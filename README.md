@@ -1,36 +1,82 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Talaan — Notebook-to-Ledger Agent for Sari-Sari Stores
 
-## Getting Started
+> Turns photos of handwritten *utang* (credit) notebooks into clean, checked digital ledgers using Meta's open-weights **Muse Glimmer 30B** running locally. Store owners keep their physical notebook habit and get verified records.
 
-First, run the development server:
+Built for the **Meta Global AI Developer Hackathon** (Oct 26 – Nov 4, 2026) · **Track:** Indie Developer (*Build for Your World*) · **Developer:** Dev Ejay.
 
+---
+
+## Architecture & How It Works
+
+Talaan splits the agent loop into two deterministic phases:
+
+1. **Prepare Phase (`POST /api/pages/extract`):** Photo upload -> server `sharp` prep -> single vision LLM call (`extract_rows` / `flag_unreadable`) -> Zod validation (`src/lib/schemas.ts`) -> deterministic arithmetic check (`src/lib/ledger`) -> staged in database (`needs_review`).
+2. **Confirm Phase (`POST /api/pages/[id]/confirm`):** Store owner inspects Red Margin Gutter & Two-Ply Proof Bar (`Written Total` vs. `Computed Total`), links/creates customers, and confirms -> committed to Supabase Postgres as verified ledger entries.
+3. **Act Phase:** Per-customer running balances (`sum(credit) - sum(payment)`) + on-demand Taglish payment reminder drafts (`Malumanay` or `Pormal`) with 1-tap Copy and SMS/Messenger share.
+
+*All arithmetic runs in deterministic TypeScript (`src/lib/ledger`) using integer centavos. The LLM never computes totals.*
+
+---
+
+## AI Model Policy
+
+- **Primary Model:** **Meta Muse Glimmer 30B** (`Q4_K_M` GGUF) served via `llama.cpp` `llama-server --jinja` on Kaggle 2x T4 GPU over a secure tunnel. Mandatory for Day 3 Gate, 30+ page evaluation, and demo.
+- **Testing Model:** **Gemini API** (`MODEL_PROVIDER=gemini`) via OpenAI-compatible client for fast local dev iteration only. Excluded from evaluation metrics.
+- **Client:** Unified `openai` client abstraction in `src/lib/model.ts`.
+
+---
+
+## Quick Start (Local Development)
+
+### 1. Prerequisites
+- Node.js 20+
+- npm 10+
+- Supabase account (Postgres + Storage + Auth)
+- Kaggle notebook (2x T4 GPU) or Gemini API key for local testing
+
+### 2. Install & Configure
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone <YOUR_GITHUB_REPO_URL>
+cd talaan
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Create `.env.local`:
+```bash
+# Supabase
+NEXT_PUBLIC_SUPABASE_URL=https://<your-project>.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=<your-anon-key>
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+# Model Provider ("glimmer" | "gemini")
+MODEL_PROVIDER=gemini
+GEMINI_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai
+GEMINI_API_KEY=<your-gemini-key>
+GEMINI_MODEL=gemini-2.0-flash
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# Kaggle Muse Glimmer (when running local/eval against tunnel)
+GLIMMER_BASE_URL=https://<your-tunnel-url>/v1
+GLIMMER_API_KEY=<your-tunnel-api-key>
+```
 
-## Learn More
+### 3. Run Dev Server
+```bash
+npm run dev
+```
+Open [http://localhost:3000](http://localhost:3000).
 
-To learn more about Next.js, take a look at the following resources:
+### 4. Validation
+```bash
+npm run lint
+npx tsc --noEmit
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Project Documentation
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Complete canonical documentation lives in [`docs/`](docs/):
+- [`docs/foundation.md`](docs/foundation.md) — Canonical source of truth
+- [`docs/dsd.md`](docs/dsd.md) — Design system ("Resibo Carbon & Counter Slip with Red Margin Gutter")
+- [`docs/data-model.md`](docs/data-model.md) — Postgres schema, state machines, and RLS policies
+- [`docs/sprint.md`](docs/sprint.md) — Hackathon sprint backlog (`TAL-01` to `TAL-08`)
+- [`docs/adr/`](docs/adr/) — Architecture decision records (`ADR-0001`, `ADR-0002`)
