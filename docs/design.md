@@ -97,7 +97,7 @@ Talaan borrows directly from the physical artifacts Filipino sari-sari store own
 - **Hyperlegible Tabular Numerals (Zero Monospace):** All UI copy and peso columns (`₱`) use **Atkinson Hyperlegible Next** with `tabular-nums`, giving older eyes on budget 360px phone screens maximum glyph clarity without a monospace terminal costume.
 - **Handwriting Quarantine:** **Caveat** appears exclusively inside `.notebook` blocks to quote raw handwritten notebook text—never in UI labels or controls.
 - **Phone-First Thumb Geometry:** 360px baseline viewport, one primary action per screen anchored at the bottom (`56px` height), `48px` minimum tap targets.
-- **Plain Taglish Copy:** Sentence case everywhere, plain verbs, actionable error recovery, and explicit model provenance (`Muse Glimmer` or `Gemini (test)`).
+- **Plain Taglish Copy:** Sentence case everywhere, plain verbs, actionable error recovery, and explicit model provenance (`Meta Muse Glimmer 30B` primary or `Gemini (dev backup)`).
 
 ---
 
@@ -201,8 +201,8 @@ Surfaces are **flat by default**. Structural separation comes from `1px solid va
 - **Primary Button:** `ink` (`#1E3FAE`) fill, `sheet` (`#FFFFFF`) bold text, `56px` height, `4px` radius (`9999px` pill only for the primary Scan CTA).
 - **Secondary Button:** `sheet` (`#FFFFFF`) fill, `1.5px solid var(--color-ink)` border, `ink` (`#1E3FAE`) text, `48px` minimum height.
 
-### Model Badge
-- **Structure:** `14px` (`small`) pill with `1px solid var(--color-rule)` border on `sheet` surface, positioned top-right on all extraction/result screens (`Muse Glimmer` or `Gemini (test)`).
+### Model Provenance Badge
+- **Structure:** Clean typographic stamp or caption (`12px` font-semibold text) with `1px solid var(--color-rule)` border on `sheet` surface, positioned top-right on all extraction/result screens (`Meta Muse Glimmer 30B` primary or `Gemini (dev backup)`). No generic pill tags with colored dots.
 
 ### Reminder Draft Card
 - **Structure:** `sheet` card (`12px` radius, `1px solid var(--color-rule)`), tone switch (`Malumanay` / `Pormal`), editable Taglish textarea (`17px` body), and two actions: **Kopyahin** and **I-edit / I-share**.
@@ -250,15 +250,30 @@ Surfaces are **flat by default**. Structural separation comes from `1px solid va
 
 ---
 
+### Named Rules
+- **The Paper Sovereign Principle.** The main point of Talaan is paper. Surfaces are tangible accounting pad sheets, ruled notebook leaves, and pinned memo notes with authentic tactile layering, subtle paper texture, and soft ambient drop shadows. Digital elements must look like ink on paper or paper slips pinned to the desk.
+- **The Anti-Tag Rule (No Pill Tags or Dot Badges).** Absolutely avoid generic pill tags with colored dots (`[• text]`), admin status chips, and developer badges. Never use generic tags for model provenance, headers, or section labels. Provenance belongs in clean, understated typographic captions or physical paper stamps.
+- **The Zero Monospace Rule.** Monospace fonts and `<code>` elements are strictly banned from marketing, landing, and UI surfaces. All peso numbers, quantities, and totals use `Atkinson Hyperlegible Next` with `tabular-nums`.
+- **The Living Paper Animation Rule.** Paper artifacts (pinned sticky notes, floating ledger slips, proof cards) feature gentle, subtle levitation and hover-lift physics (`animate-float`, `animate-float-delayed`) that breathe life into the paper scene without distracting from reading. Always disabled under `@media (prefers-reduced-motion: reduce)`.
+- **The Uncertainty Signal Rule.** Only discrepancies, errors, and low-confidence fields may use `margin` (`#C8302F`) or `marker` (`#FFE14D`). Never use red or yellow for decoration, branding, or marketing badges.
+- **The Marker Contrast Rule.** Never place any text color on `marker` (`#FFE14D`) other than `pencil` (`#23262B`).
+- **The Status Label Rule.** Never use `ink` (`#1E3FAE`) to indicate status, and never rely on color alone—every row state pairs a text label with its visual mark (`Needs review`, `Math mismatch`, `Paid`).
+
+---
+
 ## Do's and Don'ts
 
 ### Do:
+- **Do** treat paper as the hero medium: ruled lines, accounting margins, pinned yellow sticky notes, and clean ink typography.
+- **Do** add gentle, elegant floating animations on secondary paper slips and hover-lift transitions.
 - **Do** load `Bricolage_Grotesque`, `Atkinson_Hyperlegible_Next`, and `Caveat` via `next/font/google` in `src/app/layout.tsx` and eliminate all monospace fonts.
 - **Do** apply `font-variant-numeric: tabular-nums` on every peso amount (`₱`), quantity, unit price, and total.
 - **Do** theme browser defaults (`::selection` in `marker` `#FFE14D` with `pencil` `#23262B` text; `caret-color` and `:focus-visible` in `ink` `#1E3FAE`).
 
 ### Don't:
-- **Don't** use gradients, glassmorphism, glow effects, or emoji icons.
+- **Don't** use generic pill tags with green/red status dots (`[• tag]`), badge clouds, or developer chip clutter.
+- **Don't** use monospace fonts (`font-mono` or `<code>`) anywhere on the landing page or counter UI.
+- **Don't** use gradients, glassmorphism, glowing borders, or emoji icons.
 - **Don't** introduce a second accent color or use `margin` (`#C8302F`) / `marker` (`#FFE14D`) for decoration.
-- **Don't** render `Caveat` outside `.notebook` blocks or use all-caps labels anywhere in the UI.
+- **Don't** render `Caveat` outside `.notebook` / pinned paper blocks or use all-caps labels anywhere in the UI.
 - **Don't** display any total or balance the deterministic code in `src/lib/ledger/` did not compute, and never auto-send reminders.

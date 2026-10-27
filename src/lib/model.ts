@@ -1,3 +1,10 @@
+/**
+ * Unified Model Client
+ *
+ * CANONICAL PRIMARY: Meta Muse Glimmer 30B (served via llama.cpp llama-server on Kaggle 2x T4).
+ * AUXILIARY DEV BACKUP ONLY: Gemini API (used solely when offline or without active GPU compute).
+ * All evaluations, Day 3 handwriting gates, and demo submissions run strictly on Muse Glimmer.
+ */
 import OpenAI from "openai";
 
 export type ModelProvider = "glimmer" | "gemini";

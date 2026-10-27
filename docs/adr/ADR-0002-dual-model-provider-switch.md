@@ -1,4 +1,4 @@
-# ADR-0002: Dual Model Provider Switch (`glimmer` vs. `gemini`) with Mandatory Glimmer Gate/Eval/Demo Policy
+# ADR-0002: Meta Muse Glimmer 30B Primary Architecture with Auxiliary Gemini Dev Backup
 
 **Date:** 2026-10-27
 **Status:** Accepted
@@ -10,13 +10,14 @@
 
 ## Context
 
-**Meta Muse Glimmer 30B** (`Q4_K_M` GGUF served by `llama.cpp` `llama-server --jinja` on Kaggle 2x T4 GPU) is the core model required for the Meta Global AI Developer Hackathon (`S-01` §3, §4). However, Kaggle GPU quota is limited and 2x T4 responses are slower while scaffolding UI and route handlers (`S-01` §4, §8).
+**Meta Muse Glimmer 30B** (`Q4_K_M` GGUF served by `llama.cpp` `llama-server --jinja` on Kaggle 2x T4 GPU) is the canonical primary AI model for Talaan in the Meta Global AI Developer Hackathon (`S-01` §3, §4). However, Kaggle GPU quotas are capped at 30 hours/week, requiring an offline auxiliary backup fallback for rapid CSS and frontend scaffolding when GPU sessions are closed (`S-01` §4, §8).
 
 ## Decision
 
-1. Route every model call through a single module (`src/lib/model.ts`) using the `openai` npm package pointed at either `GLIMMER_BASE_URL` (default: `MODEL_PROVIDER=glimmer`) or `GEMINI_BASE_URL` (`MODEL_PROVIDER=gemini` in local `.env.local` only).
-2. Persist `model` (`"muse-glimmer"` or the active Gemini model name) and `latency_ms` on every `pages` record, and render a visible **Model Provenance Badge** in the UI.
-3. Enforce a strict boundary (`S-01` §4, §9, `R-02`): **Muse Glimmer (`MODEL_PROVIDER=glimmer`) is mandatory for the Day 3 Handwriting Gate (`TAL-03`), the 30+ page evaluation (`TAL-07`), and the final demo (`TAL-08`).** Never present Gemini test outputs or metrics as Muse Glimmer results.
+1. **Meta Muse Glimmer 30B is the primary vision and extraction engine.** All product features, schemas, and prompts are authored natively for Glimmer's `--jinja` tool formatting.
+2. The Gemini API is strictly an **auxiliary developer backup** (`MODEL_PROVIDER=gemini`) accessible through an identical OpenAI-compatible client wrapper in `src/lib/model.ts` for rapid offline dev iteration.
+3. Persist `model` (`"muse-glimmer"` or the active Gemini model name) and `latency_ms` on every `pages` record, and render a visible **Model Provenance Badge** in the UI.
+4. Enforce a strict boundary (`S-01` §4, §9, `R-02`): **Muse Glimmer (`MODEL_PROVIDER=glimmer`) is mandatory for the Day 3 Handwriting Gate (`TAL-03`), the 30+ page evaluation (`TAL-07`), and the final demo (`TAL-08`).** Never present Gemini test outputs or metrics as Muse Glimmer results. Gemini is 100% excluded from evaluations.
 
 ## Options Rejected
 

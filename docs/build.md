@@ -56,12 +56,12 @@ Names and purpose only. **Never commit or paste a real secret value.**
 
 | Variable | Purpose | Notes |
 |---|---|---|
-| `MODEL_PROVIDER` | Selects `"glimmer"` (default) or `"gemini"` (local dev testing only) | Must be `"glimmer"` for Day 3 gate, 30+ page evaluation, and final demo (`S-01` §4) |
-| `GLIMMER_BASE_URL` | Tunnel URL to Kaggle `llama-server` (e.g., `https://<tunnel>/v1`) | Changes per Kaggle session; keep in `.env.local`, never in code |
+| `MODEL_PROVIDER` | Selects `"glimmer"` (CANONICAL PRIMARY) or `"gemini"` (auxiliary developer backup only) | Must be `"glimmer"` for Day 3 gate, 30+ page evaluation, and final demo (`S-01` §4). Gemini is strictly an offline dev backup. |
+| `GLIMMER_BASE_URL` | Tunnel URL to Kaggle `llama-server` (e.g., `https://<tunnel>/v1`) | Canonical primary endpoint; changes per Kaggle session; keep in `.env.local` |
 | `GLIMMER_API_KEY` | `--api-key` secret configured on Kaggle `llama-server` | Protects public tunnel endpoint (`T-04`) |
-| `GEMINI_BASE_URL` | Google Gemini OpenAI-compatible endpoint URL | Used only when `MODEL_PROVIDER=gemini` in local dev |
-| `GEMINI_API_KEY` | Google AI Studio key | Used only when `MODEL_PROVIDER=gemini` in local dev |
-| `GEMINI_MODEL` | Gemini model name for local dev testing | Used only when `MODEL_PROVIDER=gemini` in local dev |
+| `GEMINI_BASE_URL` | Google Gemini OpenAI-compatible endpoint URL | Auxiliary developer backup only when `MODEL_PROVIDER=gemini` |
+| `GEMINI_API_KEY` | Google AI Studio key | Auxiliary developer backup only when `MODEL_PROVIDER=gemini` |
+| `GEMINI_MODEL` | Gemini model name for local dev testing | Auxiliary developer backup only when `MODEL_PROVIDER=gemini` |
 | `SUPABASE_SERVICE_ROLE_KEY` | Server-only Supabase privileged key | Used only for local seed scripts or server-side signed storage URLs; never expose to client |
 
 ---
@@ -139,8 +139,8 @@ Per `S-01` §4 and §8, **Meta Muse Glimmer 30B** runs on a Kaggle notebook with
 
 | # | Issue or doc drift | Impact | Status |
 |---|---|---|---|
-| 1 | Domain dependencies (`@supabase/supabase-js`, `openai`, `zod`, `sharp`, `vitest`) are not yet installed in `package.json` | Scheduled for installation in `TAL-01`, `TAL-02`, and `TAL-04` | ⚠️ Open |
-| 2 | `src/app/globals.css` currently contains default `create-next-app` variables and a dark-mode media query instead of [`dsd.md`](dsd.md) Daylight tokens | Scheduled for replacement in `TAL-05` | ⚠️ Open |
+| 1 | Domain dependencies (`@supabase/supabase-js`, `openai`, `zod`, `sharp`, `vitest`) are not yet installed in `package.json` | Scheduled for installation in `TAL-01`, `TAL-02`, and `TAL-04` | ✅ Resolved 2026-10-27 |
+| 2 | `src/app/globals.css` currently contains default `create-next-app` variables and a dark-mode media query instead of [`docs/design.md`](design.md) Daylight tokens | Scheduled for replacement in `TAL-05` | ✅ Resolved 2026-10-27 |
 | 3 | Template placeholders (`[PROJECT_NAME]`, etc.) across all 19 `docs/` files | Resolved on `2026-10-27` across full suite | ✅ Resolved 2026-10-27 |
 
 ---
@@ -166,12 +166,12 @@ Currently in `package.json`:
 npm run dev      # Start Next.js development server
 npm run build    # Production Next.js build
 npm run start    # Start built Next.js server
-npm run lint     # Run ESLint
+npm run lint     # Run ESLint (zero warnings tolerated)
+npm test         # Run Vitest unit & contract tests (25 passing tests)
 ```
 
-Planned scripts (`TAL-01`, `TAL-04`, `TAL-07`):
+Planned scripts (`TAL-03`, `TAL-07`):
 ```bash
-npm test         # Run Vitest unit and contract tests (⬜ TAL-04)
 npm run eval     # Run 30+ page Muse Glimmer evaluation harness (⬜ TAL-07)
 ```
 

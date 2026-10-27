@@ -26,6 +26,10 @@
   color: #23262B;            /* pencil dark text: 13.2:1 AAA contrast */
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 :root {
   caret-color: #1E3FAE;      /* ballpen blue */
 }
@@ -93,9 +97,80 @@ p {
   animation: margin-line-draw 450ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .margin-draw {
-    animation: none;
-    transform: scaleY(1);
+/* Living Paper Floating Animations (Mockup 1 & 2 inspired) */
+@keyframes float-slow {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(0.4deg);
+  }
+  100% {
+    transform: translateY(0px) rotate(0deg);
   }
 }
+
+@keyframes float-delayed {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(8px) rotate(-0.5deg);
+  }
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+}
+
+.animate-float-slow {
+  animation: float-slow 7s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: float-delayed 8s ease-in-out 1.2s infinite;
+}
+
+/* Tactile Paper Shadows */
+.shadow-paper {
+  box-shadow: 0 12px 36px -10px rgba(35, 38, 43, 0.09), 0 3px 10px -2px rgba(35, 38, 43, 0.04);
+}
+
+.shadow-paper-lg {
+  box-shadow: 0 24px 48px -12px rgba(35, 38, 43, 0.12), 0 8px 18px -4px rgba(35, 38, 43, 0.05);
+}
+
+.shadow-sticky {
+  box-shadow: 0 16px 32px -8px rgba(35, 38, 43, 0.12), 0 4px 8px -2px rgba(35, 38, 43, 0.06);
+}
+
+/* Navigation Arrival Speed-Up Highlight Effect */
+@keyframes section-arrival {
+  0% {
+    box-shadow: 0 0 0 0 rgba(30, 62, 174, 0);
+    transform: scale(0.996);
+  }
+  35% {
+    box-shadow: 0 0 0 4px rgba(30, 62, 174, 0.25), 0 16px 36px -8px rgba(30, 62, 174, 0.18);
+    transform: scale(1.003);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(30, 62, 174, 0);
+    transform: scale(1);
+  }
+}
+
+.section-arrival-pulse {
+  animation: section-arrival 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  transition: transform 0.2s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .margin-draw,
+  .animate-float-slow,
+  .animate-float-delayed,
+  .section-arrival-pulse {
+    animation: none !important;
+    transform: none !important;
+  }
+}
+

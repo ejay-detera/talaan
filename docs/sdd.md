@@ -24,9 +24,10 @@ Each screen or component exceeding ~150 lines is split into a modular folder per
 
 | Subsystem | Location | Responsibility | Status |
 |---|---|---|---|
-| Root layout & global tokens | `src/app/layout.tsx`, `src/app/globals.css` | Loads `Geist` (`--font-geist-sans`) and `Geist_Mono` (`--font-geist-mono`) and defines CSS design tokens | 🟡 Scaffold exists; custom tokens planned (`TAL-05`) |
-| Auth & 1-Tap Demo Login | `src/app/login/page.tsx` | Email/Password sign-in plus 1-tap **"Try Demo Store"** button | ⬜ Planned (`TAL-01`) |
-| Upload & Store Dashboard | `src/app/page.tsx`, `src/components/upload/` | Camera/file capture, active model badge, and recent notebook pages list | 🟡 Default Next.js starter exists; Talaan UI `⬜` (`TAL-05`) |
+| Root layout & global tokens | `src/app/layout.tsx`, `src/app/globals.css` | Loads `Bricolage_Grotesque`, `Atkinson_Hyperlegible_Next`, and `Caveat` and defines "The Notebook, Kept" daylight tokens | ✅ Built (`docs/design.md`) |
+| Auth & 1-Tap Demo Login | `src/app/login/page.tsx` | Email/Password sign-in plus 1-tap **"Subukan ang demo"** button | ✅ Built (`TAL-01`) |
+| Landing Page & Store Shell | `src/app/page.tsx`, `src/components/landing/` | Two-phase value proposition, `.notebook`-to-ledger visual proof, Model Provenance Badge, and Demo CTA | ✅ Built (`TAL-05`) |
+| Upload & Store Dashboard | `src/app/page.tsx`, `src/components/upload/` | Camera/file capture and recent notebook pages list | ⬜ Planned (`TAL-05`) |
 | Review & Discrepancy Screen | `src/app/pages/[id]/review/page.tsx`, `src/components/review/` | Cropped notebook strip, `RedMarginGutter`, editable `EntryReviewRow`, customer match dropdown, and `TwoPlyProofBar` | ⬜ Planned (`TAL-05`) |
 | Customer Balances & Detail | `src/app/customers/page.tsx`, `src/app/customers/[id]/page.tsx`, `src/components/customers/` | Per-customer *utang* balance list, confirmed history, and `ReminderDrawer` (`Malumanay` / `Pormal` tone selector + Copy/Share) | ⬜ Planned (`TAL-06`) |
 | Client services & hooks | `src/services/`, `src/hooks/` | Typed fetch wrappers (`pages-service.ts`, `customers-service.ts`, `reminders-service.ts`) | ⬜ Planned (`TAL-05`, `TAL-06`) |
@@ -36,12 +37,12 @@ Each screen or component exceeding ~150 lines is split into a modular folder per
 
 | Service / module | Location | Responsibility | Auth | Status |
 |---|---|---|---|---|
-| Model provider switch | `src/lib/model.ts` | Single `OpenAI` client switching between `glimmer` (default) and `gemini` (local dev only) via `MODEL_PROVIDER` (`S-01` §4) | Server-only | ⬜ Planned (`TAL-02`) |
+| Model provider switch | `src/lib/model.ts` | Single `OpenAI` client switching between `glimmer` (canonical primary) and `gemini` (auxiliary dev backup only) via `MODEL_PROVIDER` (`S-01` §4) | Server-only | ✅ Built (`TAL-02`) |
 | Agent prompts & tool schemas | `src/lib/prompts/` | Versioned system prompts and tool definitions (`extract_rows`, `flag_unreadable`, `draft_reminder`, `restock_list`) | Server-only | ⬜ Planned (`TAL-02`, `TAL-06`) |
-| Image pre-processor | `src/lib/image.ts` | `sharp` pipeline: auto-orient via EXIF, resize to max dimension, normalize contrast, encode compressed image | Server-only | ⬜ Planned (`TAL-02`) |
-| Deterministic ledger math | `src/lib/ledger/math.ts`, `src/lib/ledger/match.ts` | Integer-centavo row check (`qty * unit_price === amount`), page check (`computed_total === written_total`), customer balance math, and fuzzy customer name matching | Pure TS | ⬜ Planned (`TAL-04`) |
-| Supabase server/client helpers | `src/lib/supabase/` | Authenticated server client (RLS) and service helper for private Storage signed URLs | Supabase JWT | ⬜ Planned (`TAL-01`) |
-| Prepare Extraction Route | `src/app/api/pages/extract/route.ts` | `POST` handler for Phase 1 (`Prepare`): image upload → `sharp` → `lib/model.ts` → Zod → `lib/ledger` → stage `needs_review` or `retake_requested` | `store_owner` | ⬜ Planned (`TAL-02`) |
+| Image pre-processor | `src/lib/image.ts` | `sharp` pipeline: auto-orient via EXIF, resize to max dimension, normalize contrast, encode compressed image | Server-only | ✅ Built (`TAL-02`) |
+| Deterministic ledger math | `src/lib/ledger/math.ts`, `src/lib/ledger/match.ts` | Integer-centavo row check (`qty * unit_price === amount`), page check (`computed_total === written_total`), customer balance math, and fuzzy customer name matching | Pure TS | ✅ Built & Tested (`TAL-04`) |
+| Supabase server/client helpers | `src/lib/supabase/` | Authenticated server client (RLS) and service helper for private Storage signed URLs | Supabase JWT | ✅ Built (`TAL-01`) |
+| Prepare Extraction Route | `src/app/api/pages/extract/route.ts` | `POST` handler for Phase 1 (`Prepare`): image upload → `sharp` → `lib/model.ts` → Zod → `lib/ledger` → stage `needs_review` or `retake_requested` | `store_owner` | ✅ Built (`TAL-02`) |
 | Confirm Ledger Route | `src/app/api/pages/[id]/confirm/route.ts` | `POST` handler for Phase 2 (`Confirm`): idempotency check → re-verify math → link customers → commit `confirmed_by_user = true` & `status = 'confirmed'` | `store_owner` | ⬜ Planned (`TAL-05`) |
 | Customers & Balances Route | `src/app/api/customers/route.ts`, `src/app/api/customers/[id]/balance/route.ts` | `GET` / `POST` handlers for customer list, creation, and deterministic balance + history | `store_owner` | ⬜ Planned (`TAL-06`) |
 | Reminder Draft Route | `src/app/api/reminders/draft/route.ts` | `POST` handler calling `draft_reminder(customer, tone)` on confirmed unpaid entries and persisting draft to `reminders` | `store_owner` | ⬜ Planned (`TAL-06`) |
@@ -54,8 +55,8 @@ Each screen or component exceeding ~150 lines is split into a modular folder per
 
 | Service | Used for | Integration status | Pinned version |
 |---|---|---|---|
-| **Meta Muse Glimmer 30B** (`llama-server` on Kaggle 2x T4) | Primary vision extraction & Taglish reminder tool calls | ⬜ Planned (`TAL-02`, `TAL-03`) | `Q4_K_M` GGUF ([`evidence.md`](evidence.md) §5) |
-| **Gemini API** (OpenAI-compatible endpoint) | Fast local development testing only (`MODEL_PROVIDER=gemini`) | ⬜ Planned (`TAL-02`) | [`evidence.md`](evidence.md) §5 |
+| **Meta Muse Glimmer 30B** (`llama-server` on Kaggle 2x T4) | Canonical primary vision extraction & Taglish reminder tool calls | ⬜ Planned (`TAL-02`, `TAL-03`) | `Q4_K_M` GGUF ([`evidence.md`](evidence.md) §5) |
+| **Gemini API** (OpenAI-compatible endpoint) | Auxiliary developer backup fallback for offline prototyping (`MODEL_PROVIDER=gemini`) | ✅ Supported (`TAL-02`) | [`evidence.md`](evidence.md) §5 |
 | **Supabase** (Postgres, Auth, Private Storage) | Database persistence, RLS auth, private notebook photo storage | ⬜ Planned (`TAL-01`) | [`evidence.md`](evidence.md) §5 |
 
 ---
@@ -106,7 +107,7 @@ sequenceDiagram
 
 | Behavior | Status | Why | Switch (file / env var) | Rules |
 |---|---|---|---|---|
-| **Model Provider Switch (`glimmer` vs. `gemini`)** | ⬜ Planned (`TAL-02`) | Fast local building vs. mandatory Muse Glimmer gate/eval/demo (`S-01` §4) | `MODEL_PROVIDER` in `.env.local` read by `src/lib/model.ts` | Default is `"glimmer"`. Active model badge shown in UI and logged in `pages.model`. Gemini runs excluded from evaluation metrics. |
+| **Model Provider Switch (`glimmer` vs. `gemini`)** | ✅ Built (`TAL-02`) | Offline local building vs. mandatory Muse Glimmer gate/eval/demo (`S-01` §4) | `MODEL_PROVIDER` in `.env.local` read by `src/lib/model.ts` | Default is `"glimmer"` (Meta Muse Glimmer 30B canonical primary). Active model badge shown in UI and logged in `pages.model`. Gemini runs are strictly 100% excluded from evaluation metrics. |
 
 ---
 
@@ -131,12 +132,12 @@ Entities, fields, states, and migrations: [`data-model.md`](data-model.md). Poli
 
 **Backend server-only environment variables** (git-ignored `.env.local`):
 - `SUPABASE_SERVICE_ROLE_KEY` (if needed for signed storage helpers; otherwise use user-scoped server client)
-- `MODEL_PROVIDER` (`"glimmer"` default | `"gemini"` for local dev testing only)
+- `MODEL_PROVIDER` (`"glimmer"` CANONICAL PRIMARY | `"gemini"` auxiliary dev backup only)
 - `GLIMMER_BASE_URL` (Cloudflare / ngrok tunnel URL to Kaggle `llama-server`)
 - `GLIMMER_API_KEY` (`--api-key` secret configured on `llama-server`)
-- `GEMINI_BASE_URL` (Google Gemini OpenAI-compatible base URL)
-- `GEMINI_API_KEY` (Google AI Studio key for local dev testing)
-- `GEMINI_MODEL` (Gemini model identifier for local dev testing)
+- `GEMINI_BASE_URL` (Google Gemini OpenAI-compatible base URL — auxiliary backup only)
+- `GEMINI_API_KEY` (Google AI Studio key — auxiliary backup only)
+- `GEMINI_MODEL` (Gemini model identifier — auxiliary backup only)
 
 Environments: [`ops.md`](ops.md) §1.
 

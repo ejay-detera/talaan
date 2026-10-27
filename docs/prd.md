@@ -195,8 +195,8 @@ Canonical: [`bpd.md`](bpd.md) §4. **Known:** Zero fees in hackathon build; loca
 ## 8. Dependencies and Assumptions
 
 **Dependencies**
-- **Meta Muse Glimmer 30B** (`Q4_K_M` GGUF + vision projector) running on `llama.cpp` `llama-server` (`--jinja`, CUDA T4 arch 75) on a Kaggle 2x T4 notebook exposed via an authenticated Cloudflare or ngrok tunnel (`S-01` §4).
-- **Gemini API** (OpenAI-compatible endpoint) for fast local development iteration only (`S-01` §4).
+- **Meta Muse Glimmer 30B** (`Q4_K_M` GGUF + vision projector) running on `llama.cpp` `llama-server` (`--jinja`, CUDA T4 arch 75) on a Kaggle 2x T4 notebook exposed via an authenticated Cloudflare or ngrok tunnel (`S-01` §4) — **Canonical Primary Engine** for all gates, evals, and demos.
+- **Gemini API** (OpenAI-compatible endpoint) — strictly an **Auxiliary Developer Backup** for offline development iteration when GPU sessions are closed (`S-01` §4).
 - **Supabase** project providing Postgres database, Auth, Row-Level Security, and private Storage bucket (`S-01` §4).
 
 **Assumptions** (tracked in [`evidence.md`](evidence.md) §4)

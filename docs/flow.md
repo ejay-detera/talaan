@@ -24,13 +24,13 @@
 flowchart TB
   subgraph app ["Talaan Web App (Next.js 16.4.3)"]
     S0["/login (anon)"]
-    S1["/ (store_owner)"]
+    S1["/ (anon & store_owner)"]
     S2["/pages/[id]/review (store_owner)"]
     S3["/customers & /customers/[id] (store_owner)"]
   end
   S0 --> A1["✅ 1-Tap Demo Store Login & Email/Password Auth (TAL-01)"]
-  S1 --> B1["🟡 Default Next.js Starter Page (src/app/page.tsx)"]
-  S1 --> B2["⬜ Photo Upload & Recent Pages List (TAL-02, TAL-05)"]
+  S1 --> B1["✅ English Landing Page: Paper Sovereign Showcase, Floating Contextual Widgets & 1-Tap Demo CTA (src/app/page.tsx)"]
+  S1 --> B2["⬜ Photo Upload & Recent Pages List (TAL-05)"]
   S2 --> C1["⬜ Review Screen: Red Margin Gutter + Two-Ply Proof Bar (TAL-05)"]
   S3 --> D1["⬜ Customer Utang Balances & History (TAL-06)"]
   S3 --> D2["⬜ Taglish Reminder Drawer: Friendly/Firm + Copy/Share (TAL-06)"]
@@ -65,14 +65,23 @@ flowchart LR
 
 ## 3. Demonstrable Path Today (`2026-10-27`)
 
-Today, only the Next.js 16.4.3 / React 19.3.0 starter shell (`src/app/layout.tsx`, `src/app/page.tsx`) renders. Domain routes and database tables begin landing in `TAL-01`.
+Today, the Talaan Landing Page (`/`), 1-Tap Demo Store Auth (`/login` & `POST /api/auth/demo`), Image Prep + Extraction API (`POST /api/pages/extract`), and Deterministic Centavo Ledger Math (`src/lib/ledger`) are wired and test-verified.
 
 ```mermaid
 sequenceDiagram
-  actor U as Developer
-  participant APP as Next.js Dev Server (src/app/page.tsx)
-  U->>APP: GET / (npm run dev)
-  APP-->>U: Renders Next.js 16.4.3 starter page
+  actor U as Visitor / Store Owner
+  participant LANDING as Talaan Landing Page (src/app/page.tsx)
+  participant AUTH as Demo Auth API (src/app/api/auth/demo)
+  participant API as Extraction API (src/app/api/pages/extract)
+  participant MATH as Ledger Math (src/lib/ledger/math.ts)
+
+  U->>LANDING: GET /
+  LANDING-->>U: Renders Landing Page + .notebook-to-ledger visual proof + active Model Provenance Badge
+  U->>AUTH: POST /api/auth/demo (1-Tap "Subukan ang demo")
+  AUTH-->>U: Authenticated session + seeds Aling Nena's Store
+  U->>API: POST /api/pages/extract (notebook photo)
+  API->>MATH: checkRowDiscrepancy & computePageTotals
+  MATH-->>API: Centavo-exact discrepancy flags
 ```
 
 Setup and validation commands: [`build.md`](build.md).
@@ -85,7 +94,7 @@ Kept in lockstep with [`prd.md`](prd.md) §3:
 
 | Capability | Priority | Status | Where (path or table) | Verified by |
 |---|---|---|---|---|
-| Next.js 16.4.3 / React 19.3.0 / Tailwind v4 App Shell | Must | ✅ | `src/app/layout.tsx`, `src/app/page.tsx`, `package.json` | `npm run lint`, `npx tsc --noEmit` |
+| Next.js 16.4.3 App Shell & Landing Page (`/`) | Must | ✅ | `src/app/layout.tsx`, `src/app/page.tsx`, `src/components/landing/` | `npm run lint`, `npx tsc --noEmit`, `npm test` (`T-004`) |
 | 1. 1-Tap Demo Store Login & Supabase Auth + RLS | Must | ✅ | `src/app/login/page.tsx`, `supabase/migrations/0001_initial_schema.sql` (`TAL-01`) | `npm run lint`, `npx tsc --noEmit` (`T-001`) |
 | 2. Photo Upload & `sharp` Image Prep | Must | ✅ | `src/app/api/pages/extract/route.ts`, `src/lib/image.ts` (`TAL-02`) | `npm run lint`, `npx tsc --noEmit` |
 | 3. Structured Extraction (`credit`/`payment`/`cash_sale`, confidence, model badge) | Must | 🟡 partial | `src/lib/model.ts`, `src/lib/schemas.ts`, `src/app/api/pages/extract/route.ts` (`TAL-02`, `TAL-03`) | `npm run lint`, `npx tsc --noEmit` (Glimmer gate in `TAL-03`) |
@@ -104,7 +113,7 @@ Kept in lockstep with [`prd.md`](prd.md) §3:
 
 | Behavior | Mark | What exists | What does not | Switch / Gate | Rules |
 |---|---|---|---|---|---|
-| **Dual Model Provider (`glimmer` vs. `gemini`)** | ✅ | `src/lib/model.ts` switching via `MODEL_PROVIDER` | Live Kaggle tunnel endpoint (`TAL-03`) | `MODEL_PROVIDER` env var (`glimmer` default \| `gemini` dev test) | Gemini is allowed only in local `.env.local` while building. Day 3 gate, 30+ page evaluation, and final demo must run on `glimmer`. |
+| **Dual Model Provider (`glimmer` primary vs. `gemini` backup)** | ✅ | `src/lib/model.ts` switching via `MODEL_PROVIDER` | Live Kaggle tunnel endpoint (`TAL-03`) | `MODEL_PROVIDER` env var (`glimmer` canonical primary \| `gemini` auxiliary dev backup) | Gemini is strictly an offline backup in `.env.local` while prototyping. Day 3 gate, 30+ page evaluation, and final demo must run on `glimmer`. |
 
 ---
 
@@ -144,8 +153,8 @@ flowchart TB
   U1["Store Owner (store_owner)"] -.->|"⬜ Upload, Review, Confirm, Balances, Reminders"| APP["Talaan Web App"]
   U2["Anonymous Visitor (anon)"] -.->|"⬜ 1-Tap Demo Login (/login)"| APP
   APP -.->|"⬜ RLS Postgres + Private Storage"| DB["Supabase"]
-  APP -.->|"⬜ Primary Vision & Tool Inference"| GLIM["Meta Muse Glimmer 30B (Kaggle 2x T4)"]
-  APP -.->|"⬜ Local Dev Testing Only"| GEM["Gemini API"]
+  APP -.->|"⬜ Canonical Primary Vision & Tool Inference"| GLIM["Meta Muse Glimmer 30B (Kaggle 2x T4)"]
+  APP -.->|"⬜ Auxiliary Dev Backup Only"| GEM["Gemini API (Offline Dev Backup)"]
 ```
 
 ---

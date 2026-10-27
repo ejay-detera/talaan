@@ -47,11 +47,11 @@ Every business requirement (`BR-NN`), user story (`US-NN`), and sprint story (`T
 | **BR-01 / US-01 / TAL-01, TAL-02** | Auth guard + RLS tenant isolation (`T-01`) + `sharp` image resize/orientation prep | **T-001** | Static / Unit | **Passing** | 2026-10-27 | `npm run lint && npx tsc --noEmit && npm test` |
 | **BR-02 / US-02, US-07 / TAL-02** | `PageExtractionSchema` (Zod) validates `credit`/`payment`/`cash_sale` rows, rejects malformed/injected JSON (`T-03`), and handles `flag_unreadable` retake state | **T-002** | Contract / Unit | **Passing** | 2026-10-27 | `npm test` |
 | **BR-03 / US-03 / TAL-04** | Integer-centavo conversion and row-level discrepancy check (`quantity * unit_price !== amount`) with zero floating-point drift (`T-02`) | **T-003** | Unit / Property | **Passing** | 2026-10-27 | `npm test` |
-| **BR-03 / US-03 / TAL-04** | Page-level discrepancy check (`computed_total !== written_total`) and `needs_review` flagging (`confidence < 0.80` or math mismatch) (`T-02`) | **T-004** | Unit / Property | **Passing** | 2026-10-27 | `npm test` |
+| **BR-03 / US-03 / TAL-04, TAL-05** | Page-level discrepancy check (`computed_total !== written_total`), synthetic proof dataset (`sample-proof.test.ts`), and `needs_review` flagging (`confidence < 0.80` or math mismatch) (`T-02`) | **T-004** | Unit / Property | **Passing** | 2026-10-27 | `npm test` |
 | **BR-04 / US-04 / TAL-05** | Two-Phase Confirm gate: unconfirmed rows excluded from balances; `POST /api/pages/[id]/confirm` commits atomically and rejects duplicate confirm (`409 ALREADY_CONFIRMED`, `T-06`) | **T-005** | Integration / Unit | **Not written** | — | `npm test` |
 | **BR-05 / US-05 / TAL-06** | Customer balance calculation: `sum(credit) - sum(payment)` for confirmed entries only (`cash_sale` excluded) + fuzzy customer name matching | **T-006** | Unit | **Passing** | 2026-10-27 | `npm test` |
 | **BR-06 / US-06 / TAL-06** | Taglish reminder draft schema validation (`friendly` vs. `firm` tones) citing itemized debt and exact balance | **T-007** | Unit / Contract | **Not written** | — | `npm test` |
-| **BR-07 / US-02, US-03 / TAL-03, TAL-07** | **Muse Glimmer Evaluation Harness:** Day 3 Gate (10 pages, target ≥80% row accuracy) and 30+ page evaluation (field accuracy, row accuracy, total-match, discrepancy detection, 2x T4 latency) excluding Gemini runs | **T-008** | AI Eval Harness | **Not written** | — | `npm run eval` |
+| **BR-07 / US-02, US-03 / TAL-03, TAL-07** | **Meta Muse Glimmer Canonical Evaluation Harness:** Day 3 Gate (10 pages, target ≥80% row accuracy) and 30+ page evaluation (field accuracy, row accuracy, total-match, discrepancy detection, 2x T4 latency) strictly excluding auxiliary Gemini dev backup runs | **T-008** | AI Eval Harness | **Not written** | — | `npm run eval` |
 
 ---
 
@@ -59,7 +59,7 @@ Every business requirement (`BR-NN`), user story (`US-NN`), and sprint story (`T
 
 | Metric | Target | Baseline (`2026-10-27`) |
 |---|---|---|
-| `src/lib/ledger/` line & branch coverage | **100% of arithmetic & discrepancy branches** | 100% (16 passing unit tests in `src/lib/ledger/__tests__/`) |
+| `src/lib/ledger/` line & branch coverage | **100% of arithmetic & discrepancy branches** | 100% (20 passing unit tests in `src/lib/ledger/__tests__/`, 25 total) |
 | Requirements with a mapped test ID (§3) | **100% of Must requirements (`BR-01`–`BR-07`)** | 8 / 8 mapped (`6 Passing`, `2 Not written`) |
 
 ---

@@ -1,69 +1,183 @@
+import { Suspense } from "react";
+import { cookies } from "next/headers";
 import Image from "next/image";
+import { createClient } from "@/lib/supabase/server";
+import { Navbar } from "@/components/landing/Navbar";
+import { DemoCtaBar } from "@/components/landing/DemoCtaBar";
+import { PaperMockupShowcase } from "@/components/landing/PaperMockupShowcase";
+import {
+  PinnedStickyNote,
+  CustomerBalancesWidget,
+  PaymentReminderDraftWidget,
+  DeterministicShieldWidget,
+} from "@/components/landing/FloatingWidgets";
+import { FeaturesSection } from "@/components/landing/FeaturesSection";
+import ShapeGrid from "@/components/shared/ShapeGrid";
+import { InitialLoader } from "@/components/shared/InitialLoader";
 
-export default function Home() {
+async function DemoCtaSection() {
+  const cookieStore = await cookies();
+  const demoCookie = cookieStore.get("talaan_demo_user");
+
+  let isDemoActive = Boolean(demoCookie?.value);
+  let storeName = "Aling Nena's Sari-Sari Store";
+
+  try {
+    const supabase = await createClient();
+    const { data } = await supabase.auth.getUser();
+    if (data?.user) {
+      isDemoActive = true;
+      storeName = data.user.user_metadata?.full_name || storeName;
+    }
+  } catch {
+    // Fall back to cookie state if offline or unconfigured
+  }
+
+  return <DemoCtaBar isDemoActive={isDemoActive} storeName={storeName} />;
+}
+
+export default function HomePage() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <div className="relative flex min-h-screen flex-col bg-paper text-pencil font-sans selection:bg-marker selection:text-pencil overflow-x-hidden">
+      {/* Quick Initial Page Load / Reload Overlay */}
+      <InitialLoader />
+
+      {/* Living Interactive Accounting Grid Canvas Background */}
+      <div className="fixed inset-0 pointer-events-none z-0 opacity-55">
+        <ShapeGrid
+          shape="square"
+          direction="diagonal"
+          lineColor="#D5DEC6"
+          hoverColor="#1E3FAE"
+          hoverFillColor="#FFE14D"
+          fillOpacity={0.12}
+          cellSize={42}
+          speed={0.25}
+          glow={0.25}
+          fade={0.8}
+          backgroundColor="transparent"
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+      </div>
+
+      {/* Floating Centered Gooey Navigation */}
+      <Navbar />
+
+      {/* Main Persuade Hero */}
+      <main className="relative z-10 flex-1 w-full">
+        {/* Top Centered Hero Header */}
+        <section className="w-full max-w-5xl mx-auto px-4 sm:px-6 pt-24 sm:pt-32 pb-8 text-center space-y-6">
+          <div className="space-y-4 max-w-3xl mx-auto">
+            <h1 className="font-display font-bold text-3xl sm:text-5xl lg:text-[3.25rem] leading-[1.08] tracking-tight text-pencil text-balance">
+              Turn handwritten store notebooks into verified digital ledgers.
+            </h1>
+            <p className="text-base sm:text-xl text-pencil/80 leading-relaxed font-sans max-w-2xl mx-auto text-balance">
+              Keep your physical notebook habit at the counter. Talaan uses{" "}
+              <strong className="text-pencil font-semibold">Meta Muse Glimmer 30B</strong> vision to extract
+              rows and <strong className="text-pencil font-semibold">deterministic code</strong> to verify every
+              centavo before you save.
+            </p>
+          </div>
+
+          {/* Action Zone: Interactive Demo and Sign In */}
+          <div className="max-w-md mx-auto pt-2">
+            <Suspense fallback={<DemoCtaBar isDemoActive={false} />}>
+              <DemoCtaSection />
+            </Suspense>
+          </div>
+        </section>
+
+        {/* Hero Paper Artifact Workspace (Mockup 1 & 2 inspired) */}
+        <section id="verification" className="w-full max-w-6xl mx-auto px-4 sm:px-6 pb-16">
+          <div className="relative rounded-sheet border border-rule bg-sheet p-4 sm:p-8 lg:p-10 shadow-paper overflow-hidden">
+            {/* Window / Desk Surface Header */}
+            <div className="flex items-center justify-between pb-4 sm:pb-6 mb-6 border-b border-rule select-none">
+              <div className="flex items-center gap-2">
+                <span className="w-3 h-3 rounded-full bg-[#E5B5B5] border border-margin/30" />
+                <span className="w-3 h-3 rounded-full bg-[#EADFBA] border border-[#C5B367]/40" />
+                <span className="w-3 h-3 rounded-full bg-[#BFE0CD] border border-paid/30" />
+                <span className="text-xs text-muted font-sans ml-2 font-medium hidden sm:inline">
+                  talaan.ph &bull; Counter Ledger Verification Workspace
+                </span>
+              </div>
+              <span className="text-xs font-semibold text-pencil font-sans">
+                Daylight High-Contrast Mode
+              </span>
+            </div>
+
+            {/* Desktop Composition: Central Paper Hero Flanked by Micro-Widgets */}
+            <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+              {/* Left Column (Desktop Widgets) */}
+              <div className="hidden lg:flex lg:col-span-3 flex-col gap-6 items-end">
+                <PinnedStickyNote />
+                <PaymentReminderDraftWidget />
+              </div>
+
+              {/* Central Paper Sovereign Showcase (The Notebook, Kept) */}
+              <div className="w-full lg:col-span-6 flex justify-center">
+                <PaperMockupShowcase />
+              </div>
+
+              {/* Right Column (Desktop Widgets) */}
+              <div className="hidden lg:flex lg:col-span-3 flex-col gap-6 items-start">
+                <CustomerBalancesWidget />
+                <DeterministicShieldWidget />
+              </div>
+
+              {/* Mobile / Tablet Responsive Fallback (Neat Grid Below Notebook) */}
+              <div className="lg:hidden w-full grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
+                <div className="flex justify-center">
+                  <PinnedStickyNote />
+                </div>
+                <div className="flex justify-center">
+                  <CustomerBalancesWidget />
+                </div>
+                <div className="flex justify-center">
+                  <PaymentReminderDraftWidget />
+                </div>
+                <div className="flex justify-center">
+                  <DeterministicShieldWidget />
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Features & Workflow Section */}
+        <FeaturesSection />
+
+        {/* Architectural Trust Floor */}
+        <section id="features" className="w-full py-14 border-t border-rule bg-sheet">
+          <div className="max-w-4xl mx-auto px-4 text-center space-y-3">
+            <h3 className="font-display font-bold text-lg text-pencil">
+              Sovereign Ledger Guarantee
+            </h3>
+            <p className="text-xs sm:text-sm text-muted font-sans max-w-2xl mx-auto leading-relaxed">
+              No automatic customer SMS blasts without your tap. No cloud fee surprise on open-weights inference.
+              Every total is calculated in TypeScript integer centavos with zero LLM arithmetic.
+            </p>
+          </div>
+        </section>
       </main>
+
+      {/* Footer */}
+      <footer className="w-full border-t border-rule py-8 bg-paper">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted font-sans">
+          <div className="flex items-center gap-2.5">
+            <Image
+              src="/assets/talaan-icon.png"
+              alt="Talaan logo"
+              width={20}
+              height={20}
+              className="flex-shrink-0 object-contain"
+            />
+            <span className="font-bold text-pencil">Talaan</span>
+            <span>&bull; Two-Phase Bookkeeping for Philippine Sari-Sari Stores</span>
+          </div>
+          <div>
+            Meta Global AI Developer Hackathon 2026 &bull; Indie Developer Track
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

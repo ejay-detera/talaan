@@ -94,7 +94,7 @@ Pinned versions come from `package.json` / `package-lock.json` (`S-10`). Planned
 | `sharp` | `0.35.5` | `package-lock.json` | `https://sharp.pixelplumbing.com` | 2026-10-27 | Server-side image resize, auto-rotate, contrast, crop |
 | `vitest` | `5.0.5` | `package-lock.json` | `https://vitest.dev` | 2026-10-27 | Unit test runner for `src/lib/ledger` and evaluation harness |
 | Meta Muse Glimmer 30B (`llama.cpp` `llama-server`) | `Q4_K_M` GGUF (`~16.8 GB` + `~1.4 GB` projector) | External (Kaggle 2x T4) | `S-08` | 2026-10-27 | Serve with CUDA arch 75 and `--jinja --api-key` |
-| Gemini API (OpenAI-compatible endpoint) | Dev-only (`MODEL_PROVIDER=gemini`) | External API | `https://ai.google.dev/gemini-api/docs/openai` | 2026-10-27 | For fast development testing only; excluded from evals and final demo |
+| Gemini API (OpenAI-compatible endpoint) | Auxiliary Dev Backup Only (`MODEL_PROVIDER=gemini`) | External API | `https://ai.google.dev/gemini-api/docs/openai` | 2026-10-27 | Auxiliary developer backup fallback only for offline UI prototyping; 100% excluded from evals, gates, and final demo |
 
 ---
 

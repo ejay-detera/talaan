@@ -117,8 +117,8 @@ Talaan — Hackathon Build Stage (Consented / Synthetic Data Only; Zero Live Cus
   BACKEND:   Next.js App Router Route Handlers (`src/app/api/*`) — Two-Phase Split
              (Prepare extraction + deterministic `src/lib/ledger` check -> Human Confirm)
   DATA:      Supabase Postgres (`numeric(10,2)` money, RLS by `owner_id`) + Private Storage (⬜ Planned)
-  EXTERNAL:  Meta Muse Glimmer 30B (`llama-server` on Kaggle 2x T4) .... ⬜ Planned
-             Gemini API (OpenAI-compatible dev test endpoint) ........... ⬜ Planned
+  EXTERNAL:  Meta Muse Glimmer 30B (CANONICAL PRIMARY on Kaggle 2x T4) .. ⬜ Planned
+             Gemini API (Auxiliary Developer Backup Only) ............... ✅ Supported
 ```
 
 **Not implemented:** All domain routes, Supabase tables, `src/lib/model.ts`, `src/lib/ledger/` (`TAL-01` to `TAL-08`). **Simulated:** None. **Deployed:** Local `next dev` scaffold only. **Out of scope:** Voice input, automated SMS sending, payment processing, POS hardware, native mobile app.

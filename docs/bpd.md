@@ -52,7 +52,7 @@ Talaan is not a payment processor, e-wallet, POS cash register, automated SMS sp
 | Boundary | Detail |
 |---|---|
 | **Stage** | **Hackathon Build Stage** (Meta Global AI Developer Hackathon, Oct 26 – Nov 4, 2026). Currently a Next.js 16.4.3 scaffold (`S-10`) with product features in active sprint backlog (`TAL-01` to `TAL-08`). |
-| **Model Runtime** | ⬜ **Muse Glimmer 30B** planned on temporary Kaggle 2x T4 GPU sessions via authenticated tunnel (`A-06`), with **Gemini API** used for local dev speed only. |
+| **Model Runtime** | ⬜ **Meta Muse Glimmer 30B** is the canonical primary engine hosted on Kaggle 2x T4 GPU sessions via authenticated tunnel (`A-06`), with **Gemini API** used strictly as an auxiliary offline developer backup. |
 | **Handwriting Gate** | ⬜ **Unverified (`A-05`).** Filipino/Taglish handwriting accuracy on Muse Glimmer must pass the Day 3 Gate (≥80% row accuracy on 10 real pages). |
 | **Hosting** | 🟡 Local `next dev` and planned Vercel preview. No production SLA, automated backup, or 24/7 GPU hosting exists ([`ops.md`](ops.md) §1). |
 | **Customers** | ❌ **Zero.** No sari-sari store, cooperative, LGU, lender, or distributor has deployed, piloted, or endorsed Talaan. |

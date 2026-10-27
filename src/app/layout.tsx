@@ -28,6 +28,14 @@ export const metadata: Metadata = {
   title: "Talaan — Notebook-to-Ledger Agent",
   description:
     "Two-phase notebook extraction and centavo-accurate bookkeeping for Philippine sari-sari stores.",
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/assets/talaan-icon.png", type: "image/png" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: "/assets/talaan-icon.png",
+  },
 };
 
 export default function RootLayout({

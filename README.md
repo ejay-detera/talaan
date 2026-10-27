@@ -18,11 +18,13 @@ Talaan splits the agent loop into two deterministic phases:
 
 ---
 
-## AI Model Policy
+## AI Model Architecture & Policy
 
-- **Primary Model:** **Meta Muse Glimmer 30B** (`Q4_K_M` GGUF) served via `llama.cpp` `llama-server --jinja` on Kaggle 2x T4 GPU over a secure tunnel. Mandatory for Day 3 Gate, 30+ page evaluation, and demo.
-- **Testing Model:** **Gemini API** (`MODEL_PROVIDER=gemini`) via OpenAI-compatible client for fast local dev iteration only. Excluded from evaluation metrics.
-- **Client:** Unified `openai` client abstraction in `src/lib/model.ts`.
+> **Important Note for Hackathon Judges:** **Meta Muse Glimmer 30B is the canonical, primary vision model for Talaan.** All benchmark evaluations, the Day 3 handwriting gate, and the final demonstration run strictly on Muse Glimmer 30B. The Gemini API is strictly an auxiliary developer backup used for offline frontend prototyping when away from GPU compute, and is 100% excluded from all evaluation metrics.
+
+- **Primary & Native Engine:** **Meta Muse Glimmer 30B** (`Q4_K_M` GGUF + vision projector) served via `llama.cpp` `llama-server --jinja` on Kaggle 2x T4 GPU over an authenticated secure tunnel. Mandatory for the Day 3 Handwriting Gate, 30+ page evaluation, and final demonstration.
+- **Developer Backup Only:** **Gemini API** (`MODEL_PROVIDER=gemini`) via OpenAI-compatible endpoint, used solely as an offline/backup fallback during rapid UI development when GPU instances are offline.
+- **Unified Client:** Single abstraction in `src/lib/model.ts` using the `openai` SDK, with transparent model provenance badging in the UI and exact model logging on every database page record.
 
 ---
 
@@ -32,7 +34,7 @@ Talaan splits the agent loop into two deterministic phases:
 - Node.js 20+
 - npm 10+
 - Supabase account (Postgres + Storage + Auth)
-- Kaggle notebook (2x T4 GPU) or Gemini API key for local testing
+- Kaggle notebook (2x T4 GPU) for Meta Muse Glimmer 30B (or Gemini API key as developer backup fallback)
 
 ### 2. Install & Configure
 ```bash
@@ -47,15 +49,18 @@ Create `.env.local`:
 NEXT_PUBLIC_SUPABASE_URL=https://<your-project>.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=<your-anon-key>
 
-# Model Provider ("glimmer" | "gemini")
-MODEL_PROVIDER=gemini
-GEMINI_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai
-GEMINI_API_KEY=<your-gemini-key>
-GEMINI_MODEL=gemini-2.0-flash
+# Model Provider: "glimmer" (PRIMARY - Canonical Meta Muse Glimmer 30B) | "gemini" (BACKUP - Dev test only)
+MODEL_PROVIDER=glimmer
 
-# Kaggle Muse Glimmer (when running local/eval against tunnel)
+# Meta Muse Glimmer 30B (Primary / Canonical Kaggle 2x T4 tunnel endpoint)
 GLIMMER_BASE_URL=https://<your-tunnel-url>/v1
 GLIMMER_API_KEY=<your-tunnel-api-key>
+
+# Gemini API (Developer Backup / Fallback only when GPU instance is inactive)
+# MODEL_PROVIDER=gemini
+# GEMINI_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai
+# GEMINI_API_KEY=<your-gemini-key>
+# GEMINI_MODEL=gemini-2.0-flash
 ```
 
 ### 3. Run Dev Server

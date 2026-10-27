@@ -22,10 +22,10 @@
 
 **Talaan** is a **Two-Phase Verification Web Application & Multimodal Agent** built on a unified **Next.js App Router** codebase with four tiers:
 
-1. **Mobile-First Web Client (`src/app/`, `src/components/`)** — React 19 + Tailwind CSS v4 interface ("Resibo Carbon & Counter Slip" with Red Margin Gutter) for capturing notebook photos, reviewing staged rows, inspecting customer balances, and copying/sharing Taglish reminders.
+1. **Mobile-First Web Client (`src/app/`, `src/components/`)** — React 19 + Tailwind CSS v4 interface ("The Notebook, Kept" with Red Margin Gutter per [`docs/design.md`](design.md)) for capturing notebook photos, reviewing staged rows, inspecting customer balances, and copying/sharing Taglish reminders.
 2. **Server Route Handlers & Deterministic Ledger Engine (`src/app/api/`, `src/lib/ledger/`, `src/lib/image.ts`, `src/lib/schemas.ts`)** — Next.js server endpoints that pre-process images with `sharp`, validate model responses with Zod, and execute centavo-exact row and page arithmetic checks in TypeScript.
 3. **Data & Storage Tier (Supabase Postgres + Private Storage + Auth/RLS)** — Persistent tenant-isolated storage for `stores`, `customers`, `pages`, `entries`, and `reminders` (`numeric(10,2)` money columns) plus private storage for notebook photos.
-4. **Multimodal Inference Tier (`src/lib/model.ts` → Muse Glimmer 30B / Dev Gemini)** — OpenAI-compatible client pointing by default at **Meta Muse Glimmer 30B** (`llama-server --jinja` on Kaggle 2x T4 GPU via authenticated tunnel) and optionally at **Gemini API** in local `.env.local` for fast dev iteration only.
+4. **Multimodal Inference Tier (`src/lib/model.ts` → Meta Muse Glimmer 30B Primary / Auxiliary Dev Gemini)** — OpenAI-compatible client pointing natively at **Meta Muse Glimmer 30B** (`llama-server --jinja` on Kaggle 2x T4 GPU via authenticated tunnel) as the canonical primary engine, with **Gemini API** strictly as an auxiliary developer backup in local `.env.local` for offline development.
 
 ### 1.2 The load-bearing architectural decision
 
@@ -37,17 +37,15 @@
 
 ### 1.3 Structural breakdown
 
-| Component | Location | Responsibility | Status |
-|---|---|---|---|
-| App shell & routes | `src/app/` | Mobile-first screens (`/login`, `/`, `/pages/[id]/review`, `/customers`, `/customers/[id]`) | 🟡 Scaffold (`src/app/layout.tsx`, `src/app/page.tsx` exist; domain routes `⬜`) |
-| UI components | `src/components/` | Modular sub-components (`RedMarginGutter`, `TwoPlyProofBar`, `EntryReviewRow`, `ReminderDrawer`) | ⬜ Planned (`TAL-05`, `TAL-06`) |
+| App shell & routes | `src/app/` | Mobile-first screens (`/login`, `/`, `/pages/[id]/review`, `/customers`, `/customers/[id]`) | 🟡 App shell, `/` Landing Page, `/login` built; review and customer screens planned (`TAL-05`, `TAL-06`) |
+| UI components | `src/components/` | Modular sub-components (`Amount`, `NotebookLedgerProof`, `DemoCtaBar`, `RedMarginGutter`, `TwoPlyProofBar`) | 🟡 Shared & Landing components built; Review UI planned (`TAL-05`) |
 | Client services & hooks | `src/services/`, `src/hooks/` | Typed API callers and state hooks for upload, review, balances, and reminders | ⬜ Planned (`TAL-05`, `TAL-06`) |
-| Shared domain types & Zod schemas | `src/types/`, `src/lib/schemas.ts` | Canonical TypeScript interfaces and Zod runtime validators (`PageExtractionSchema`, etc.) | ⬜ Planned (`TAL-02`) |
-| Deterministic ledger engine | `src/lib/ledger/` | Integer-centavo row check (`qty * unit_price === amount`), page check (`computed_total === written_total`), and customer balance math | ⬜ Planned (`TAL-04`) |
-| Unified AI client & prompts | `src/lib/model.ts`, `src/lib/prompts/` | Single `openai` SDK switch between `glimmer` (default) and `gemini` (local dev only) + tool schemas | ⬜ Planned (`TAL-02`) |
-| Image pre-processor | `src/lib/image.ts` | Server-side `sharp` resize, auto-orientation, contrast enhancement, and cropping | ⬜ Planned (`TAL-02`) |
-| API Route Handlers | `src/app/api/` | `POST /api/pages/extract`, `POST /api/pages/[id]/confirm`, `GET /api/customers`, `POST /api/reminders/draft` | ⬜ Planned (`TAL-02`, `TAL-05`, `TAL-06`) |
-| Database migrations & RLS | `supabase/migrations/` | DDL for `stores`, `customers`, `pages`, `entries`, `reminders`, indexes, and RLS policies | ⬜ Planned (`TAL-01`) |
+| Shared domain types & Zod schemas | `src/types/`, `src/lib/schemas.ts` | Canonical TypeScript interfaces and Zod runtime validators (`PageExtractionSchema`, etc.) | ✅ Built (`TAL-02`) |
+| Deterministic ledger engine | `src/lib/ledger/` | Integer-centavo row check (`qty * unit_price === amount`), page check (`computed_total === written_total`), and customer balance math | ✅ Built & Tested (`TAL-04`) |
+| Unified AI client & prompts | `src/lib/model.ts`, `src/lib/prompts/` | Single `openai` SDK switch between `glimmer` (canonical default) and `gemini` (auxiliary dev backup only) + tool schemas | ✅ Built (`TAL-02`) |
+| Image pre-processor | `src/lib/image.ts` | Server-side `sharp` resize, auto-orientation, contrast enhancement, and cropping | ✅ Built (`TAL-02`) |
+| API Route Handlers | `src/app/api/` | `POST /api/pages/extract`, `POST /api/auth/demo`, `POST /api/pages/[id]/confirm`, `GET /api/customers`, `POST /api/reminders/draft` | 🟡 Demo Auth & Extract API built; confirm, customer & reminder routes planned |
+| Database migrations & RLS | `supabase/migrations/` | DDL for `stores`, `customers`, `pages`, `entries`, `reminders`, indexes, and RLS policies | ✅ Built (`TAL-01`) |
 | Evaluation & Kaggle scripts | `scripts/`, `eval/` | Kaggle `llama-server` setup script and 30+ page Muse Glimmer evaluation harness | ⬜ Planned (`TAL-03`, `TAL-07`) |
 
 ---
@@ -62,9 +60,9 @@ Pinned versions come from `package.json` (`S-10`); planned packages are tracked 
 | UI Runtime | **React / React DOM** | `19.3.0` (✅ Installed) | Server and Client Components with fast transitions |
 | Styling | **Tailwind CSS** | `^4` (✅ Installed) | CSS-first token authority in `src/app/globals.css` |
 | Language | **TypeScript** | `^5` (✅ Installed) | Strict end-to-end type safety |
-| Database, Auth & Storage | **Supabase (`@supabase/supabase-js`)** | ⬜ Planned (`TAL-01`) | Managed Postgres (`numeric(10,2)`), Auth + RLS tenant isolation, and private Storage bucket with signed URLs |
-| Primary Vision & Tool LLM | **Meta Muse Glimmer 30B** (`Q4_K_M` GGUF ~16.8 GB + ~1.4 GB projector) | Served via `llama.cpp` `llama-server` (`--jinja`, CUDA arch 75) on Kaggle 2x T4 (`⬜`) | Open weights (Apache 2.0), multimodal vision + tool calling, 131K context, zero token fees (`C-07`) |
-| Dev Testing LLM | **Gemini API** (OpenAI-compatible endpoint) | ⬜ Planned (`TAL-02`) | Fast iteration while building; strictly excluded from Day 3 gate, evals, and final demo (`S-01` §4) |
+| Database, Auth & Storage | **Supabase (`@supabase/supabase-js`)** | `^2.118.0` (✅ Installed) | Managed Postgres (`numeric(10,2)`), Auth + RLS tenant isolation, and private Storage bucket with signed URLs |
+| Primary Vision & Tool LLM | **Meta Muse Glimmer 30B** (`Q4_K_M` GGUF ~16.8 GB + ~1.4 GB projector) | Served via `llama.cpp` `llama-server` (`--jinja`, CUDA arch 75) on Kaggle 2x T4 (`⬜`) | Canonical primary engine: open weights (Apache 2.0), multimodal vision + tool calling, zero token fees (`C-07`) |
+| Auxiliary Dev Backup LLM | **Gemini API** (OpenAI-compatible endpoint) | Supported in `src/lib/model.ts` (`MODEL_PROVIDER=gemini`) | Auxiliary developer backup fallback for offline UI development; strictly excluded from Day 3 gate, evals, and final demo (`S-01` §4) |
 | Model SDK | **`openai` npm package** | ⬜ Planned (`TAL-02`) | Identical code path in `src/lib/model.ts` for both `llama-server` and Gemini |
 | Validation | **Zod** | ⬜ Planned (`TAL-02`) | Rejects malformed LLM JSON before any ledger or DB logic runs |
 | Image Processing | **`sharp`** | ⬜ Planned (`TAL-02`) | Shrinks image token count and boosts handwriting contrast before calling 2x T4 GPU |
@@ -97,8 +95,8 @@ flowchart TB
     BUCKET["Private Storage Bucket (notebook-pages)"]
   end
   subgraph external ["Inference Endpoint (Env-Selected)"]
-    GLIMMER["Kaggle 2x T4: llama-server --jinja\n(Muse Glimmer 30B Q4_K_M via Tunnel)"]
-    GEMINI["Gemini API\n(Local Dev Testing Only)"]
+    GLIMMER["Kaggle 2x T4: llama-server --jinja\n(CANONICAL PRIMARY: Muse Glimmer 30B)"]
+    GEMINI["Gemini API\n(Auxiliary Dev Backup Only)"]
   end
 
   UI --> SVC
@@ -107,8 +105,8 @@ flowchart TB
   API --> SHARP
   SHARP --> BUCKET
   API --> MODEL
-  MODEL --> GLIMMER
-  MODEL -.->|"MODEL_PROVIDER=gemini (dev only)"| GEMINI
+  MODEL -->|"MODEL_PROVIDER=glimmer (primary)"| GLIMMER
+  MODEL -.->|"MODEL_PROVIDER=gemini (backup only)"| GEMINI
   API --> LEDGER
   API --> RLS
   RLS --> TBL

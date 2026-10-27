@@ -38,7 +38,7 @@ Today (`2026-10-27`), the repository contains the **Next.js 16.4.3 / React 19.3.
 |---|---|
 | Lifecycle stage | **Build** (Hackathon prototype for Meta Global AI Developer Hackathon, Oct 26 – Nov 4, 2026) |
 | Data posture | **Consented / synthetic pages only** (`S-01` §4, §8). Customer names redacted in demo and repo. |
-| Model posture | **Muse Glimmer 30B** (`llama-server` on Kaggle 2x T4) is mandatory for Day 3 gate, 30+ page evaluation, and final demo. **Gemini API** is used for local dev speed only (`S-01` §4). |
+| Model posture | **Meta Muse Glimmer 30B** (`llama-server` on Kaggle 2x T4) is the canonical primary engine and mandatory for Day 3 gate, 30+ page evaluation, and final demo. **Gemini API** is strictly an auxiliary developer backup for offline UI work (`S-01` §4). |
 | Pilots & Customers | ❌ Zero. No sari-sari store, cooperative, lender, or distributor has deployed, piloted, procured, or endorsed Talaan. |
 | Revenue & Value Movement | ❌ Zero revenue earned. Talaan is a bookkeeping record system only and moves zero real money (`S-01` §8). |
 
@@ -123,7 +123,7 @@ The system must accept phone photos of handwritten notebook pages, supplier rece
 **Traces:** US-01 · TAL-01, TAL-02 · tests T-001
 
 ### BR-02 Multimodal Structured Extraction & Unreadable Recovery ⬜
-The system must extract structured candidate rows (`customer`, `item`, optional `quantity` and `unit_price`, `amount`, `entry_type`: `'credit' | 'payment' | 'cash_sale'`, `confidence`) and `written_total` using `src/lib/model.ts` (Muse Glimmer primary; Gemini local dev only), or trigger a specific retake request (`flag_unreadable`) when a page cannot be read. Every extraction must log the active `model` and `latency_ms`.
+The system must extract structured candidate rows (`customer`, `item`, optional `quantity` and `unit_price`, `amount`, `entry_type`: `'credit' | 'payment' | 'cash_sale'`, `confidence`) and `written_total` using `src/lib/model.ts` (Meta Muse Glimmer 30B canonical primary; Gemini auxiliary developer backup only), or trigger a specific retake request (`flag_unreadable`) when a page cannot be read. Every extraction must log the active `model` and `latency_ms`.
 **Traces:** US-02, US-07 · TAL-02, TAL-03 · tests T-002, T-008
 
 ### BR-03 Deterministic Two-Level Discrepancy Verification ⬜

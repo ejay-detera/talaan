@@ -69,7 +69,7 @@ Every agent operating on this codebase must adhere to these five universal execu
 Active in `docs/foundation.md` §0; their rules are non-negotiable:
 
 - **Payments and ledger (`docs/modules/payments-ledger.md`):** Active for Talaan's Two-Phase Bookkeeping & *Utang* Ledger (`Prepare` extraction via `POST /api/pages/extract` → human `Confirm` via `POST /api/pages/[id]/confirm`, confirmation idempotency, fail-closed integer-centavo math in `src/lib/ledger/` and `numeric(10,2)` in Postgres, zero LLM arithmetic).
-- **AI component (`docs/modules/ai-component.md`):** Active for Meta Muse Glimmer 30B (primary) and Gemini API (local dev testing only) via `src/lib/model.ts` (mandatory human-in-the-loop confirmation before DB balance updates, Zod schema validation in `src/lib/schemas.ts`, active model badge in UI, `model` column logged on `pages`, and 30+ page evaluation strictly on Muse Glimmer).
+- **AI component (`docs/modules/ai-component.md`):** Active for **Meta Muse Glimmer 30B** (canonical primary engine) and Gemini API (auxiliary developer backup only) via `src/lib/model.ts` (mandatory human-in-the-loop confirmation before DB balance updates, Zod schema validation in `src/lib/schemas.ts`, active model badge in UI, `model` column logged on `pages`, and 30+ page evaluation strictly on Muse Glimmer).
 - **Mobile client:** Inactive (deleted; Talaan is a mobile-first Next.js web app governed by `docs/design.md`).
 
 ---
@@ -120,7 +120,7 @@ Rules:
 ## 7. Environments & Secrets
 
 - **Never put a secret in client-bundled variables (`NEXT_PUBLIC_*`)**, repository files, logs, or chat.
-- **Never present Gemini test output as Muse Glimmer output.** `MODEL_PROVIDER=gemini` is for fast local building only; the Day 3 gate, 30+ page evaluation, and final demo must run on `MODEL_PROVIDER=glimmer`.
+- **Never present Gemini test output as Muse Glimmer output.** Meta Muse Glimmer 30B is the canonical primary engine; `MODEL_PROVIDER=gemini` is strictly an auxiliary developer backup for offline UI work. The Day 3 gate, 30+ page evaluation, and final demo must run on `MODEL_PROVIDER=glimmer`.
 - **Hosted non-production environments** are demo/test only (`docs/build.md` §13). Never describe them as "live" or "in production."
 - **Irreversible commands** (`supabase db reset`, `DROP TABLE`, `git push --force`): ask before running.
 - Default to local/dev stack for all seed and migration scripts. Confirm targets before running.

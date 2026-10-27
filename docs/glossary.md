@@ -61,8 +61,8 @@ Every enum or state machine value, with its meaning. The legal transitions live 
 | `entries.entry_type` | `'cash_sale'` | Paid cash purchase; does not affect customer *utang* balance | N/A | `Cash Sale` |
 | `reminders.tone` | `'friendly'` | Polite, neighborly Taglish reminder (*Malumanay*) | N/A | `Malumanay (Friendly)` |
 | `reminders.tone` | `'firm'` | Clear, direct Taglish due-balance reminder (*Pormal*) | N/A | `Pormal (Firm)` |
-| `MODEL_PROVIDER` | `'glimmer'` | Meta Muse Glimmer 30B via `llama-server` (Default, Gate, Eval, Demo) | N/A | `Muse Glimmer 30B (Local)` |
-| `MODEL_PROVIDER` | `'gemini'` | Gemini API via OpenAI-compatible client (Local dev testing only) | N/A | `Gemini API (Dev Test)` |
+| `MODEL_PROVIDER` | `'glimmer'` | Meta Muse Glimmer 30B via `llama-server` (CANONICAL PRIMARY: Gate, Eval, Demo, Production) | N/A | `Muse Glimmer 30B (Primary)` |
+| `MODEL_PROVIDER` | `'gemini'` | Gemini API via OpenAI-compatible client (Auxiliary Developer Backup Only — excluded from evals) | N/A | `Gemini API (Dev Backup)` |
 
 ## 4. Acronyms and Abbreviations
 

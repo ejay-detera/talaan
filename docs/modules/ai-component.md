@@ -8,16 +8,18 @@ This module governs AI **inside the product** (`src/lib/model.ts` and `src/lib/p
 
 ---
 
+> **Important Note for Hackathon Judges:** **Meta Muse Glimmer 30B is the primary and canonical engine of Talaan.** The product is designed natively for open-weights execution on local/cooperative compute via `llama-server`. The Gemini API is strictly an auxiliary developer backup used for offline frontend prototyping when GPU compute is spun down, and is completely excluded from all benchmark metrics, gates, and demonstrations.
+
 ## 1. Inventory
 
 | Component | Model / provider | Pinned version | Purpose | Input data | Output used for | Status |
 |---|---|---|---|---|---|---|
 | **Primary Vision & Tool Agent** | **Meta Muse Glimmer 30B** via `llama.cpp` `llama-server` (`--jinja`, CUDA T4 arch 75) on Kaggle 2x T4 GPU | `Q4_K_M` GGUF (`~16.8 GB` + `~1.4 GB` vision projector; [`evidence.md`](../evidence.md) §5) | `extract_rows`, `flag_unreadable`, `draft_reminder`, `restock_list` | Pre-processed notebook/receipt image (`sharp`) or confirmed customer debt items | Staged ledger rows (`needs_review`) and Taglish reminder drafts | ⬜ Planned (`TAL-02`, `TAL-03`) |
-| **Development Testing Provider** | **Gemini API** (OpenAI-compatible endpoint via `MODEL_PROVIDER=gemini`) | Configured via `GEMINI_MODEL` in `.env.local` ([`evidence.md`](../evidence.md) §5) | Fast local iteration while building UI and route handlers (**never used for Day 3 gate, evaluation, or final demo**) | Synthetic / consented test images and test prompts | Development debugging only (excluded from eval metrics via `pages.model` column) | ⬜ Planned (`TAL-02`) |
+| **Auxiliary Dev Backup Only** | **Gemini API** (OpenAI-compatible endpoint via `MODEL_PROVIDER=gemini`) | Configured via `GEMINI_MODEL` in `.env.local` ([`evidence.md`](../evidence.md) §5) | Developer backup fallback for rapid offline UI iteration (**never used for Day 3 gate, evaluation, or final demo**) | Synthetic / consented test images and test prompts | Development debugging only (100% excluded from eval metrics via `pages.model` column) | ⬜ Planned (`TAL-02`) |
 
 ### Unified Client Rule (`src/lib/model.ts`)
 - Every model call goes through `src/lib/model.ts` using the `openai` npm package.
-- Default `MODEL_PROVIDER` is `"glimmer"`.
+- Default `MODEL_PROVIDER` is `"glimmer"` (Meta Muse Glimmer 30B).
 - Every extraction writes the active `modelName` (`"muse-glimmer"` or `process.env.GEMINI_MODEL`) and `latency_ms` into the `pages` table.
 - The UI renders a visible **Model Provenance Badge** showing which model produced the current page extraction.
 

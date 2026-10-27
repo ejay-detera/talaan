@@ -28,7 +28,7 @@ Unlike POS or inventory apps that require store owners to abandon paper and type
 ## Capabilities and Constraints
 
 - **Confirmed Capabilities (MVP Scope — Planned):** Photo upload, structured extraction with row confidence, review screen with low-confidence highlights and customer auto-matching, two-level deterministic discrepancy finder, customer balance ledger, Taglish reminder drafts (copy/share only), and unreadable page retake request.
-- **Model Policy:** Meta Muse Glimmer 30B (Q4_K_M GGUF via `llama-server` on Kaggle 2x T4) is the primary model and mandatory for the Day 3 handwriting gate, 30+ page evaluation, and final demo. Gemini API (`MODEL_PROVIDER=gemini`) is permitted for local development speed only. Active model is always badged in UI and logged per page in the database.
+- **Model Policy:** **Meta Muse Glimmer 30B** (Q4_K_M GGUF via `llama-server` on Kaggle 2x T4) is the canonical primary engine and mandatory for the Day 3 handwriting gate, 30+ page evaluation, and final demo. Gemini API (`MODEL_PROVIDER=gemini`) is strictly an auxiliary developer backup used for rapid local offline iteration. Active model is always badged in UI and logged per page in the database.
 - **Hard Boundaries:** No automated message sending (owner sends manually), no payment processing or e-wallet movement, no voice/audio input, and zero LLM-computed arithmetic (all math happens in deterministic code using integer centavos / `numeric(10,2)`).
 
 ## Brand Commitments

@@ -129,15 +129,16 @@
 |---|---|
 | Priority | P1 |
 | Points | 5 |
-| Status | ⬜ To Do |
+| Status | 🟡 Partial |
 | Developer | Dev Ejay |
-| Traces | BR-04 · US-04 · tests T-005 |
+| Traces | BR-04 · US-04 · tests T-000, T-004, T-005 |
 
 > **As a Store Owner**, I want to review extracted rows with the **Red Margin Gutter** and **Two-Ply Proof Bar**, edit any misread amount, link/create customers in 1 tap, and confirm the page into the ledger (`POST /api/pages/[id]/confirm`).
 
 **Acceptance criteria:**
-- [ ] Apply [`dsd.md`](dsd.md) High-Contrast Daylight tokens (`#FAF8F4`, `#1E293B`, `#0F6E56`, `#E11D48`, `Geist Mono` `tabular-nums`) in `src/app/globals.css`.
-- [ ] Build Upload Dashboard (`src/app/page.tsx`) showing active **Model Provenance Badge** (`Muse Glimmer 30B` vs. `Gemini Dev`) and recent pages.
+- [x] Apply [`docs/design.md`](design.md) High-Contrast Daylight tokens (`#F2F5EC`, `#FFFFFF`, `#1E3FAE`, `#C8302F`, `#FFE14D`, `tabular-nums`) in `src/app/globals.css`.
+- [x] Build Landing Page (`src/app/page.tsx`, `src/components/landing/*`) showing active **Model Provenance Badge** (`Muse Glimmer 30B` vs. `Gemini Dev`), `.notebook`-to-ledger visual proof, and 1-tap Demo Store CTA.
+- [ ] Build Upload Dashboard showing recent notebook pages list and image capture trigger.
 - [ ] Build `/pages/[id]/review` with cropped notebook strip, `RedMarginGutter` (`✓`, `▲ Needs Review`, `✕ Math Mismatch`), inline row editor, 1-tap customer match/create dropdown, and sticky `TwoPlyProofBar` (`Written Total` vs. `Computed Total`).
 - [ ] Implement `POST /api/pages/[id]/confirm` (`API-02`) with idempotency guard (`409 ALREADY_CONFIRMED`), centavo re-verification, and atomic commit (`confirmed_by_user = true`, `pages.status = 'confirmed'`).
 
@@ -215,8 +216,8 @@
 
 | Sprint | Planned stories | Planned points | Completed points | Status |
 |---|---|---|---|---|
-| Sprint 1 (Oct 27–28) | `TAL-01`, `TAL-02`, `TAL-03` | 13 | 0 | 🔄 In Progress |
-| Sprint 2 (Oct 29–Nov 1) | `TAL-04`, `TAL-05`, `TAL-06` | 13 | 0 | ⬜ Not started |
+| Sprint 1 (Oct 27–28) | `TAL-01`, `TAL-02`, `TAL-03` | 13 | 8 | 🔄 In Progress (`TAL-01`, `TAL-02` done) |
+| Sprint 2 (Oct 29–Nov 1) | `TAL-04`, `TAL-05`, `TAL-06` | 13 | 3 | 🔄 Active (`TAL-04` done, `TAL-05` partial) |
 | Sprint 3 (Nov 2–Nov 4) | `TAL-07`, `TAL-08` | 8 | 0 | ⬜ Not started |
 
 ---
@@ -225,8 +226,8 @@
 
 | Role | In backlog | In code (`2026-10-27`) | Notes |
 |---|---|---|---|
-| `store_owner` | Yes (`TAL-01`–`TAL-06`) | ⬜ Planned | Scoped via `stores.owner_id = auth.uid()` |
-| `anon` | Yes (`TAL-01`) | ⬜ Planned | `/login` with 1-Tap Demo Store entry |
+| `store_owner` | Yes (`TAL-01`–`TAL-06`) | 🟡 Partial | Auth, Extract API, Centavo math wired |
+| `anon` | Yes (`TAL-01`, `TAL-05`) | ✅ Built | Landing Page (`/`) and 1-Tap Demo Login (`/login`) |
 
 ---
 
@@ -244,6 +245,9 @@
 | Date | Change | Reason | Stories affected |
 |---|---|---|---|
 | 2026-10-27 | Created 3-sprint hackathon backlog (`TAL-01` to `TAL-08`) from Project Brief v1 (`S-01`) and locked `/grill-me` decisions. | Initial project planning | `TAL-01`–`TAL-08` |
+| 2026-10-27 | Implemented Landing Page (`src/app/page.tsx`, `src/components/landing/*`, `src/lib/ledger/sample-proof.ts`) and aligned design system tokens. | Story delivery (`TAL-05`) | `TAL-05` |
+| 2026-10-27 | Redesigned Landing Page in English with Paper Sovereign Showcase, floating contextual widgets (sticky memo, credit balances, Taglish reminder, deterministic shield), living paper keyframe animations, and shadcn UI primitives (`button`, `card`, `badge`, `cn`). | Design craft upgrade (`TAL-05`, `impeccable`) | `TAL-05` |
+
 
 ---
 

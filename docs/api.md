@@ -52,7 +52,7 @@
 1. Authenticate `store_owner` via Supabase Auth; verify `store_id` ownership under RLS.
 2. Pre-process `file` with `sharp` (`src/lib/image.ts`: EXIF auto-orient, resize max width/height, normalize contrast).
 3. Upload processed image to private Supabase Storage bucket `notebook-pages/{store_id}/{page_id}.jpg` and insert `pages` row (`status = 'processing'`).
-4. Call `src/lib/model.ts` (`extract_rows` and `flag_unreadable` tool definitions), recording elapsed `latency_ms` and active `modelName` (`"muse-glimmer"` or dev Gemini model).
+4. Call `src/lib/model.ts` (`extract_rows` and `flag_unreadable` tool definitions), recording elapsed `latency_ms` and active `modelName` (`"muse-glimmer"` [canonical primary] or dev backup model name).
 5. If model calls `flag_unreadable(region, reason)`: update `pages` (`status = 'retake_requested'`, `retake_reason`, `model`, `latency_ms`) and return `200 OK` with retake guidance.
 6. If model calls `extract_rows`: validate arguments with `PageExtractionSchema` (Zod).
 7. Pass validated rows and `written_total` to `src/lib/ledger/math.ts` to compute `line_discrepancy` (`quantity * unit_price !== amount`), `computed_total`, `has_page_discrepancy` (`computed_total !== written_total`), and `needs_review` (`confidence < 0.80 || line_discrepancy`).
@@ -180,8 +180,8 @@ None. Talaan uses synchronous HTTP Route Handlers.
 
 | Service | Version | Used for | Auth | Docs and pinned version |
 |---|---|---|---|---|
-| **Kaggle `llama-server` (Muse Glimmer 30B)** | OpenAI-compatible `/v1/chat/completions` | Vision extraction & Taglish reminder tool calls | `Bearer ${GLIMMER_API_KEY}` | [`evidence.md`](evidence.md) §5 |
-| **Gemini API** (Dev test only) | OpenAI-compatible `/v1beta/openai/chat/completions` | Local dev iteration when `MODEL_PROVIDER=gemini` | `Bearer ${GEMINI_API_KEY}` | [`evidence.md`](evidence.md) §5 |
+| **Meta Muse Glimmer 30B (Kaggle `llama-server`)** | OpenAI-compatible `/v1/chat/completions` | Canonical primary vision extraction & Taglish reminder tool calls | `Bearer ${GLIMMER_API_KEY}` | [`evidence.md`](evidence.md) §5 |
+| **Gemini API** (Auxiliary dev backup only) | OpenAI-compatible `/v1beta/openai/chat/completions` | Offline local dev iteration when `MODEL_PROVIDER=gemini` | `Bearer ${GEMINI_API_KEY}` | [`evidence.md`](evidence.md) §5 |
 | **Supabase API** | REST / Storage / Auth v2 | Database persistence, RLS auth, private Storage bucket | Supabase JWT / Service key | [`evidence.md`](evidence.md) §5 |
 
 ---
