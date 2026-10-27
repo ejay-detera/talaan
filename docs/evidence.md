@@ -89,9 +89,9 @@ Pinned versions come from `package.json` / `package-lock.json` (`S-10`). Planned
 | `typescript` | `^5` | `package-lock.json` | `https://www.typescriptlang.org/docs/` | 2026-10-27 | Strict mode enabled in `tsconfig.json` |
 | `eslint` / `eslint-config-next` | `^9` / `16.4.3` | `package-lock.json` | `https://eslint.org/docs/latest/` | 2026-10-27 | Flat config in `eslint.config.mjs` |
 | `@supabase/supabase-js` | `Not yet installed` (⬜ Planned in `TAL-01`) | — | `https://supabase.com/docs/reference/javascript` | 2026-10-27 | Postgres, Storage, Auth + RLS client |
-| `openai` | `Not yet installed` (⬜ Planned in `TAL-02`) | — | `https://github.com/openai/openai-node` | 2026-10-27 | Used in `src/lib/model.ts` for both `llama-server` (Muse Glimmer) and Gemini OpenAI-compatible endpoint |
-| `zod` | `Not yet installed` (⬜ Planned in `TAL-02`) | — | `https://zod.dev` | 2026-10-27 | Schema validation of model tool calls and API inputs |
-| `sharp` | `Not yet installed` (⬜ Planned in `TAL-02`) | — | `https://sharp.pixelplumbing.com` | 2026-10-27 | Server-side image resize, auto-rotate, contrast, crop |
+| `openai` | `7.45.0` | `package-lock.json` | `https://github.com/openai/openai-node` | 2026-10-27 | Used in `src/lib/model.ts` for both `llama-server` (Muse Glimmer) and Gemini OpenAI-compatible endpoint |
+| `zod` | `4.6.7` | `package-lock.json` | `https://zod.dev` | 2026-10-27 | Schema validation of model tool calls and API inputs |
+| `sharp` | `0.35.5` | `package-lock.json` | `https://sharp.pixelplumbing.com` | 2026-10-27 | Server-side image resize, auto-rotate, contrast, crop |
 | `vitest` | `Not yet installed` (⬜ Planned in `TAL-04`) | — | `https://vitest.dev` | 2026-10-27 | Unit test runner for `src/lib/ledger` and evaluation harness |
 | Meta Muse Glimmer 30B (`llama.cpp` `llama-server`) | `Q4_K_M` GGUF (`~16.8 GB` + `~1.4 GB` projector) | External (Kaggle 2x T4) | `S-08` | 2026-10-27 | Serve with CUDA arch 75 and `--jinja --api-key` |
 | Gemini API (OpenAI-compatible endpoint) | Dev-only (`MODEL_PROVIDER=gemini`) | External API | `https://ai.google.dev/gemini-api/docs/openai` | 2026-10-27 | For fast development testing only; excluded from evals and final demo |

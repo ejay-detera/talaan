@@ -1,0 +1,42 @@
+import OpenAI from "openai";
+
+export type ModelProvider = "glimmer" | "gemini";
+
+export const activeProvider: ModelProvider =
+  (process.env.MODEL_PROVIDER as ModelProvider) ?? "glimmer";
+
+export const activeModelName: string =
+  activeProvider === "gemini"
+    ? process.env.GEMINI_MODEL || "gemini-2.0-flash"
+    : "muse-glimmer";
+
+export function getModelClient(): { client: OpenAI; model: string; provider: ModelProvider } {
+  const isGemini = activeProvider === "gemini";
+
+  const baseURL = isGemini
+    ? process.env.GEMINI_BASE_URL || "https://generativelanguage.googleapis.com/v1beta/openai"
+    : process.env.GLIMMER_BASE_URL;
+
+  const apiKey = isGemini
+    ? process.env.GEMINI_API_KEY
+    : process.env.GLIMMER_API_KEY ?? "none";
+
+  if (!baseURL) {
+    throw new Error(
+      isGemini
+        ? "GEMINI_BASE_URL is not configured"
+        : "GLIMMER_BASE_URL is not configured. Set the Kaggle tunnel URL in .env.local"
+    );
+  }
+
+  if (isGemini && !apiKey) {
+    throw new Error("GEMINI_API_KEY is not configured in .env.local");
+  }
+
+  const client = new OpenAI({
+    baseURL,
+    apiKey: apiKey || "dummy-key",
+  });
+
+  return { client, model: activeModelName, provider: activeProvider };
+}

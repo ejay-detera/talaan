@@ -70,17 +70,17 @@
 |---|---|
 | Priority | P1 |
 | Points | 5 |
-| Status | ⬜ To Do |
+| Status | 🔄 In Progress (Pipeline built; DB wiring in TAL-01) |
 | Developer | Dev Ejay |
 | Traces | BR-01, BR-02 · US-01, US-02, US-07 · tests T-001, T-002 |
 
 > **As a Store Owner**, I want my uploaded notebook photo pre-processed with `sharp` and extracted into structured candidate rows (`credit`, `payment`, `cash_sale`, `confidence`) or flagged as unreadable (`flag_unreadable`) through `POST /api/pages/extract`.
 
 **Acceptance criteria:**
-- [ ] Install `openai`, `zod`, and `sharp`; record pinned versions in [`evidence.md`](evidence.md) §5.
-- [ ] Implement `src/lib/model.ts` switching between `glimmer` (default) and `gemini` (local dev testing only) via `MODEL_PROVIDER` (`S-01` §4).
-- [ ] Implement `src/lib/schemas.ts` (`PageExtractionSchema`, `RetakeRequestSchema`) and `src/lib/image.ts` (`sharp` auto-orient, resize, contrast).
-- [ ] Implement `POST /api/pages/extract` (`API-01`): stores image in private bucket, calls `extract_rows` / `flag_unreadable`, logs `model` and `latency_ms` on `pages`, and stages rows with `confirmed_by_user = false` and `pages.status = 'needs_review'` (or `'retake_requested'`).
+- [x] Install `openai`, `zod`, and `sharp`; record pinned versions in [`evidence.md`](evidence.md) §5.
+- [x] Implement `src/lib/model.ts` switching between `glimmer` (default) and `gemini` (local dev testing only) via `MODEL_PROVIDER` (`S-01` §4).
+- [x] Implement `src/lib/schemas.ts` (`PageExtractionSchema`, `RetakeRequestSchema`) and `src/lib/image.ts` (`sharp` auto-orient, resize, contrast).
+- [x] Implement `POST /api/pages/extract` (`API-01`): handles image upload, `sharp` prep, calls `extract_rows` / `flag_unreadable`, logs `model` and `latency_ms`, and returns candidate rows with deterministic math (`confirmed_by_user = false`, `status = 'needs_review'` / `'retake_requested'`). Storage/DB commit hooks into `TAL-01`.
 
 ---
 

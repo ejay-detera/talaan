@@ -87,10 +87,10 @@ Kept in lockstep with [`prd.md`](prd.md) §3:
 |---|---|---|---|---|
 | Next.js 16.4.3 / React 19.3.0 / Tailwind v4 App Shell | Must | ✅ | `src/app/layout.tsx`, `src/app/page.tsx`, `package.json` | `npm run lint`, `npx tsc --noEmit` |
 | 1. 1-Tap Demo Store Login & Supabase Auth + RLS | Must | ⬜ planned | `src/app/login/page.tsx`, `supabase/migrations/` (`TAL-01`) | `T-001` |
-| 2. Photo Upload & `sharp` Image Prep | Must | ⬜ planned | `src/app/api/pages/extract/route.ts`, `src/lib/image.ts` (`TAL-02`) | `T-001` |
-| 3. Structured Extraction (`credit`/`payment`/`cash_sale`, confidence, model badge) | Must | ⬜ planned | `src/lib/model.ts`, `src/lib/schemas.ts` (`TAL-02`, `TAL-03`) | `T-002`, `T-008` |
-| 4. Unreadable Page Retake Request (`flag_unreadable`) | Must | ⬜ planned | `src/app/api/pages/extract/route.ts` (`TAL-02`) | `T-002` |
-| 5. Two-Level Deterministic Discrepancy Finder | Must | ⬜ planned | `src/lib/ledger/math.ts` (`TAL-04`) | `T-003`, `T-004` |
+| 2. Photo Upload & `sharp` Image Prep | Must | ✅ | `src/app/api/pages/extract/route.ts`, `src/lib/image.ts` (`TAL-02`) | `npm run lint`, `npx tsc --noEmit` |
+| 3. Structured Extraction (`credit`/`payment`/`cash_sale`, confidence, model badge) | Must | 🟡 partial | `src/lib/model.ts`, `src/lib/schemas.ts`, `src/app/api/pages/extract/route.ts` (`TAL-02`, `TAL-03`) | `npm run lint`, `npx tsc --noEmit` (Glimmer gate in `TAL-03`) |
+| 4. Unreadable Page Retake Request (`flag_unreadable`) | Must | ✅ | `src/app/api/pages/extract/route.ts`, `src/lib/schemas.ts` (`TAL-02`) | `npm run lint`, `npx tsc --noEmit` |
+| 5. Two-Level Deterministic Discrepancy Finder | Must | 🟡 partial | `src/lib/ledger/math.ts` (`TAL-04`) | `npm run lint`, `npx tsc --noEmit` (Vitest in `TAL-04`) |
 | 6. Review Screen (Red Margin Gutter, Two-Ply Proof Bar, Customer Auto-Match) | Must | ⬜ planned | `src/app/pages/[id]/review/page.tsx`, `src/app/api/pages/[id]/confirm/route.ts` (`TAL-05`) | `T-005` |
 | 7. Customer Balances Ledger (`sum(credit) - sum(payment)`) | Must | ⬜ planned | `src/app/customers/page.tsx`, `src/app/api/customers/route.ts` (`TAL-06`) | `T-006` |
 | 8. Taglish Reminder Drafts (Tone Selector + Copy & Web Share / `sms:`) | Must | ⬜ planned | `src/app/customers/[id]/page.tsx`, `src/app/api/reminders/draft/route.ts` (`TAL-06`) | `T-007` |
@@ -104,7 +104,7 @@ Kept in lockstep with [`prd.md`](prd.md) §3:
 
 | Behavior | Mark | What exists | What does not | Switch / Gate | Rules |
 |---|---|---|---|---|---|
-| **Dual Model Provider (`glimmer` vs. `gemini`)** | ⬜ planned (`TAL-02`) | Specification in `foundation.md` & `sdd.md` | `src/lib/model.ts` not yet written | `MODEL_PROVIDER` env var (`glimmer` default \| `gemini` dev test) | Gemini is allowed only in local `.env.local` while building. Day 3 gate, 30+ page evaluation, and final demo must run on `glimmer`. |
+| **Dual Model Provider (`glimmer` vs. `gemini`)** | ✅ | `src/lib/model.ts` switching via `MODEL_PROVIDER` | Live Kaggle tunnel endpoint (`TAL-03`) | `MODEL_PROVIDER` env var (`glimmer` default \| `gemini` dev test) | Gemini is allowed only in local `.env.local` while building. Day 3 gate, 30+ page evaluation, and final demo must run on `glimmer`. |
 
 ---
 
@@ -120,7 +120,7 @@ flowchart LR
   end
   subgraph s1 ["Sprint 1 (Oct 27–28)"]
     P1["⬜ TAL-01: Supabase Schema, RLS & 1-Tap Auth"]
-    P2["⬜ TAL-02: lib/model.ts, sharp & Extract API"]
+    P2["✅ TAL-02: lib/model.ts, sharp & Extract API"]
     P3["⬜ TAL-03: Kaggle Glimmer Tunnel & Day 3 Gate (10 pages)"]
   end
   subgraph s2 ["Sprint 2 (Oct 29–Nov 1)"]
