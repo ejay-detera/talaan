@@ -426,7 +426,7 @@ Talaan aligns with:
 | **Q4** | Muse Glimmer Filipino/Taglish handwriting accuracy | **Open (`A-05`)** — Day 3 Gate on 10 real pages (target ≥80% row accuracy) | Determines whether MVP processes messy cursive/handwriting or narrows to printed receipts/typed lists |
 | **Q5** | Kaggle 2x T4 inference latency & tunnel stability | **Open (`A-06`)** — Must benchmark `llama-server` via Cloudflare/ngrok tunnel | Determines whether deployed Vercel app can call Kaggle or if demo runs `next dev` locally against the tunnel |
 | **Q6** | Hackathon rules on Gemini dev testing & $150 credits | **Open** — Verify in Official Rules (`S-01` §4, §11, §12) | Ensures strict compliance with Meta hackathon eligibility rules |
-| **Q7** | Visual design system & token authority | Resolved via user decision (`impeccable` `seed:dcbface214fe32da`): **Resibo Carbon & Counter Slip with Red Margin Gutter** | Establishes token authority in `src/app/globals.css` and [`dsd.md`](dsd.md) |
+| **Q7** | Visual design system & token authority | Resolved via user decision (`impeccable`): **The Notebook, Kept** | Establishes token authority in `src/app/globals.css` and [`design.md`](design.md) |
 | **Q8** | Commercial pricing & store owner willingness to pay | **Open (`A-02`, `A-03`, `A-04`)** — Pending 3–5 store owner interviews | Required before any post-hackathon commercial or SAM/SOM claim can be validated |
 
 ### 14.1 Resolution tracker
@@ -439,5 +439,5 @@ Talaan aligns with:
 | Q4 | **Open** | Pending Day 3 Gate (`TAL-03`) | — |
 | Q5 | **Open** | `ADR-0002` (Dual Model Provider Switch) / Pending benchmark (`TAL-03`) | — |
 | Q6 | **Open** | Pending organizer verification (`S-01` §11) | — |
-| Q7 | **Decided** | [`dsd.md`](dsd.md) (`seed:dcbface214fe32da`) | 2026-10-27 |
+| Q7 | **Decided** | [`design.md`](design.md) ("The Notebook, Kept") | 2026-10-27 |
 | Q8 | **Open** | [`bpd.md`](bpd.md) §4 / Pending interviews | — |

@@ -32,7 +32,7 @@ Read in this order.
 | 4 | PRD | [prd.md](prd.md) | Personas, features, user stories, non-goals, **roadmap (canonical)** |
 | 5 | SAD | [sad.md](sad.md) | Architecture, **tech stack (canonical)**, communication, quality attributes |
 | 6 | SDD | [sdd.md](sdd.md) | Subsystems, data flow, configuration, error handling |
-| 7 | DSD | [dsd.md](dsd.md) | Design tokens, components, navigation, accessibility |
+| 7 | Design System | [design.md](design.md) | Canonical visual design system ("The Notebook, Kept"), tokens, components, accessibility |
 | 8 | Flow | [flow.md](flow.md) | Honest status map: what works, what is gated or simulated, what is planned |
 | 9 | Build | [build.md](build.md) | Setup, commands, guardrails, known issues, Definition of Done |
 | 10 | Sprint | [sprint.md](sprint.md) | **Use for anything sprint-related.** Stories with acceptance criteria and traces |

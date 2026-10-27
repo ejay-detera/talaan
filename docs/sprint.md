@@ -50,17 +50,17 @@
 |---|---|
 | Priority | P1 |
 | Points | 3 |
-| Status | ⬜ To Do |
+| Status | ✅ Done |
 | Developer | Dev Ejay |
 | Traces | BR-01 · US-01 · tests T-001 |
 
 > **As a Store Owner**, I want to sign in via Email/Password or a 1-Tap Demo Store button on `/login` with my store's `stores`, `customers`, `pages`, `entries`, and `reminders` data isolated by Postgres RLS and private Storage.
 
 **Acceptance criteria:**
-- [ ] Install `@supabase/supabase-js` (and `@supabase/ssr` if needed) and record pinned version in [`evidence.md`](evidence.md) §5.
-- [ ] Create `supabase/migrations/0001_initial_schema.sql` defining `stores`, `customers`, `pages`, `entries`, and `reminders` with `numeric(10,2)` money columns, FK indexes, `CHECK` constraints, and RLS policies (`stores.owner_id = (select auth.uid())`) per [`data-model.md`](data-model.md).
-- [ ] Configure private storage bucket `notebook-pages` and seed script for **"Aling Nena's Sari-Sari Store"**.
-- [ ] Build `/login` screen with Email/Password sign-in and 1-tap **"Try Demo Store"** button.
+- [x] Install `@supabase/supabase-js` and `@supabase/ssr`; record pinned version in [`evidence.md`](evidence.md) §5.
+- [x] Create `supabase/migrations/0001_initial_schema.sql` defining `stores`, `customers`, `pages`, `entries`, and `reminders` with `numeric(10,2)` money columns, FK indexes, `CHECK` constraints, and RLS policies (`stores.owner_id = (select auth.uid())`) per [`data-model.md`](data-model.md).
+- [x] Configure private storage bucket `notebook-pages` and seed script for **"Aling Nena's Sari-Sari Store"** (`supabase/seed.sql`).
+- [x] Build `/login` screen with Email/Password sign-in and 1-tap **"Subukan ang Demo Store"** button (`src/app/login/page.tsx`, `src/app/api/auth/demo/route.ts`).
 
 ---
 
@@ -70,7 +70,7 @@
 |---|---|
 | Priority | P1 |
 | Points | 5 |
-| Status | 🔄 In Progress (Pipeline built; DB wiring in TAL-01) |
+| Status | ✅ Done |
 | Developer | Dev Ejay |
 | Traces | BR-01, BR-02 · US-01, US-02, US-07 · tests T-001, T-002 |
 
@@ -110,16 +110,16 @@
 |---|---|
 | Priority | P1 |
 | Points | 3 |
-| Status | ⬜ To Do |
+| Status | ✅ Done |
 | Developer | Dev Ejay |
-| Traces | BR-03 · US-03 · tests T-003, T-004 |
+| Traces | BR-03 · US-03 · tests T-003, T-004, T-006 |
 
 > **As a Store Owner**, I want every row multiplication (`quantity * unit_price === amount`) and page total (`computed_total === written_total`) checked deterministically in integer centavos so arithmetic mistakes are caught with 100% precision.
 
 **Acceptance criteria:**
-- [ ] Install `vitest` and record pinned version in [`evidence.md`](evidence.md) §5.
-- [ ] Write failing unit/property tests (`T-003`, `T-004`, `T-006`) in `src/lib/ledger/__tests__/math.test.ts` covering floating-point edge cases (`0.1 + 0.2`, `3 * 12.10`), row multiplication mismatches, page total discrepancies, `confidence < 0.80` flags, and `credit` / `payment` / `cash_sale` balance math.
-- [ ] Implement `src/lib/ledger/math.ts` and `src/lib/ledger/match.ts` (case-insensitive / fuzzy customer name auto-matching) to pass all tests.
+- [x] Install `vitest` and record pinned version in [`evidence.md`](evidence.md) §5.
+- [x] Write failing unit/property tests (`T-003`, `T-004`, `T-006`) in `src/lib/ledger/__tests__/math.test.ts` and `src/lib/ledger/__tests__/match.test.ts` covering floating-point edge cases (`0.1 + 0.2`, `3 * 12.10`), row multiplication mismatches, page total discrepancies, `confidence < 0.80` flags, and `credit` / `payment` / `cash_sale` balance math.
+- [x] Implement `src/lib/ledger/math.ts` and `src/lib/ledger/match.ts` (case-insensitive / fuzzy customer name auto-matching) to pass all tests.
 
 ---
 

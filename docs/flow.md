@@ -28,7 +28,7 @@ flowchart TB
     S2["/pages/[id]/review (store_owner)"]
     S3["/customers & /customers/[id] (store_owner)"]
   end
-  S0 --> A1["⬜ 1-Tap Demo Store Login & Email/Password Auth (TAL-01)"]
+  S0 --> A1["✅ 1-Tap Demo Store Login & Email/Password Auth (TAL-01)"]
   S1 --> B1["🟡 Default Next.js Starter Page (src/app/page.tsx)"]
   S1 --> B2["⬜ Photo Upload & Recent Pages List (TAL-02, TAL-05)"]
   S2 --> C1["⬜ Review Screen: Red Margin Gutter + Two-Ply Proof Bar (TAL-05)"]
@@ -43,7 +43,7 @@ flowchart TB
 ```mermaid
 flowchart LR
   subgraph A ["A — Authenticate"]
-    A1["⬜ 1-Tap Demo Login (/login)"]
+    A1["✅ 1-Tap Demo Login (/login)"]
   end
   subgraph B ["B — Prepare (Extract & Check)"]
     B1["⬜ Upload Photo + sharp prep"]
@@ -86,13 +86,13 @@ Kept in lockstep with [`prd.md`](prd.md) §3:
 | Capability | Priority | Status | Where (path or table) | Verified by |
 |---|---|---|---|---|
 | Next.js 16.4.3 / React 19.3.0 / Tailwind v4 App Shell | Must | ✅ | `src/app/layout.tsx`, `src/app/page.tsx`, `package.json` | `npm run lint`, `npx tsc --noEmit` |
-| 1. 1-Tap Demo Store Login & Supabase Auth + RLS | Must | ⬜ planned | `src/app/login/page.tsx`, `supabase/migrations/` (`TAL-01`) | `T-001` |
+| 1. 1-Tap Demo Store Login & Supabase Auth + RLS | Must | ✅ | `src/app/login/page.tsx`, `supabase/migrations/0001_initial_schema.sql` (`TAL-01`) | `npm run lint`, `npx tsc --noEmit` (`T-001`) |
 | 2. Photo Upload & `sharp` Image Prep | Must | ✅ | `src/app/api/pages/extract/route.ts`, `src/lib/image.ts` (`TAL-02`) | `npm run lint`, `npx tsc --noEmit` |
 | 3. Structured Extraction (`credit`/`payment`/`cash_sale`, confidence, model badge) | Must | 🟡 partial | `src/lib/model.ts`, `src/lib/schemas.ts`, `src/app/api/pages/extract/route.ts` (`TAL-02`, `TAL-03`) | `npm run lint`, `npx tsc --noEmit` (Glimmer gate in `TAL-03`) |
 | 4. Unreadable Page Retake Request (`flag_unreadable`) | Must | ✅ | `src/app/api/pages/extract/route.ts`, `src/lib/schemas.ts` (`TAL-02`) | `npm run lint`, `npx tsc --noEmit` |
-| 5. Two-Level Deterministic Discrepancy Finder | Must | 🟡 partial | `src/lib/ledger/math.ts` (`TAL-04`) | `npm run lint`, `npx tsc --noEmit` (Vitest in `TAL-04`) |
+| 5. Two-Level Deterministic Discrepancy Finder | Must | ✅ | `src/lib/ledger/math.ts` (`TAL-04`) | `npm test` (`T-003`, `T-004`) |
 | 6. Review Screen (Red Margin Gutter, Two-Ply Proof Bar, Customer Auto-Match) | Must | ⬜ planned | `src/app/pages/[id]/review/page.tsx`, `src/app/api/pages/[id]/confirm/route.ts` (`TAL-05`) | `T-005` |
-| 7. Customer Balances Ledger (`sum(credit) - sum(payment)`) | Must | ⬜ planned | `src/app/customers/page.tsx`, `src/app/api/customers/route.ts` (`TAL-06`) | `T-006` |
+| 7. Customer Balances Ledger (`sum(credit) - sum(payment)`) | Must | 🟡 partial | `src/lib/ledger/match.ts` (`TAL-04`, `TAL-06`) | `npm test` (`T-006`) |
 | 8. Taglish Reminder Drafts (Tone Selector + Copy & Web Share / `sms:`) | Must | ⬜ planned | `src/app/customers/[id]/page.tsx`, `src/app/api/reminders/draft/route.ts` (`TAL-06`) | `T-007` |
 | 9. 30+ Page Muse Glimmer Evaluation Harness | Must | ⬜ planned | `scripts/eval-glimmer.ts`, `eval/` (`TAL-03`, `TAL-07`) | `T-008` |
 | 10–13. Stretch Features (Restock, Weekly Summary, Multi-Page, Shelf Count, CSV) | Could | ⬜ roadmap | Deferred until MVP + Day 3 Gate pass | — |
@@ -119,12 +119,12 @@ flowchart LR
     N2["✅ Full Documentation & Grounding Suite"]
   end
   subgraph s1 ["Sprint 1 (Oct 27–28)"]
-    P1["⬜ TAL-01: Supabase Schema, RLS & 1-Tap Auth"]
+    P1["✅ TAL-01: Supabase Schema, RLS & 1-Tap Auth"]
     P2["✅ TAL-02: lib/model.ts, sharp & Extract API"]
     P3["⬜ TAL-03: Kaggle Glimmer Tunnel & Day 3 Gate (10 pages)"]
   end
   subgraph s2 ["Sprint 2 (Oct 29–Nov 1)"]
-    P4["⬜ TAL-04: lib/ledger Two-Level Discrepancy Math"]
+    P4["✅ TAL-04: lib/ledger Two-Level Discrepancy Math"]
     P5["⬜ TAL-05: Review UI (Red Margin + Proof Bar) & Confirm API"]
     P6["⬜ TAL-06: Customer Balances & Taglish Reminders"]
   end

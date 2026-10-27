@@ -50,8 +50,8 @@ Every agent operating on this codebase must adhere to these five universal execu
 
 3. **`impeccable` (Frontend Design & UI/UX Craft):**
    - Mandatory for every UI screen, component, styling, layout, or design token task.
-   - Strictly follow tokens in `docs/dsd.md` (`seed:dcbface214fe32da` — "Resibo Carbon & Counter Slip" with Red Margin Gutter; no arbitrary hex colors).
-   - Ensure visual hierarchy, minimum 44x44 touch targets, high contrast in Daylight Mode, responsive layouts, and proper empty/error states. Avoid generic AI design tropes.
+   - Strictly follow tokens in `docs/design.md` ("The Notebook, Kept"; no arbitrary hex colors).
+   - Ensure visual hierarchy, minimum 48x48 touch targets, high contrast in Daylight Mode, responsive layouts, and proper empty/error states. Avoid generic AI design tropes.
 
 4. **`grill-me` (Requirement Clarification & Stop-and-Ask):**
    - Trigger when requirements, edge cases, acceptance criteria, or `TBD` decisions are ambiguous.
@@ -70,7 +70,7 @@ Active in `docs/foundation.md` §0; their rules are non-negotiable:
 
 - **Payments and ledger (`docs/modules/payments-ledger.md`):** Active for Talaan's Two-Phase Bookkeeping & *Utang* Ledger (`Prepare` extraction via `POST /api/pages/extract` → human `Confirm` via `POST /api/pages/[id]/confirm`, confirmation idempotency, fail-closed integer-centavo math in `src/lib/ledger/` and `numeric(10,2)` in Postgres, zero LLM arithmetic).
 - **AI component (`docs/modules/ai-component.md`):** Active for Meta Muse Glimmer 30B (primary) and Gemini API (local dev testing only) via `src/lib/model.ts` (mandatory human-in-the-loop confirmation before DB balance updates, Zod schema validation in `src/lib/schemas.ts`, active model badge in UI, `model` column logged on `pages`, and 30+ page evaluation strictly on Muse Glimmer).
-- **Mobile client:** Inactive (deleted; Talaan is a mobile-first Next.js web app governed by `docs/dsd.md`).
+- **Mobile client:** Inactive (deleted; Talaan is a mobile-first Next.js web app governed by `docs/design.md`).
 
 ---
 
@@ -98,12 +98,12 @@ Rules:
 
 ## 5. Design System & Frontend
 
-`src/app/globals.css` is the token authority. Full specification: `docs/dsd.md` (`seed:dcbface214fe32da`).
+`src/app/globals.css` is the token authority. Full specification: `docs/design.md` ("The Notebook, Kept").
 
-- Brand colors: Deep Carbon Indigo shell (`#1E293B`), Warm Counter Bond ground (`#FAF8F4`), Crisp Slip surface (`#FFFFFF`), Sari Emerald primary (`#0F6E56`), Carbon Blue secondary (`#1D4ED8`), Listahan Red Margin rule (`#E11D48`), Amber Review warning (`#B45309` / `#FEF3C7`), and Red Ballpen discrepancy/error (`#DC2626` / `#FEE2E2`). Use tokens from `src/app/globals.css` — never hardcode hex values.
-- Typography: `Geist Sans` (`--font-geist-sans`) for all UI, headings, and labels. `Geist Mono` (`--font-geist-mono` with `tabular-nums`) for all peso amounts, quantities, confidence scores, and running totals.
-- Appearance: **High-Contrast Daylight Mode (Light Mode)** is the supported appearance. Dark Mode is TBD (`docs/dsd.md` §3.2).
-- Signature verification elements: `RedMarginGutter` (left `2px solid #E11D48` status column) and `TwoPlyProofBar` (sticky bottom `Written Total` vs. `Computed Total` reconciliation bar).
+- Brand colors: Analysis Pad Paper ground (`#F2F5EC`), Notebook Sheet surface (`#FFFFFF`), Ruled line divider (`#D5DEC6`), Graphite Pencil text (`#23262B`), Muted Sage secondary text (`#5B6457`), Ballpen Blue primary action/ink (`#1E3FAE`), Red Margin rule/discrepancy (`#C8302F`), Highlighter Marker review background (`#FFE14D`), and Paid stamp (`#1F7A4D`). Use semantic tokens from `src/app/globals.css` — never hardcode hex values.
+- Typography: Zero monospace. `Bricolage Grotesque` (`--font-display`) for headings, `Atkinson Hyperlegible Next` (`--font-sans` with `tabular-nums`) for all UI, body, peso amounts, and running totals; `Caveat` (`--font-hand`) strictly quarantined to `.notebook` original-handwriting quote blocks.
+- Appearance: **High-Contrast Daylight Mode (Light Mode)** is the supported appearance. Dark Mode is TBD.
+- Signature verification elements: `RedMarginGutter` (left `2px solid #C8302F` status column) and `TwoPlyProofBar` (sticky bottom `Written Total` vs. `Computed Total` reconciliation bar).
 - Status presentation: every status must pair a label with an icon or shape, never color alone (`docs/glossary.md` §3).
 
 ---
