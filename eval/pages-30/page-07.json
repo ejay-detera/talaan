@@ -1,0 +1,39 @@
+{
+  "page_id": "page-07",
+  "synthetic": true,
+  "category": "clean",
+  "page_date": "2026-10-07",
+  "unreadable": false,
+  "written_total": 202,
+  "expected_computed_total": 202,
+  "has_page_discrepancy": false,
+  "entries": [
+    {
+      "customer_name": "Nanay Cora",
+      "item": "kopiko brown",
+      "quantity": 1,
+      "unit_price": 20,
+      "amount": 20,
+      "entry_type": "credit",
+      "line_discrepancy": false
+    },
+    {
+      "customer_name": "Kuya Jun",
+      "item": "bigas 1kg",
+      "quantity": 2,
+      "unit_price": 55,
+      "amount": 110,
+      "entry_type": "credit",
+      "line_discrepancy": false
+    },
+    {
+      "customer_name": "Aling Rosa",
+      "item": "sardinas",
+      "quantity": 3,
+      "unit_price": 24,
+      "amount": 72,
+      "entry_type": "credit",
+      "line_discrepancy": false
+    }
+  ]
+}

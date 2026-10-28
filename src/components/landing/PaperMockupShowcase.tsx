@@ -1,3 +1,4 @@
+// impeccable-disable design-system-font-size -- decorative miniature paper mockup props
 import { AlertTriangle, CheckCircle2, ShieldCheck } from "lucide-react";
 import { Amount } from "@/components/shared/Amount";
 import {
@@ -28,12 +29,12 @@ export function PaperMockupShowcase() {
             <span className="w-2.5 h-2.5 rounded-full bg-paper border border-rule" />
             <span className="w-2.5 h-2.5 rounded-full bg-paper border border-rule" />
           </div>
-          <span className="text-[11px] font-sans font-semibold tracking-wider uppercase text-muted ml-2">
+          <span className="text-sm font-sans font-semibold tracking-wider uppercase text-muted ml-2">
             Counter Notebook &bull; Page 14
           </span>
         </div>
 
-        <div className="flex items-center gap-1 text-[11px] font-sans text-muted">
+        <div className="flex items-center gap-1 text-sm font-sans text-muted">
           <span>Date:</span>
           <span className="font-semibold text-pencil">Oct 27</span>
         </div>
@@ -44,15 +45,15 @@ export function PaperMockupShowcase() {
         {/* Notebook Title Bar */}
         <div className="flex flex-col sm:flex-row sm:items-baseline justify-between pb-4 border-b border-rule gap-1 select-none">
           <div>
-            <h4 className="font-display font-bold text-base sm:text-lg text-pencil tracking-tight">
+            <h3 className="font-display font-bold text-base sm:text-lg text-pencil tracking-tight">
               Aling Nena&apos;s Store — Talaan ng Utang
-            </h4>
+            </h3>
             <p className="text-xs text-muted font-sans">
               Handwritten counter entries verified by deterministic math
             </p>
           </div>
           <div className="text-right">
-            <span className="text-[11px] uppercase tracking-wider text-muted font-sans block">
+            <span className="text-sm uppercase tracking-wider text-muted font-sans block">
               Status
             </span>
             <span className="text-xs font-semibold text-paid font-sans inline-flex items-center gap-1">
@@ -95,14 +96,14 @@ export function PaperMockupShowcase() {
                         </span>
 
                         {isBaby && (
-                          <span className="inline-flex items-center gap-1 text-[11px] font-sans font-semibold text-margin bg-sheet px-2 py-0.5 rounded border border-margin/40">
+                          <span className="inline-flex items-center gap-1 text-sm font-sans font-semibold text-margin bg-sheet px-2 py-0.5 rounded border border-margin/40">
                             <AlertTriangle className="w-3 h-3" />
                             Multiplication Mismatch
                           </span>
                         )}
 
                         {isCora && (
-                          <span className="inline-flex items-center gap-1 text-[11px] font-sans font-semibold text-pencil bg-sheet px-2 py-0.5 rounded border border-pencil/30">
+                          <span className="inline-flex items-center gap-1 text-sm font-sans font-semibold text-pencil bg-sheet px-2 py-0.5 rounded border border-pencil/30">
                             <span>Unitemized</span>
                           </span>
                         )}
@@ -137,19 +138,19 @@ export function PaperMockupShowcase() {
                       </div>
 
                       {isBaby && (
-                        <span className="text-[10px] font-sans text-margin font-semibold">
+                        <span className="text-sm font-sans text-margin font-semibold">
                           ₱10.00 overcharge caught
                         </span>
                       )}
 
                       {isCora && (
-                        <span className="text-[10px] font-sans text-muted">
+                        <span className="text-sm font-sans text-muted">
                           Needs storekeeper confirm
                         </span>
                       )}
 
                       {!isBaby && !isCora && (
-                        <span className="text-[10px] font-sans text-muted">
+                        <span className="text-sm font-sans text-muted">
                           Verified by math
                         </span>
                       )}
@@ -165,7 +166,7 @@ export function PaperMockupShowcase() {
         <div className="mt-6 pt-4 border-t-2 border-rule bg-paper/60 -mx-5 -mb-5 sm:-mx-7 sm:-mb-7 p-4 sm:p-5 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 select-none">
           <div className="flex items-center justify-between sm:justify-start gap-4 sm:gap-6 text-xs font-sans">
             <div>
-              <span className="text-muted block text-[11px]">Written Total</span>
+              <span className="text-muted block text-sm">Written Total</span>
               <span className="font-bold text-pencil text-sm tabular-nums">
                 <Amount amount={LANDING_SAMPLE_WRITTEN_TOTAL} />
               </span>
@@ -174,7 +175,7 @@ export function PaperMockupShowcase() {
             <div className="w-[1px] h-8 bg-rule" aria-hidden="true" />
 
             <div>
-              <span className="text-muted block text-[11px]">Computed Total</span>
+              <span className="text-muted block text-sm">Computed Total</span>
               <span className="font-bold text-paid text-sm tabular-nums">
                 <Amount amount={totals.computedTotal} />
               </span>
@@ -186,7 +187,7 @@ export function PaperMockupShowcase() {
             <ShieldCheck className="w-4 h-4 text-paid" />
             <div className="flex flex-col sm:flex-row sm:items-center sm:gap-1.5">
               <span className="text-pencil font-bold">₱10.00 Overcharge Caught</span>
-              <span className="text-muted text-[11px] font-normal">
+              <span className="text-muted text-sm font-normal">
                 (Fixed before DB update)
               </span>
             </div>

@@ -53,16 +53,16 @@ export default async function CustomerDetailPage({
               {customer.name}
             </h1>
             {customer.phone_optional && (
-              <p className="text-[11px] text-muted flex items-center justify-center gap-1">
+              <p className="text-sm text-muted flex items-center justify-center gap-1">
                 <Phone className="w-2.5 h-2.5" />
                 <span>{customer.phone_optional}</span>
               </p>
             )}
           </div>
 
-          <div className="w-16 text-right">
+          <div className="w-20 text-right">
             <span
-              className={`text-[10px] font-bold px-2 py-0.5 rounded-row border ${
+              className={`text-sm font-bold px-2 py-0.5 rounded-row border ${
                 hasDebt
                   ? "bg-margin/10 text-margin border-margin/30"
                   : isPaid
@@ -82,7 +82,7 @@ export default async function CustomerDetailPage({
         <section aria-label="Balanse ng Suki">
           <div className="p-4 sm:p-5 rounded-sheet border border-rule bg-sheet space-y-3 select-none">
             <div className="flex items-center justify-between">
-              <span className="text-[11px] font-bold text-muted uppercase tracking-wider">
+              <span className="text-sm font-bold text-muted uppercase tracking-wider">
                 Kasalukuyang Balanse
               </span>
               <span className="text-xs font-semibold text-muted flex items-center gap-1">

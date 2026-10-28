@@ -1,0 +1,48 @@
+{
+  "page_id": "page-05",
+  "synthetic": true,
+  "category": "clean",
+  "page_date": "2026-10-05",
+  "unreadable": false,
+  "written_total": 133,
+  "expected_computed_total": 133,
+  "has_page_discrepancy": false,
+  "entries": [
+    {
+      "customer_name": "Aling Rosa",
+      "item": "mantika bote",
+      "quantity": 2,
+      "unit_price": 35,
+      "amount": 70,
+      "entry_type": "credit",
+      "line_discrepancy": false
+    },
+    {
+      "customer_name": "Tito Boy",
+      "item": "asukal 1/4",
+      "quantity": 3,
+      "unit_price": 25,
+      "amount": 75,
+      "entry_type": "credit",
+      "line_discrepancy": false
+    },
+    {
+      "customer_name": "Ate Lorna",
+      "item": "corned beef",
+      "quantity": 1,
+      "unit_price": 38,
+      "amount": 38,
+      "entry_type": "credit",
+      "line_discrepancy": false
+    },
+    {
+      "customer_name": "Aling Rosa",
+      "item": "Bayad",
+      "quantity": null,
+      "unit_price": null,
+      "amount": 50,
+      "entry_type": "payment",
+      "line_discrepancy": false
+    }
+  ]
+}

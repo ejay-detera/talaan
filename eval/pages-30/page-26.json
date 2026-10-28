@@ -1,0 +1,48 @@
+{
+  "page_id": "page-26",
+  "synthetic": true,
+  "category": "discrepancy",
+  "page_date": "2026-10-26",
+  "unreadable": false,
+  "written_total": 252,
+  "expected_computed_total": 242,
+  "has_page_discrepancy": true,
+  "entries": [
+    {
+      "customer_name": "Kuya Jun",
+      "item": "corned beef",
+      "quantity": 2,
+      "unit_price": 38,
+      "amount": 76,
+      "entry_type": "credit",
+      "line_discrepancy": false
+    },
+    {
+      "customer_name": "Aling Rosa",
+      "item": "pancit canton",
+      "quantity": 3,
+      "unit_price": 12,
+      "amount": 36,
+      "entry_type": "credit",
+      "line_discrepancy": false
+    },
+    {
+      "customer_name": "Tito Boy",
+      "item": "kopiko brown",
+      "quantity": 1,
+      "unit_price": 20,
+      "amount": 20,
+      "entry_type": "credit",
+      "line_discrepancy": false
+    },
+    {
+      "customer_name": "Ate Lorna",
+      "item": "bigas 1kg",
+      "quantity": 2,
+      "unit_price": 55,
+      "amount": 110,
+      "entry_type": "credit",
+      "line_discrepancy": false
+    }
+  ]
+}

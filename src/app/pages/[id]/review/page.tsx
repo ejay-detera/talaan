@@ -48,13 +48,13 @@ export default async function ReviewPage({ params }: ReviewPageProps) {
             <h1 className="font-display font-bold text-base sm:text-lg text-pencil">
               Pagsusuri ng Pahina
             </h1>
-            <p className="text-[11px] text-muted">
+            <p className="text-sm text-muted">
               {page.page_date || "Kuwaderno"} &bull; {entries.length} linya
             </p>
           </div>
 
           {/* Model Provenance Badge */}
-          <div className="px-2 py-0.5 rounded-row border border-rule bg-sheet text-[10px] font-bold text-muted uppercase tracking-wider">
+          <div className="px-2 py-0.5 rounded-row border border-rule bg-sheet text-sm font-bold text-muted uppercase tracking-wider">
             {page.model}
           </div>
         </div>

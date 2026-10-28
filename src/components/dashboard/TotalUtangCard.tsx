@@ -14,7 +14,7 @@ export function TotalUtangCard({
   return (
     <div className="p-4 sm:p-5 rounded-sheet border border-rule bg-sheet space-y-3 select-none">
       <div className="flex items-center justify-between gap-2">
-        <span className="text-[11px] font-bold text-muted uppercase tracking-wider flex items-center gap-1.5">
+        <span className="text-sm font-bold text-muted uppercase tracking-wider flex items-center gap-1.5">
           <AlertCircle className="w-3.5 h-3.5 text-margin" />
           <span>Kabuuang Pautang ng Tindahan</span>
         </span>
@@ -30,7 +30,7 @@ export function TotalUtangCard({
       <div className="flex items-baseline justify-between gap-3">
         <div>
           <Amount amount={totalStoreUtang} size="lg" className="text-2xl font-extrabold text-pencil" />
-          <p className="text-[11px] text-muted pt-0.5">
+          <p className="text-sm text-muted pt-0.5">
             Mula sa lahat ng kumpirmadong talaan ng utang
           </p>
         </div>

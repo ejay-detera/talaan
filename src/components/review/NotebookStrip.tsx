@@ -31,7 +31,7 @@ export function NotebookStrip({ imageUrl, className = "" }: NotebookStripProps) 
           <ImageIcon className="w-4 h-4 text-ink" />
           <span>Orihinal na Litrato ng Kuwaderno</span>
         </span>
-        <span className="flex items-center gap-1 text-muted text-[11px]">
+        <span className="flex items-center gap-1 text-muted text-sm">
           <span>{isOpen ? "Itago" : "Ipakita"}</span>
           {isOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
         </span>

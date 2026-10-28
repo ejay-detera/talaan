@@ -13,7 +13,7 @@ export default function Loading() {
             <span className="w-2.5 h-2.5 rounded-full bg-paper border border-rule" />
             <span className="w-2.5 h-2.5 rounded-full bg-paper border border-rule" />
           </div>
-          <span className="text-[10px] font-bold uppercase tracking-wider text-muted font-sans">
+          <span className="text-sm font-bold uppercase tracking-wider text-muted font-sans">
             Talaan &bull; Counter Ledger
           </span>
         </div>
@@ -36,7 +36,7 @@ export default function Loading() {
               <h2 className="font-display font-black text-xl text-pencil leading-tight">
                 Talaan
               </h2>
-              <p className="text-[11px] text-muted font-sans font-medium">
+              <p className="text-sm text-muted font-sans font-medium">
                 Two-Phase Store Bookkeeping
               </p>
             </div>
@@ -48,23 +48,23 @@ export default function Loading() {
               <div className="absolute inset-y-0 w-1/2 bg-ink rounded-full animate-[pulse_1s_ease-in-out_infinite]" />
             </div>
 
-            <div className="flex items-center justify-between text-[11px] font-sans">
+            <div className="flex items-center justify-between text-sm font-sans">
               <span className="font-medium text-pencil">
                 Loading counter ledger...
               </span>
-              <span className="text-[10px] text-muted font-medium">
+              <span className="text-sm text-muted font-medium">
                 Deterministic
               </span>
             </div>
           </div>
 
           {/* Micro Verification Guarantee Stamp */}
-          <div className="pt-2 border-t border-rule/60 flex items-center justify-between text-[10px] text-muted font-sans">
+          <div className="pt-2 border-t border-rule/60 flex items-center justify-between text-sm text-muted font-sans">
             <div className="inline-flex items-center gap-1.5 font-semibold text-paid">
               <ShieldCheck className="w-3.5 h-3.5" />
               <span>Zero LLM Arithmetic</span>
             </div>
-            <span className="text-muted/80">Meta Muse Glimmer 30B</span>
+            <span className="text-muted">Meta Muse Glimmer 30B</span>
           </div>
         </div>
       </div>

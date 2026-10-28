@@ -1,0 +1,48 @@
+{
+  "page_id": "page-09",
+  "synthetic": true,
+  "category": "clean",
+  "page_date": "2026-10-09",
+  "unreadable": false,
+  "written_total": 164,
+  "expected_computed_total": 164,
+  "has_page_discrepancy": false,
+  "entries": [
+    {
+      "customer_name": "Mang Jose",
+      "item": "safeguard",
+      "quantity": 3,
+      "unit_price": 45,
+      "amount": 135,
+      "entry_type": "credit",
+      "line_discrepancy": false
+    },
+    {
+      "customer_name": "Ate Baby",
+      "item": "itlog",
+      "quantity": 1,
+      "unit_price": 9,
+      "amount": 9,
+      "entry_type": "credit",
+      "line_discrepancy": false
+    },
+    {
+      "customer_name": "Nanay Cora",
+      "item": "mantika bote",
+      "quantity": 2,
+      "unit_price": 35,
+      "amount": 70,
+      "entry_type": "credit",
+      "line_discrepancy": false
+    },
+    {
+      "customer_name": "Mang Jose",
+      "item": "Bayad",
+      "quantity": null,
+      "unit_price": null,
+      "amount": 50,
+      "entry_type": "payment",
+      "line_discrepancy": false
+    }
+  ]
+}

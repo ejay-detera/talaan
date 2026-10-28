@@ -1,0 +1,48 @@
+{
+  "page_id": "page-01",
+  "synthetic": true,
+  "category": "clean",
+  "page_date": "2026-10-01",
+  "unreadable": false,
+  "written_total": 72,
+  "expected_computed_total": 72,
+  "has_page_discrepancy": false,
+  "entries": [
+    {
+      "customer_name": "Mang Jose",
+      "item": "corned beef",
+      "quantity": 1,
+      "unit_price": 38,
+      "amount": 38,
+      "entry_type": "credit",
+      "line_discrepancy": false
+    },
+    {
+      "customer_name": "Ate Baby",
+      "item": "pancit canton",
+      "quantity": 2,
+      "unit_price": 12,
+      "amount": 24,
+      "entry_type": "credit",
+      "line_discrepancy": false
+    },
+    {
+      "customer_name": "Nanay Cora",
+      "item": "kopiko brown",
+      "quantity": 3,
+      "unit_price": 20,
+      "amount": 60,
+      "entry_type": "credit",
+      "line_discrepancy": false
+    },
+    {
+      "customer_name": "Mang Jose",
+      "item": "Bayad",
+      "quantity": null,
+      "unit_price": null,
+      "amount": 50,
+      "entry_type": "payment",
+      "line_discrepancy": false
+    }
+  ]
+}

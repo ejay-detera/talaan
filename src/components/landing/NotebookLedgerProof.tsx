@@ -1,3 +1,4 @@
+// impeccable-disable design-system-font-size, side-tab -- decorative miniature paper mockup and RedMarginGutter rule
 import { Amount } from "@/components/shared/Amount";
 import {
   LANDING_SAMPLE_WRITTEN_TOTAL,

@@ -37,7 +37,7 @@ export function InitialLoader() {
   return (
     <div
       className={`fixed inset-0 z-50 flex items-center justify-center p-4 bg-paper/95 backdrop-blur-md text-pencil font-sans selection:bg-marker transition-all duration-300 pointer-events-none ${
-        fadeOut ? "opacity-0 scale-[0.98]" : "opacity-100 scale-100"
+        fadeOut ? "opacity-0 invisible scale-[0.98]" : "opacity-100 scale-100"
       }`}
       aria-hidden="true"
     >
@@ -50,7 +50,7 @@ export function InitialLoader() {
             <span className="w-2.5 h-2.5 rounded-full bg-paper border border-rule" />
             <span className="w-2.5 h-2.5 rounded-full bg-paper border border-rule" />
           </div>
-          <span className="text-[10px] font-bold uppercase tracking-wider text-muted font-sans">
+          <span className="text-sm font-bold uppercase tracking-wider text-muted font-sans">
             Talaan &bull; Counter Ledger
           </span>
         </div>
@@ -73,7 +73,7 @@ export function InitialLoader() {
               <h2 className="font-display font-black text-xl text-pencil leading-tight">
                 Talaan
               </h2>
-              <p className="text-[11px] text-muted font-sans font-medium">
+              <p className="text-sm text-muted font-sans font-medium">
                 Two-Phase Store Bookkeeping
               </p>
             </div>
@@ -90,7 +90,7 @@ export function InitialLoader() {
               />
             </div>
 
-            <div className="flex items-center justify-between text-[11px] font-sans">
+            <div className="flex items-center justify-between text-sm font-sans">
               <span className="font-medium text-pencil transition-all duration-200">
                 {STEPS[stepIndex].label}
               </span>
@@ -101,12 +101,12 @@ export function InitialLoader() {
           </div>
 
           {/* Micro Verification Guarantee Stamp */}
-          <div className="pt-2 border-t border-rule/60 flex items-center justify-between text-[10px] text-muted font-sans">
+          <div className="pt-2 border-t border-rule/60 flex items-center justify-between text-sm text-muted font-sans">
             <div className="inline-flex items-center gap-1.5 font-semibold text-paid">
               <ShieldCheck className="w-3.5 h-3.5" />
               <span>Deterministic Math</span>
             </div>
-            <span className="text-muted/80">Meta Muse Glimmer 30B</span>
+            <span className="text-muted">Meta Muse Glimmer 30B</span>
           </div>
         </div>
       </div>

@@ -1,3 +1,4 @@
+// impeccable-disable side-tab -- intentional RedMarginGutter discrepancy border per docs/design.md
 "use client";
 
 import React from "react";
@@ -60,7 +61,7 @@ export function TwoPlyProofBar({
         )}
 
         {disabledReason && (
-          <p className="text-[11px] text-margin font-semibold flex items-center gap-1">
+          <p className="text-sm text-margin font-semibold flex items-center gap-1">
             <AlertCircle className="w-3.5 h-3.5 flex-shrink-0" />
             <span>{disabledReason}</span>
           </p>

@@ -1,0 +1,48 @@
+{
+  "page_id": "page-22",
+  "synthetic": true,
+  "category": "discrepancy",
+  "page_date": "2026-10-22",
+  "unreadable": false,
+  "written_total": 232,
+  "expected_computed_total": 222,
+  "has_page_discrepancy": true,
+  "entries": [
+    {
+      "customer_name": "Mangardo",
+      "item": "kopiko brown",
+      "quantity": 1,
+      "unit_price": 20,
+      "amount": 30,
+      "entry_type": "credit",
+      "line_discrepancy": true
+    },
+    {
+      "customer_name": "Mang Jose",
+      "item": "bigas 1kg",
+      "quantity": 2,
+      "unit_price": 55,
+      "amount": 110,
+      "entry_type": "credit",
+      "line_discrepancy": false
+    },
+    {
+      "customer_name": "Ate Baby",
+      "item": "sardinas",
+      "quantity": 3,
+      "unit_price": 24,
+      "amount": 72,
+      "entry_type": "credit",
+      "line_discrepancy": false
+    },
+    {
+      "customer_name": "Nanay Cora",
+      "item": "coke mismo",
+      "quantity": 1,
+      "unit_price": 20,
+      "amount": 20,
+      "entry_type": "credit",
+      "line_discrepancy": false
+    }
+  ]
+}

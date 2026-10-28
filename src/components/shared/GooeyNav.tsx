@@ -39,8 +39,8 @@ const THEMES: Record<'dark' | 'light', Record<string, string>> = {
     '--gn-frame-edge': 'rgba(255, 255, 255, 0.08)',
     '--gn-frame-highlight': 'rgba(255, 255, 255, 0.07)',
     '--gn-frame-shadow': '0 22px 44px -20px rgba(0, 0, 0, 0.8), 0 6px 16px -8px rgba(0, 0, 0, 0.5)',
-    '--gn-ink': '#f4f4f5',
-    '--gn-muted': 'rgba(244, 244, 245, 0.62)'
+    '--gn-ink': '#F2F5EC',
+    '--gn-muted': 'rgba(242, 245, 236, 0.62)'
   },
   light: {
     '--gn-frame': 'rgba(255, 255, 255, 0.85)',
@@ -53,7 +53,7 @@ const THEMES: Record<'dark' | 'light', Record<string, string>> = {
 };
 
 const PILLS: Record<'dark' | 'light', { color: string; hover: string; shadow: number }> = {
-  dark: { color: '#f4f4f5', hover: 'rgba(255, 255, 255, 0.08)', shadow: 0.4 },
+  dark: { color: '#F2F5EC', hover: 'rgba(255, 255, 255, 0.08)', shadow: 0.4 },
   light: { color: '#1E3FAE', hover: 'rgba(30, 62, 174, 0.08)', shadow: 0.2 }
 };
 

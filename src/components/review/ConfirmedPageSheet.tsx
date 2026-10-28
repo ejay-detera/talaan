@@ -37,7 +37,7 @@ export function ConfirmedPageSheet({
             <h2 className="text-xs sm:text-sm font-bold text-pencil leading-tight">
               Kumpirmado at Naitala sa Ledger
             </h2>
-            <p className="text-[11px] text-muted">
+            <p className="text-sm text-muted">
               {entries.length} mga linya &bull; {page.page_date || "Listahan"}
             </p>
           </div>
@@ -61,7 +61,7 @@ export function ConfirmedPageSheet({
           <h3 className="text-xs font-bold text-pencil uppercase tracking-wider">
             Mga Naitalang Transaksyon
           </h3>
-          <span className="text-[11px] text-muted font-bold">
+          <span className="text-sm text-muted font-bold">
             {page.model}
           </span>
         </div>
@@ -93,7 +93,7 @@ export function ConfirmedPageSheet({
                     )}
 
                     <span
-                      className={`text-[10px] font-bold px-1.5 py-0.5 rounded-row border ${
+                      className={`text-sm font-bold px-1.5 py-0.5 rounded-row border ${
                         isPayment
                           ? "bg-paid/10 text-paid border-paid/30"
                           : isCredit
@@ -108,7 +108,7 @@ export function ConfirmedPageSheet({
                   <p className="text-xs text-muted truncate">
                     {entry.item}
                     {entry.quantity && entry.unit_price ? (
-                      <span className="ml-1 text-[11px] text-muted/80">
+                      <span className="ml-1 text-sm text-muted/80">
                         ({entry.quantity} &times; ₱{Number(entry.unit_price).toFixed(2)})
                       </span>
                     ) : null}
@@ -122,7 +122,7 @@ export function ConfirmedPageSheet({
                     className={isPayment ? "text-paid font-bold" : "text-pencil font-bold"}
                   />
                   {isPayment && (
-                    <span className="block text-[10px] text-paid font-semibold">
+                    <span className="block text-sm text-paid font-semibold">
                       Bawas sa utang
                     </span>
                   )}

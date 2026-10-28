@@ -56,7 +56,7 @@ export function RecentPagesList({ pages, className = "" }: RecentPagesListProps)
                     <span className="text-xs font-bold text-pencil">
                       {p.page_date || "Listahan"}
                     </span>
-                    <span className="text-[10px] text-muted font-bold px-1.5 py-0.5 rounded-row border border-rule bg-paper">
+                    <span className="text-sm text-muted font-bold px-1.5 py-0.5 rounded-row border border-rule bg-paper">
                       {p.model}
                     </span>
                   </div>
@@ -94,7 +94,7 @@ export function RecentPagesList({ pages, className = "" }: RecentPagesListProps)
                   <div className="text-right">
                     <Amount amount={p.computed_total} size="base" />
                     {p.has_page_discrepancy && (
-                      <span className="block text-[10px] font-bold text-margin">May pagkakaiba</span>
+                      <span className="block text-sm font-bold text-margin">May pagkakaiba</span>
                     )}
                   </div>
                   <ArrowRight className="w-4 h-4 text-muted group-hover:text-ink group-hover:translate-x-0.5 transition-all" />

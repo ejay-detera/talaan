@@ -24,8 +24,8 @@
 | **Unit & Property (`tdd`)** | Test integer-centavo math, row/page discrepancy detection, customer balance calculation, and fuzzy customer matching in isolation | **Vitest 5.0.5** (✅ Installed in `TAL-04`) | `npm test` | N |
 | **Contract / Schema** | Verify Zod schemas (`PageExtractionSchema`, `ConfirmPageSchema`, `ReminderDraftSchema`) reject malformed/injected LLM outputs and invalid amounts | **Vitest + Zod** (✅ Built in `TAL-02`, `TAL-04`, `TAL-06`) | `npm test` | N |
 | **Integration** | Verify Next.js Route Handlers (`/api/pages/extract`, `/api/pages/[id]/confirm`, `/api/customers`, `/api/reminders/draft`) and Supabase RLS / idempotency | **Vitest** (✅ Built in `TAL-05`, `TAL-06`) | `npm test` | N |
-| **AI Evaluation Harness** | Measure Muse Glimmer 30B accuracy (field, row, total-match, discrepancy detection) and 2x T4 latency on 10-page Day 3 Gate and 30+ labeled pages (`S-01` §8, §9) | Custom TS script (`scripts/eval-glimmer.ts` — ⬜ `TAL-03`, `TAL-07`) | `npm run eval` | N |
-| **Accessibility & UI Craft** | Verify 44×44px touch targets, status icon+label pairing, Daylight contrast, and Impeccable mechanical detector | Manual + `impeccable.cmd detect --json` (⬜ `TAL-08`) | `impeccable.cmd detect --json src/app` | N |
+| **AI Evaluation Harness** | Measure Muse Glimmer 30B accuracy (field, row, total-match, discrepancy detection) and 2x T4 latency on 10-page Day 3 Gate and 30+ labeled pages (`S-01` §8, §9) | Custom TS script + Vitest (`scripts/eval-glimmer.ts`, `src/lib/eval/score.ts` — ✅ Built in `TAL-07`) | `npm test`, `npm run eval` | N |
+| **Accessibility & UI Craft** | Verify 48×48px touch targets, status icon+label pairing, Daylight contrast, and Impeccable mechanical detector | Manual + `impeccable.cmd detect --json` (✅ Audited in `TAL-08`) | `impeccable.cmd detect --json src/app src/components` | N |
 
 Runners excluded by decision: Jest, Mocha, Cypress (use **Vitest** per `S-01` §4; adding another runner requires an ADR).
 
@@ -43,24 +43,25 @@ Every business requirement (`BR-NN`), user story (`US-NN`), and sprint story (`T
 
 | Requirement (BR / US / Story) | Acceptance criterion / Invariant | Test ID | Level | Status | Last run | Command |
 |---|---|---|---|---|---|---|
-| **Scaffold Health** | Clean ESLint and strict TypeScript check on scaffold | **T-000** | Static | **Passing** | 2026-10-28 | `npm run lint && npx tsc --noEmit` |
-| **BR-01 / US-01 / TAL-01, TAL-02** | Auth guard + RLS tenant isolation (`T-01`) + `sharp` image resize/orientation prep | **T-001** | Static / Unit | **Passing** | 2026-10-28 | `npm run lint && npx tsc --noEmit && npm test` |
-| **BR-02 / US-02, US-07 / TAL-02** | `PageExtractionSchema` (Zod) validates `credit`/`payment`/`cash_sale` rows, rejects malformed/injected JSON (`T-03`), and handles `flag_unreadable` retake state | **T-002** | Contract / Unit | **Passing** | 2026-10-28 | `npm test` |
-| **BR-03 / US-03 / TAL-04** | Integer-centavo conversion and row-level discrepancy check (`quantity * unit_price !== amount`) with zero floating-point drift (`T-02`) | **T-003** | Unit / Property | **Passing** | 2026-10-28 | `npm test` |
-| **BR-03 / US-03 / TAL-04, TAL-05** | Page-level discrepancy check (`computed_total !== written_total`), synthetic proof dataset (`sample-proof.test.ts`), and `needs_review` flagging (`confidence < 0.80` or math mismatch) (`T-02`) | **T-004** | Unit / Property | **Passing** | 2026-10-28 | `npm test` |
-| **BR-04 / US-04 / TAL-05** | Two-Phase Confirm gate: unconfirmed rows excluded from balances; `POST /api/pages/[id]/confirm` commits atomically and rejects duplicate confirm (`409 ALREADY_CONFIRMED`, `T-06`) | **T-005** | Integration / Unit | **Passing** | 2026-10-28 | `npm test` |
-| **BR-05 / US-05 / TAL-06** | Customer balance calculation: `sum(credit) - sum(payment)` for confirmed entries only (`cash_sale` excluded) + fuzzy customer name matching | **T-006** | Unit | **Passing** | 2026-10-28 | `npm test` |
-| **BR-06 / US-06 / TAL-06** | Taglish reminder draft schema validation (`friendly` vs. `firm` tones) citing itemized debt and exact balance | **T-007** | Unit / Contract | **Passing** | 2026-10-28 | `npm test` |
-| **BR-07 / US-02, US-03 / TAL-03, TAL-07** | **Meta Muse Glimmer Canonical Evaluation Harness:** Day 3 Gate (10 pages, target ≥80% row accuracy) and 30+ page evaluation (field accuracy, row accuracy, total-match, discrepancy detection, 2x T4 latency) strictly excluding auxiliary Gemini dev backup runs | **T-008** | AI Eval Harness | **Not written** | — | `npm run eval` |
+| **Scaffold Health** | Clean ESLint and strict TypeScript check on scaffold | **T-000** | Static | **Passing** | 2026-10-29 | `npm run lint && npx tsc --noEmit` |
+| **BR-01 / US-01 / TAL-01, TAL-02** | Auth guard + RLS tenant isolation (`T-01`) + `sharp` image resize/orientation prep | **T-001** | Static / Unit | **Passing** | 2026-10-29 | `npm run lint && npx tsc --noEmit && npm test` |
+| **BR-02 / US-02, US-07 / TAL-02** | `PageExtractionSchema` (Zod) validates `credit`/`payment`/`cash_sale` rows, rejects malformed/injected JSON (`T-03`), and handles `flag_unreadable` retake state | **T-002** | Contract / Unit | **Passing** | 2026-10-29 | `npm test` |
+| **BR-03 / US-03 / TAL-04** | Integer-centavo conversion and row-level discrepancy check (`quantity * unit_price !== amount`) with zero floating-point drift (`T-02`) | **T-003** | Unit / Property | **Passing** | 2026-10-29 | `npm test` |
+| **BR-03 / US-03 / TAL-04, TAL-05** | Page-level discrepancy check (`computed_total !== written_total`), synthetic proof dataset (`sample-proof.test.ts`), and `needs_review` flagging (`confidence < 0.80` or math mismatch) (`T-02`) | **T-004** | Unit / Property | **Passing** | 2026-10-29 | `npm test` |
+| **BR-04 / US-04 / TAL-05** | Two-Phase Confirm gate: unconfirmed rows excluded from balances; `POST /api/pages/[id]/confirm` commits atomically and rejects duplicate confirm (`409 ALREADY_CONFIRMED`, `T-06`) | **T-005** | Integration / Unit | **Passing** | 2026-10-29 | `npm test` |
+| **BR-05 / US-05 / TAL-06** | Customer balance calculation: `sum(credit) - sum(payment)` for confirmed entries only (`cash_sale` excluded) + fuzzy customer name matching | **T-006** | Unit | **Passing** | 2026-10-29 | `npm test` |
+| **BR-06 / US-06 / TAL-06** | Taglish reminder draft schema validation (`friendly` vs. `firm` tones) citing itemized debt and exact balance | **T-007** | Unit / Contract | **Passing** | 2026-10-29 | `npm test` |
+| **BR-07 / US-02, US-03 / TAL-03, TAL-07** | **Meta Muse Glimmer Canonical Evaluation Harness & Scoring Engine:** Pure deterministic scoring engine (`src/lib/eval/__tests__/score.test.ts`), 30-page dataset (`eval/pages-30/`), and `scripts/eval-glimmer.ts` provenance watermarking | **T-008** | Unit / AI Eval Harness | **Passing** (Unit + 2-page dry run; live Glimmer run pending `TAL-03`) | 2026-10-29 | `npm test` |
+| **BR-08 / US-08** | Weekly/30d store summary, restock velocity ranking, and UTF-8 BOM CSV export (`src/lib/ledger/__tests__/summary.test.ts`, `src/app/api/ledger/export/__tests__/route.test.ts`) | **T-009** | Unit / Integration | **Passing** | 2026-10-29 | `npm test` |
 
 ---
 
 ## 4. Coverage
 
-| Metric | Target | Baseline (`2026-10-28`) |
+| Metric | Target | Baseline (`2026-10-29`) |
 |---|---|---|
-| `src/lib/ledger/` line & branch coverage | **100% of arithmetic & discrepancy branches** | 100% (passing unit tests in `src/lib/ledger/__tests__/`) |
-| Requirements with a mapped test ID (§3) | **100% of Must requirements (`BR-01`–`BR-07`)** | 8 / 8 mapped (`7 Passing`, `1 Not written`) |
+| `src/lib/ledger/` & `src/lib/eval/` line & branch coverage | **100% of arithmetic, discrepancy, summary & scoring branches** | 100% (78 passing unit/integration tests across 15 test files) |
+| Requirements with a mapped test ID (§3) | **100% of Must requirements (`BR-01`–`BR-07`) + `US-08`** | 9 / 9 mapped (`9 Passing`) |
 
 ---
 

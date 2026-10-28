@@ -58,7 +58,7 @@ export function FeaturesSection() {
                     <div className="w-11 h-11 rounded-row bg-paper border border-rule flex items-center justify-center text-ink group-hover:bg-ink group-hover:text-sheet group-hover:border-ink transition-all duration-300 shadow-xs group-hover:scale-105">
                       <Icon className="w-5 h-5 transition-transform duration-300" />
                     </div>
-                    <span className="font-display font-black text-2xl text-rule group-hover:text-ink/30 transition-colors duration-300 select-none">
+                    <span className="font-display font-black text-2xl text-muted group-hover:text-ink transition-colors duration-300 select-none">
                       {item.step}
                     </span>
                   </div>

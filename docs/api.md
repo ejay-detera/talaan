@@ -38,6 +38,7 @@
 | **CRON-01** | `GET` | `/api/cron/cleanup-demo` | `vercel_cron` | **Scheduled Cleanup:** Delete expired anonymous demo users (>7 days) and remove associated Storage objects | ✅ Built (`TAL-05`) | **Yes** | `demo-cleanup.test.ts` |
 | **API-03** | `GET` | `/api/customers` & `/api/customers/[id]/balance` | `store_owner` | List store customers with deterministic *utang* balances (`sum(credit) - sum(payment)` from confirmed entries) and itemized history | ✅ Built (`TAL-06`) | Yes | `T-006` |
 | **API-04** | `POST` | `/api/reminders/draft` | `store_owner` | Generate a polite Taglish payment reminder draft (`friendly` / *Malumanay* or `firm` / *Pormal*) from confirmed unpaid entries using `src/lib/model.ts` (`draft_reminder`) | ✅ Built (`TAL-06`) | No (creates new draft) | `T-007` |
+| **API-05** | `GET` | `/api/ledger/export` | `store_owner` | Export all confirmed store ledger entries as a UTF-8 BOM CSV attachment (`text/csv; charset=utf-8`) | ✅ Built (`US-08`) | Yes | `T-009` |
 
 ---
 

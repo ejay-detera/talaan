@@ -1,0 +1,39 @@
+{
+  "page_id": "page-25",
+  "synthetic": true,
+  "category": "discrepancy",
+  "page_date": "2026-10-25",
+  "unreadable": false,
+  "written_total": 209,
+  "expected_computed_total": 199,
+  "has_page_discrepancy": true,
+  "entries": [
+    {
+      "customer_name": "Mang Jose",
+      "item": "mantika bote",
+      "quantity": 1,
+      "unit_price": 35,
+      "amount": 35,
+      "entry_type": "credit",
+      "line_discrepancy": false
+    },
+    {
+      "customer_name": "Ate Baby",
+      "item": "asukal 1/4",
+      "quantity": 2,
+      "unit_price": 25,
+      "amount": 50,
+      "entry_type": "credit",
+      "line_discrepancy": false
+    },
+    {
+      "customer_name": "Nanay Cora",
+      "item": "corned beef",
+      "quantity": 3,
+      "unit_price": 38,
+      "amount": 114,
+      "entry_type": "credit",
+      "line_discrepancy": false
+    }
+  ]
+}

@@ -170,7 +170,7 @@ export default function LoginPage() {
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="aling.nena@talaan.ph"
                       required
-                      className="w-full min-h-[48px] pl-10 pr-3.5 py-2.5 bg-sheet border border-rule rounded-row text-sm text-pencil placeholder-muted/70 focus:border-ink focus:ring-1 focus:ring-ink outline-none transition-all"
+                      className="w-full min-h-[48px] pl-10 pr-3.5 py-2.5 bg-sheet border border-rule rounded-row text-sm text-pencil placeholder:text-muted focus:border-ink focus:ring-1 focus:ring-ink outline-none transition-all"
                     />
                   </div>
                 </div>
@@ -190,7 +190,7 @@ export default function LoginPage() {
                         e.preventDefault();
                         setErrorMessage("Password recovery is available via demo store access below.");
                       }}
-                      className="text-[11px] font-semibold text-ink hover:underline"
+                      className="text-sm font-semibold text-ink hover:underline"
                     >
                       Forgot Password?
                     </a>
@@ -204,7 +204,7 @@ export default function LoginPage() {
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="••••••••"
                       required
-                      className="w-full min-h-[48px] pl-10 pr-10 py-2.5 bg-sheet border border-rule rounded-row text-sm text-pencil placeholder-muted/70 focus:border-ink focus:ring-1 focus:ring-ink outline-none transition-all"
+                      className="w-full min-h-[48px] pl-10 pr-10 py-2.5 bg-sheet border border-rule rounded-row text-sm text-pencil placeholder:text-muted focus:border-ink focus:ring-1 focus:ring-ink outline-none transition-all"
                     />
                     <button
                       type="button"
@@ -297,7 +297,7 @@ export default function LoginPage() {
                 </span>
               </div>
 
-              <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-row bg-sheet border border-rule text-[11px] font-semibold text-paid">
+              <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-row bg-sheet border border-rule text-sm font-semibold text-paid">
                 <ShieldCheck className="w-3.5 h-3.5" />
                 <span>Deterministic Math</span>
               </div>
@@ -313,13 +313,13 @@ export default function LoginPage() {
             </div>
 
             {/* Central Physical Notebook Mockup (Replaces Cartoon Meditating Person) */}
-            <div className="my-6 w-full max-w-sm bg-sheet rounded-sheet border border-rule shadow-paper p-5 relative transform hover:scale-[1.02] transition-transform duration-300">
+            <div className="my-6 w-full max-w-sm bg-sheet rounded-sheet border border-rule p-5 relative transform hover:scale-[1.02] transition-transform duration-300">
               {/* Binder Edge Holes */}
               <div className="flex items-center gap-1.5 mb-3 pb-2 border-b border-rule">
                 <span className="w-2 h-2 rounded-full bg-paper border border-rule" />
                 <span className="w-2 h-2 rounded-full bg-paper border border-rule" />
                 <span className="w-2 h-2 rounded-full bg-paper border border-rule" />
-                <span className="text-[10px] uppercase font-bold tracking-wider text-muted ml-1">
+                <span className="text-sm uppercase font-bold tracking-wider text-muted ml-1">
                   Counter Listahan &bull; Page 14
                 </span>
               </div>
@@ -337,9 +337,9 @@ export default function LoginPage() {
                 </div>
 
                 {/* Micro Discrepancy Caught Tag */}
-                <div className="p-2 rounded-row bg-[#FDF2F2] border border-margin/40 text-[11px] font-sans text-margin font-semibold flex items-center justify-between">
+                <div className="p-2 rounded-row bg-[#FDF2F2] border border-margin/40 text-sm font-sans text-margin font-semibold flex items-center justify-between">
                   <span>₱10.00 Overcharge Caught</span>
-                  <span className="text-[10px] text-paid font-bold">100% Corrected</span>
+                  <span className="text-sm text-paid font-bold">100% Corrected</span>
                 </div>
               </div>
             </div>
@@ -354,9 +354,9 @@ export default function LoginPage() {
               </div>
 
               <div className="space-y-1 max-w-xs mx-auto">
-                <h3 className="font-display font-bold text-base sm:text-lg text-pencil leading-tight">
+                <h2 className="font-display font-bold text-base sm:text-lg text-pencil leading-tight">
                   Make your store bookkeeping easier and organized with Talaan
-                </h3>
+                </h2>
                 <p className="text-xs text-muted font-sans">
                   Keep writing on paper. Code verifies the centavos.
                 </p>

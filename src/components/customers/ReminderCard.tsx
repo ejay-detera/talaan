@@ -105,13 +105,13 @@ export function ReminderCard({
             <Sparkles className="w-3.5 h-3.5 text-ink" />
             <span>Taglish Payment Reminder</span>
           </h3>
-          <p className="text-[11px] text-muted">
+          <p className="text-sm text-muted">
             Kultura at magalang na paalala sa utang
           </p>
         </div>
 
         {/* Model Provenance Stamp */}
-        <span className="px-2 py-0.5 rounded-row border border-rule bg-paper text-[10px] font-bold text-muted uppercase tracking-wider">
+        <span className="px-2 py-0.5 rounded-row border border-rule bg-paper text-sm font-bold text-muted uppercase tracking-wider">
           {modelName}
         </span>
       </div>
@@ -245,7 +245,7 @@ export function ReminderCard({
               </div>
 
               {/* Mandatory Footer per docs/design.md line 346 */}
-              <p className="text-[11px] text-muted text-center italic">
+              <p className="text-sm text-muted text-center italic">
                 Draft lang. Ikaw ang magpapadala.
               </p>
             </div>

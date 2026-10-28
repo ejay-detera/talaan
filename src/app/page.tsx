@@ -44,7 +44,7 @@ export default function HomePage() {
         {/* Top Centered Hero Header */}
         <section className="w-full max-w-5xl mx-auto px-4 sm:px-6 pt-24 sm:pt-32 pb-8 text-center space-y-6">
           <div className="space-y-4 max-w-3xl mx-auto">
-            <h1 className="font-display font-bold text-3xl sm:text-5xl lg:text-[3.25rem] leading-[1.08] tracking-tight text-pencil text-balance">
+            <h1 className="font-display font-bold text-3xl sm:text-5xl lg:text-5xl leading-[1.08] tracking-tight text-pencil text-balance">
               Turn handwritten store notebooks into verified digital ledgers.
             </h1>
             <p className="text-base sm:text-xl text-pencil/80 leading-relaxed font-sans max-w-2xl mx-auto text-balance">
@@ -65,7 +65,8 @@ export default function HomePage() {
 
         {/* Hero Paper Artifact Workspace (Mockup 1 & 2 inspired) */}
         <section id="verification" className="w-full max-w-6xl mx-auto px-4 sm:px-6 pb-16">
-          <div className="relative rounded-sheet border border-rule bg-sheet p-4 sm:p-8 lg:p-10 shadow-paper overflow-hidden">
+          <h2 className="sr-only">Counter Ledger Verification Workspace</h2>
+          <div className="relative p-2 sm:p-6 lg:p-8 overflow-hidden">
             {/* Window / Desk Surface Header */}
             <div className="flex items-center justify-between pb-4 sm:pb-6 mb-6 border-b border-rule select-none">
               <div className="flex items-center gap-2">

@@ -1,0 +1,39 @@
+{
+  "page_id": "page-21",
+  "synthetic": true,
+  "category": "discrepancy",
+  "page_date": "2026-10-21",
+  "unreadable": false,
+  "written_total": 176,
+  "expected_computed_total": 166,
+  "has_page_discrepancy": true,
+  "entries": [
+    {
+      "customer_name": "Aling Rosa",
+      "item": "corned beef",
+      "quantity": 3,
+      "unit_price": 38,
+      "amount": 124,
+      "entry_type": "credit",
+      "line_discrepancy": true
+    },
+    {
+      "customer_name": "Tito Boy",
+      "item": "pancit canton",
+      "quantity": 1,
+      "unit_price": 12,
+      "amount": 12,
+      "entry_type": "credit",
+      "line_discrepancy": false
+    },
+    {
+      "customer_name": "Ate Lorna",
+      "item": "kopiko brown",
+      "quantity": 2,
+      "unit_price": 20,
+      "amount": 40,
+      "entry_type": "credit",
+      "line_discrepancy": false
+    }
+  ]
+}

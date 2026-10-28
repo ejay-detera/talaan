@@ -1,0 +1,39 @@
+{
+  "page_id": "page-23",
+  "synthetic": true,
+  "category": "discrepancy",
+  "page_date": "2026-10-23",
+  "unreadable": false,
+  "written_total": 163,
+  "expected_computed_total": 153,
+  "has_page_discrepancy": true,
+  "entries": [
+    {
+      "customer_name": "Nanay Cora",
+      "item": "sardinas",
+      "quantity": 2,
+      "unit_price": 24,
+      "amount": 58,
+      "entry_type": "credit",
+      "line_discrepancy": true
+    },
+    {
+      "customer_name": "Kuya Jun",
+      "item": "coke mismo",
+      "quantity": 3,
+      "unit_price": 20,
+      "amount": 60,
+      "entry_type": "credit",
+      "line_discrepancy": false
+    },
+    {
+      "customer_name": "Aling Rosa",
+      "item": "safeguard",
+      "quantity": 1,
+      "unit_price": 45,
+      "amount": 45,
+      "entry_type": "credit",
+      "line_discrepancy": false
+    }
+  ]
+}

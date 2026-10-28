@@ -171,16 +171,16 @@
 |---|---|
 | Priority | P1 |
 | Points | 5 |
-| Status | ⬜ To Do |
+| Status | 🔄 In Progress (Harness, `T-008` & 30 synthetic pages done; pending live Glimmer tunnel & field interviews) |
 | Developer | Dev Ejay |
 | Traces | BR-07 · US-02, US-03 · tests T-008 |
 
 > **As a Developer**, I want to evaluate **Muse Glimmer 30B** across 30+ labeled pages (with planted arithmetic errors) and document 3–5 store owner discovery interviews to substantiate Technical Depth (20%) and Impact (30%).
 
 **Acceptance criteria:**
-- [ ] Assemble 30+ consented/redacted or synthetic labeled notebook pages (`eval/pages-30/`) covering diverse handwriting, lighting, Taglish items, and planted arithmetic errors (`S-01` §9).
-- [ ] Build `scripts/eval-glimmer.ts` filtering strictly for `model = 'muse-glimmer'` and reporting: field-level accuracy, row-level accuracy, total-match rate, discrepancy detection rate, review flag rate, and seconds per page on 2x T4.
-- [ ] Conduct 3 to 5 store owner interviews using the 5 behavioral questions in `S-01` §11 and record findings in [`evidence.md`](evidence.md).
+- [x] Assemble 30+ consented/redacted or synthetic labeled notebook pages (`eval/pages-30/`) covering diverse handwriting, lighting, Taglish items, and planted arithmetic errors (`S-01` §9).
+- [x] Build `scripts/eval-glimmer.ts` and `src/lib/eval/score.ts` (`T-008`) filtering strictly for `model = 'muse-glimmer'` (watermarking any backup dev run as `DRY RUN`) and reporting: field-level accuracy, row-level accuracy, total-match rate, discrepancy detection rate, review flag rate, and seconds per page on 2x T4.
+- [ ] Conduct 3 to 5 store owner interviews using the 5 behavioral questions in `docs/interviews/TEMPLATE.md` (`S-01` §11) and record findings in [`evidence.md`](evidence.md).
 
 ---
 
@@ -190,15 +190,15 @@
 |---|---|
 | Priority | P1 |
 | Points | 3 |
-| Status | ⬜ To Do |
+| Status | 🔄 In Progress (`impeccable` audit & `README.md` done; pending Nov 3 demo video) |
 | Developer | Dev Ejay |
-| Traces | BR-01..07 · US-01..07 · Manual Checklist (§6 of `test-plan.md`) |
+| Traces | BR-01..07 · US-01..08 · Manual Checklist (§6 of `test-plan.md`) |
 
 > **As a Submitter**, I want the UI audited by `impeccable.cmd detect`, a complete public `README.md` with a "Built during the hackathon" section and evaluation table, and a recorded demo video showing a messy notebook page with a planted addition error turning into a verified ledger on Muse Glimmer.
 
 **Acceptance criteria:**
-- [ ] Run `C:\Users\Detera\.agents\skills\impeccable\scripts\impeccable.cmd detect --json` over all built routes and fix any findings.
-- [ ] Update root `README.md` with architecture diagram, setup instructions, "Built during the hackathon" section, and measured Muse Glimmer evaluation metrics (`S-01` §4, §11).
+- [x] Run `C:\Users\Detera\.agents\skills\impeccable\scripts\impeccable.cmd detect --json` over all built routes and fix any findings (0 findings across `src/app` and `src/components`).
+- [x] Update root `README.md` with architecture diagram, setup instructions, "Built during the hackathon" section, and Muse Glimmer evaluation metrics table (`S-01` §4, §11).
 - [ ] Record final demo video (plus backup take) running against Muse Glimmer on Nov 3 (`S-01` §11).
 
 ---

@@ -1,0 +1,48 @@
+{
+  "page_id": "page-14",
+  "synthetic": true,
+  "category": "clean",
+  "page_date": "2026-10-14",
+  "unreadable": false,
+  "written_total": 202,
+  "expected_computed_total": 202,
+  "has_page_discrepancy": false,
+  "entries": [
+    {
+      "customer_name": "Mangardo",
+      "item": "safeguard",
+      "quantity": 2,
+      "unit_price": 45,
+      "amount": 90,
+      "entry_type": "credit",
+      "line_discrepancy": false
+    },
+    {
+      "customer_name": "Mang Jose",
+      "item": "itlog",
+      "quantity": 3,
+      "unit_price": 9,
+      "amount": 27,
+      "entry_type": "credit",
+      "line_discrepancy": false
+    },
+    {
+      "customer_name": "Ate Baby",
+      "item": "mantika bote",
+      "quantity": 1,
+      "unit_price": 35,
+      "amount": 35,
+      "entry_type": "credit",
+      "line_discrepancy": false
+    },
+    {
+      "customer_name": "Nanay Cora",
+      "item": "asukal 1/4",
+      "quantity": 2,
+      "unit_price": 25,
+      "amount": 50,
+      "entry_type": "credit",
+      "line_discrepancy": false
+    }
+  ]
+}

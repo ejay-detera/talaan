@@ -185,4 +185,47 @@ export async function getCustomerBalanceDetail(
     latest_reminder,
   };
 }
+import type { SummaryLedgerRow } from "@/lib/ledger/summary";
 
+/**
+ * Lists all confirmed ledger entries for the authenticated owner's store,
+ * joined with customer name and page date, for summary analytics and CSV export.
+ */
+export async function listConfirmedStoreLedgerRows(
+  supabase: SupabaseClient<Database>
+): Promise<SummaryLedgerRow[]> {
+  const { data, error } = await supabase
+    .from("entries")
+    .select(
+      "id, page_id, item, quantity, unit_price, amount, entry_type, confirmed_by_user, created_at, customers(name), pages(page_date)"
+    )
+    .eq("confirmed_by_user", true)
+    .order("created_at", { ascending: false });
+
+  if (error || !data) {
+    return [];
+  }
+
+  return data.map((row) => {
+    const custObj = row.customers as unknown as { name: string } | null;
+    const pageObj = row.pages as unknown as { page_date: string | null } | null;
+    const rawType = row.entry_type;
+
+    return {
+      id: row.id,
+      page_id: row.page_id,
+      page_date: pageObj?.page_date ?? null,
+      created_at: row.created_at,
+      customer_name: custObj?.name ?? "Suki (Cash)",
+      item: row.item,
+      quantity: row.quantity !== null ? Number(row.quantity) : null,
+      unit_price: row.unit_price !== null ? Number(row.unit_price) : null,
+      amount: Number(row.amount),
+      entry_type: (rawType === "cash_sale" ? "cash" : rawType) as
+        | "credit"
+        | "payment"
+        | "cash",
+      confirmed_by_user: Boolean(row.confirmed_by_user),
+    };
+  });
+}

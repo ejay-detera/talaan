@@ -112,7 +112,7 @@ export function EntryReviewRow({
 
       <div className="grid grid-cols-3 gap-2 pt-2.5 items-center">
         <div>
-          <label className="block text-[10px] text-muted font-bold uppercase tracking-wider mb-0.5">Dami (Qty)</label>
+          <label className="block text-sm text-muted font-bold uppercase tracking-wider mb-0.5">Dami (Qty)</label>
           <input
             type="number"
             step="any"
@@ -126,7 +126,7 @@ export function EntryReviewRow({
           />
         </div>
         <div>
-          <label className="block text-[10px] text-muted font-bold uppercase tracking-wider mb-0.5">Presyo (₱)</label>
+          <label className="block text-sm text-muted font-bold uppercase tracking-wider mb-0.5">Presyo (₱)</label>
           <input
             type="number"
             step="0.01"
@@ -140,7 +140,7 @@ export function EntryReviewRow({
           />
         </div>
         <div>
-          <label className="block text-[10px] text-muted font-bold uppercase tracking-wider mb-0.5">Halaga (₱)</label>
+          <label className="block text-sm text-muted font-bold uppercase tracking-wider mb-0.5">Halaga (₱)</label>
           <input
             type="number"
             step="0.01"

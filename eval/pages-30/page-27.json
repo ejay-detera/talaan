@@ -1,0 +1,39 @@
+{
+  "page_id": "page-27",
+  "synthetic": true,
+  "category": "discrepancy",
+  "page_date": "2026-10-27",
+  "unreadable": false,
+  "written_total": 173,
+  "expected_computed_total": 163,
+  "has_page_discrepancy": true,
+  "entries": [
+    {
+      "customer_name": "Ate Lorna",
+      "item": "kopiko brown",
+      "quantity": 3,
+      "unit_price": 20,
+      "amount": 60,
+      "entry_type": "credit",
+      "line_discrepancy": false
+    },
+    {
+      "customer_name": "Mangardo",
+      "item": "bigas 1kg",
+      "quantity": 1,
+      "unit_price": 55,
+      "amount": 55,
+      "entry_type": "credit",
+      "line_discrepancy": false
+    },
+    {
+      "customer_name": "Mang Jose",
+      "item": "sardinas",
+      "quantity": 2,
+      "unit_price": 24,
+      "amount": 48,
+      "entry_type": "credit",
+      "line_discrepancy": false
+    }
+  ]
+}

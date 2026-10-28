@@ -1,0 +1,48 @@
+{
+  "page_id": "page-13",
+  "synthetic": true,
+  "category": "clean",
+  "page_date": "2026-10-13",
+  "unreadable": false,
+  "written_total": 149,
+  "expected_computed_total": 149,
+  "has_page_discrepancy": false,
+  "entries": [
+    {
+      "customer_name": "Aling Rosa",
+      "item": "sardinas",
+      "quantity": 1,
+      "unit_price": 24,
+      "amount": 24,
+      "entry_type": "credit",
+      "line_discrepancy": false
+    },
+    {
+      "customer_name": "Tito Boy",
+      "item": "coke mismo",
+      "quantity": 2,
+      "unit_price": 20,
+      "amount": 40,
+      "entry_type": "credit",
+      "line_discrepancy": false
+    },
+    {
+      "customer_name": "Ate Lorna",
+      "item": "safeguard",
+      "quantity": 3,
+      "unit_price": 45,
+      "amount": 135,
+      "entry_type": "credit",
+      "line_discrepancy": false
+    },
+    {
+      "customer_name": "Aling Rosa",
+      "item": "Bayad",
+      "quantity": null,
+      "unit_price": null,
+      "amount": 50,
+      "entry_type": "payment",
+      "line_discrepancy": false
+    }
+  ]
+}

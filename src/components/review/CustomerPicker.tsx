@@ -58,7 +58,7 @@ export function CustomerPicker({
             setIsCreatingNew(false);
             onSelectCustomer(null, null);
           }}
-          className="text-[11px] text-muted hover:text-pencil px-1.5 py-1 whitespace-nowrap cursor-pointer"
+          className="text-sm text-muted hover:text-pencil px-1.5 py-1 whitespace-nowrap cursor-pointer"
         >
           Pumili sa listahan
         </button>

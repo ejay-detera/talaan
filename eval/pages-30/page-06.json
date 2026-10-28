@@ -1,0 +1,48 @@
+{
+  "page_id": "page-06",
+  "synthetic": true,
+  "category": "clean",
+  "page_date": "2026-10-06",
+  "unreadable": false,
+  "written_total": 331,
+  "expected_computed_total": 331,
+  "has_page_discrepancy": false,
+  "entries": [
+    {
+      "customer_name": "Mangardo",
+      "item": "corned beef",
+      "quantity": 3,
+      "unit_price": 38,
+      "amount": 114,
+      "entry_type": "credit",
+      "line_discrepancy": false
+    },
+    {
+      "customer_name": "Mang Jose",
+      "item": "pancit canton",
+      "quantity": 1,
+      "unit_price": 12,
+      "amount": 12,
+      "entry_type": "credit",
+      "line_discrepancy": false
+    },
+    {
+      "customer_name": "Ate Baby",
+      "item": "kopiko brown",
+      "quantity": 2,
+      "unit_price": 20,
+      "amount": 40,
+      "entry_type": "credit",
+      "line_discrepancy": false
+    },
+    {
+      "customer_name": "Nanay Cora",
+      "item": "bigas 1kg",
+      "quantity": 3,
+      "unit_price": 55,
+      "amount": 165,
+      "entry_type": "credit",
+      "line_discrepancy": false
+    }
+  ]
+}

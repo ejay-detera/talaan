@@ -25,7 +25,7 @@ export function CustomerList({ customers }: CustomerListProps) {
         <h2 className="text-xs font-bold text-muted uppercase tracking-wider">
           Listahan ng mga Suki ({customers.length})
         </h2>
-        <span className="text-[11px] text-muted">Pindutin para sa buong kasaysayan</span>
+        <span className="text-sm text-muted">Pindutin para sa buong kasaysayan</span>
       </div>
 
       <div className="space-y-2.5">
@@ -48,7 +48,7 @@ export function CustomerList({ customers }: CustomerListProps) {
                       {c.name}
                     </span>
                     {c.phone_optional && (
-                      <span className="inline-flex items-center gap-0.5 text-[11px] text-muted">
+                      <span className="inline-flex items-center gap-0.5 text-sm text-muted">
                         <Phone className="w-2.5 h-2.5" />
                         <span>{c.phone_optional}</span>
                       </span>
@@ -77,7 +77,7 @@ export function CustomerList({ customers }: CustomerListProps) {
                     )}
 
                     {c.last_activity_at && (
-                      <span className="text-[11px] text-muted font-normal inline-flex items-center gap-1">
+                      <span className="text-sm text-muted font-normal inline-flex items-center gap-1">
                         &bull;
                         <Clock className="w-3 h-3" />
                         <span>{new Date(c.last_activity_at).toLocaleDateString("tl-PH")}</span>
@@ -96,7 +96,7 @@ export function CustomerList({ customers }: CustomerListProps) {
                         hasDebt ? "text-margin" : isPaid ? "text-paid" : "text-ink"
                       }`}
                     />
-                    <span className="block text-[10px] text-muted font-medium">
+                    <span className="block text-sm text-muted font-medium">
                       {hasDebt ? "Kailangang singilin" : isPaid ? "Walang balanse" : "Advance payment"}
                     </span>
                   </div>

@@ -1,0 +1,70 @@
+{
+  "timestamp": "2026-10-28T17:58:30.716Z",
+  "model": "gemini-3.5-flash-lite",
+  "provider": "gemini",
+  "isOfficialMuseGlimmer": false,
+  "watermark": "DRY RUN — AUXILIARY DEV BACKUP (NOT MUSE GLIMMER) [provider=gemini, model=gemini-3.5-flash-lite]",
+  "datasetDir": "eval/pages-30",
+  "totalPages": 2,
+  "metrics": {
+    "customerNameAccuracy": 1,
+    "itemAccuracy": 1,
+    "amountAccuracy": 1,
+    "exactRowMatchRate": 1,
+    "writtenTotalAccuracy": 1,
+    "computedTotalAccuracy": 1,
+    "unreadableDetectionAccuracy": 1,
+    "discrepancyRecall": 1,
+    "discrepancyPrecision": 1,
+    "reviewFlagRate": 0
+  },
+  "latency": {
+    "meanMs": 16992,
+    "p50Ms": 16574,
+    "p95Ms": 17410
+  },
+  "pages": [
+    {
+      "page_id": "page-01",
+      "category": "clean",
+      "unreadableCorrect": true,
+      "expectedEntryCount": 4,
+      "extractedEntryCount": 4,
+      "matchedCustomerCount": 4,
+      "matchedItemCount": 4,
+      "matchedAmountCount": 4,
+      "exactRowMatchCount": 4,
+      "writtenTotalMatched": true,
+      "computedTotalMatched": true,
+      "discrepancyConfusion": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "tn": 5
+      },
+      "flaggedForReviewCount": 0,
+      "latencyMs": 17410
+    },
+    {
+      "page_id": "page-02",
+      "category": "clean",
+      "unreadableCorrect": true,
+      "expectedEntryCount": 4,
+      "extractedEntryCount": 4,
+      "matchedCustomerCount": 4,
+      "matchedItemCount": 4,
+      "matchedAmountCount": 4,
+      "exactRowMatchCount": 4,
+      "writtenTotalMatched": true,
+      "computedTotalMatched": true,
+      "discrepancyConfusion": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "tn": 5
+      },
+      "flaggedForReviewCount": 0,
+      "latencyMs": 16574
+    }
+  ]
+}

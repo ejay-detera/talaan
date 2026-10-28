@@ -24,7 +24,7 @@ export function CustomerHistoryList({ entries }: CustomerHistoryListProps) {
         <h3 className="text-xs font-bold text-pencil uppercase tracking-wider">
           Kasaysayan ng Transaksyon ({entries.length})
         </h3>
-        <span className="text-[11px] text-muted">Mula sa kumpirmadong kuwaderno</span>
+        <span className="text-sm text-muted">Mula sa kumpirmadong kuwaderno</span>
       </div>
 
       <div className="divide-y divide-rule/60">
@@ -58,7 +58,7 @@ export function CustomerHistoryList({ entries }: CustomerHistoryListProps) {
                       {entry.item}
                     </span>
                     <span
-                      className={`text-[10px] font-bold px-1.5 py-0.2 rounded-row border ${
+                      className={`text-sm font-bold px-1.5 py-0.2 rounded-row border ${
                         isPayment
                           ? "bg-paid/10 text-paid border-paid/30"
                           : "bg-paper text-pencil border-rule"
@@ -68,7 +68,7 @@ export function CustomerHistoryList({ entries }: CustomerHistoryListProps) {
                     </span>
                   </div>
 
-                  <div className="flex items-center gap-2 text-[11px] text-muted">
+                  <div className="flex items-center gap-2 text-sm text-muted">
                     <span>{entry.page_date || "Listahan"}</span>
                     {entry.quantity && entry.unit_price && (
                       <span>
@@ -87,7 +87,7 @@ export function CustomerHistoryList({ entries }: CustomerHistoryListProps) {
                     size="base"
                     className={`font-bold ${isPayment ? "text-paid" : "text-pencil"}`}
                   />
-                  <span className="block text-[10px] text-muted">
+                  <span className="block text-sm text-muted">
                     {isPayment ? "- Bayad" : "+ Utang"}
                   </span>
                 </div>
