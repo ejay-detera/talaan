@@ -340,7 +340,7 @@ export function ConfirmedPageSheet({
           {/* Right Summary Info */}
           <div className="px-4 text-xs text-muted font-sans font-medium">
             {entries.length} {entries.length === 1 ? "row" : "rows"} &bull; Total: ₱
-            {Number(page.computed_total).toFixed(2)} &bull; Zero AI guesswork
+            {Number(page.computed_total).toFixed(2)}
           </div>
         </div>
       </div>

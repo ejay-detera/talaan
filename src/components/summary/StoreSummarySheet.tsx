@@ -92,10 +92,13 @@ export function StoreSummarySheet({ storeName, rows }: StoreSummarySheetProps) {
       </div>
 
       {/* Main Grid: Left Yellow Sticky Memo + Right Open 2-Page Ledger Pad */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start paper-stagger">
         {/* Left Column: Yellow Pinned Memo Note */}
         <div className="lg:col-span-4 print:hidden">
-          <div className="relative rounded-row border border-[#EADB85] bg-[#FFF9D2] p-5 sm:p-6 shadow-paper space-y-4">
+          <div
+            className="slip paper-settle relative rounded-row border border-[#EADB85] bg-[#FFF9D2] p-5 sm:p-6 shadow-paper space-y-4"
+            style={{ ["--tilt" as string]: "-1deg" }}
+          >
             {/* 3D Red Pushpin */}
             <div
               className="absolute -top-3 left-1/2 -translate-x-1/2 z-20 pointer-events-none"
@@ -135,14 +138,13 @@ export function StoreSummarySheet({ storeName, rows }: StoreSummarySheetProps) {
               </p>
             </div>
 
-
             {/* Action Buttons Pinned at Bottom of Sticky Note */}
             <div className="pt-2 space-y-2 border-t border-[#EADB85]/80">
               {/* Primary Action: Download CSV */}
               <a
                 href="/api/ledger/export"
                 download
-                className="w-full h-[46px] rounded-row bg-ink hover:bg-ink/90 active:scale-[0.99] text-xs sm:text-sm font-bold text-sheet flex items-center justify-center gap-2 shadow-paper transition-all cursor-pointer select-none font-sans"
+                className="w-full h-[46px] rounded-row bg-ink hover:bg-ink/90 active:scale-[0.99] text-xs sm:text-sm font-bold text-sheet flex items-center justify-center gap-2 shadow-paper transition-all cursor-pointer select-none font-sans paper-press"
               >
                 <Download className="w-4 h-4" />
                 <span>Download CSV (Excel)</span>
@@ -152,7 +154,7 @@ export function StoreSummarySheet({ storeName, rows }: StoreSummarySheetProps) {
               <button
                 type="button"
                 onClick={() => window.print()}
-                className="w-full h-[46px] rounded-row border border-ink text-ink bg-sheet hover:bg-paper active:scale-[0.99] text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition-all cursor-pointer select-none font-sans"
+                className="w-full h-[46px] rounded-row border border-ink text-ink bg-sheet hover:bg-paper active:scale-[0.99] text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition-all cursor-pointer select-none font-sans paper-press"
               >
                 <Printer className="w-4 h-4" />
                 <span>Print / PDF</span>

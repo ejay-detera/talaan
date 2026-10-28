@@ -39,7 +39,7 @@ export default async function CustomersPage() {
       <AppHeaderNav storeName={storeName} activeTab="customers" />
 
       {/* Main Content Area: 2-Column Responsive Layout matching Dashboard max-w-5xl */}
-      <main className="max-w-5xl mx-auto px-4 sm:px-6 pt-2 sm:pt-4 space-y-6">
+      <main className="paper-enter max-w-5xl mx-auto px-4 sm:px-6 pt-2 sm:pt-4 space-y-6">
         {/* Store Title & Date Sub-Header */}
         <header className="space-y-1 select-none">
           <h1 className="font-display font-bold text-2xl sm:text-3xl text-pencil tracking-tight">

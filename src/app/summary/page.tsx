@@ -28,7 +28,7 @@ export default async function StoreSummaryPage() {
   return (
     <div className="flex-1 flex flex-col bg-transparent text-pencil font-sans selection:bg-marker selection:text-pencil pb-16">
       <AppHeaderNav storeName={storeName} activeTab="summary" />
-      <main className="max-w-6xl mx-auto w-full px-4 sm:px-6 pt-2 sm:pt-4">
+      <main className="paper-enter max-w-6xl mx-auto w-full px-4 sm:px-6 pt-2 sm:pt-4">
         <StoreSummarySheet storeName={storeName} rows={rows} />
       </main>
     </div>

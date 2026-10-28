@@ -38,20 +38,19 @@ export default function Loading() {
           </div>
         </div>
 
-        {/* Ruled Notebook Rows Shimmer */}
+        {/* Ruled Notebook Rows ("Lines being written" animation per paper-motion.md §3e) */}
         <div className="space-y-3 py-3 border-t border-b border-rule/60">
-          <div className="flex items-center justify-between gap-3">
-            <div className="h-3 w-36 bg-rule/50 rounded-sm animate-pulse" />
-            <div className="h-3 w-12 bg-rule/40 rounded-sm animate-pulse" />
-          </div>
-          <div className="flex items-center justify-between gap-3">
-            <div className="h-3 w-28 bg-rule/40 rounded-sm animate-pulse" />
-            <div className="h-3 w-14 bg-rule/35 rounded-sm animate-pulse" />
-          </div>
-          <div className="flex items-center justify-between gap-3">
-            <div className="h-3 w-40 bg-rule/35 rounded-sm animate-pulse" />
-            <div className="h-3 w-10 bg-rule/30 rounded-sm animate-pulse" />
-          </div>
+          {[100, 82, 91, 60].map((w, i) => (
+            <div key={i} className="h-4 border-b border-rule/30 flex items-center">
+              <div
+                className="h-2 origin-left rounded-sm bg-rule"
+                style={{
+                  width: `${w}%`,
+                  animation: `write-line 700ms var(--ease-paper) ${i * 90}ms infinite alternate`,
+                }}
+              />
+            </div>
+          ))}
         </div>
 
         {/* Fluid Ink Travel Progress Beam */}

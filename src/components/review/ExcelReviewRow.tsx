@@ -104,7 +104,7 @@ export function ExcelReviewRow({
     <>
       <tr
         onClick={onSelect}
-        className={`transition-colors cursor-pointer ${
+        className={`paper-row transition-colors cursor-pointer ${
           isSelected ? "bg-paper/40" : "hover:bg-paper/20"
         } ${isMismatch && !entry.accept_written ? "bg-[#FFF5F5]" : ""}`}
       >

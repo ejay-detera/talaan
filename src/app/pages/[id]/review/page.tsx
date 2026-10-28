@@ -78,7 +78,7 @@ export default async function ReviewPage({ params }: ReviewPageProps) {
       </header>
 
       {/* Main Container */}
-      <main className="max-w-5xl mx-auto px-4 sm:px-6 pt-5">
+      <main className="paper-enter max-w-5xl mx-auto px-4 sm:px-6 pt-5">
         {isAlreadyConfirmed ? (
           <ConfirmedPageSheet
             page={{

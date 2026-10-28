@@ -20,7 +20,7 @@ export async function LandingCta() {
       <div className="flex justify-center w-full">
         <Link
           href="/dashboard"
-          className="inline-flex items-center justify-center gap-2.5 w-full sm:w-auto min-w-[240px] h-[56px] px-8 rounded-row bg-ink text-sheet text-base font-semibold shadow-paper hover:bg-ink/90 active:scale-[0.99] transition-all cursor-pointer select-none group"
+          className="inline-flex items-center justify-center gap-2.5 w-full sm:w-auto min-w-[240px] h-[56px] px-8 rounded-row bg-ink text-sheet text-base font-semibold shadow-paper hover:bg-ink/90 active:scale-[0.99] transition-all cursor-pointer select-none group paper-press"
         >
           <LayoutDashboard className="w-5 h-5" />
           <span>Open Store App</span>
@@ -34,7 +34,7 @@ export async function LandingCta() {
     <div className="flex justify-center w-full">
       <Link
         href="/login"
-        className="inline-flex items-center justify-center gap-2.5 w-full sm:w-auto min-w-[240px] h-[56px] px-8 rounded-row bg-ink text-sheet text-base font-semibold shadow-paper hover:bg-ink/90 active:scale-[0.99] transition-all cursor-pointer select-none group"
+        className="inline-flex items-center justify-center gap-2.5 w-full sm:w-auto min-w-[240px] h-[56px] px-8 rounded-row bg-ink text-sheet text-base font-semibold shadow-paper hover:bg-ink/90 active:scale-[0.99] transition-all cursor-pointer select-none group paper-press"
       >
         <LogIn className="w-5 h-5" />
         <span>Sign in to Talaan</span>

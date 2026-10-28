@@ -88,7 +88,7 @@ export default async function DashboardPage() {
       <AppHeaderNav storeName={storeName} activeTab="pages" />
 
       {/* Main Dashboard Layout */}
-      <main className="max-w-5xl mx-auto px-4 sm:px-6 pt-2 sm:pt-4 space-y-6">
+      <main className="paper-enter max-w-5xl mx-auto px-4 sm:px-6 pt-2 sm:pt-4 space-y-6">
         {/* Store Title & Date Header */}
         <header className="space-y-1 select-none">
           <h1 className="font-display font-bold text-2xl sm:text-3xl text-pencil tracking-tight">
@@ -102,7 +102,7 @@ export default async function DashboardPage() {
         {/* 2-Column Responsive Dashboard Grid matching the wireframe */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
           {/* Left Column: Total Store Credit & Notebook Pages */}
-          <div className="space-y-6">
+          <div className="space-y-6 paper-stagger">
             <section aria-label="Total Customer Credit">
               <TotalUtangCard
                 totalStoreUtang={customersResult.totalStoreUtang}
@@ -122,7 +122,7 @@ export default async function DashboardPage() {
           </div>
 
           {/* Right Column: Who Owes Credit & Trust Stamp Card */}
-          <div className="space-y-6">
+          <div className="space-y-6 paper-stagger">
             <section aria-label="Who Owes Credit">
               <WhoOwesCreditCard
                 customers={customersResult.customers}

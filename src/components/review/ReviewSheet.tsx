@@ -178,7 +178,9 @@ export function ReviewSheet({
       )}
 
       {/* Spreadsheet Review Container */}
-      <div className="rounded-sheet border border-rule bg-sheet shadow-paper overflow-hidden select-none">
+      <div className="relative rounded-sheet border border-rule bg-sheet shadow-paper overflow-hidden select-none">
+        {/* Authoritative Red Margin Line drawn down sheet */}
+        <div className="margin-draw absolute left-0 top-0 bottom-0 w-[3px] bg-margin z-10 pointer-events-none" />
         {/* Formula Bar */}
         <div className="border-b border-rule bg-paper/30 flex items-stretch divide-x divide-rule">
           {/* Cell Address Coordinate */}
@@ -338,7 +340,7 @@ export function ReviewSheet({
           {/* Right Summary Info */}
           <div className="px-4 py-2 text-xs text-muted font-sans font-medium">
             {entries.length} {entries.length === 1 ? "row" : "rows"} &bull; Total: ₱
-            {totals.computedTotal.toFixed(2)} &bull; Zero AI guesswork
+            {totals.computedTotal.toFixed(2)}
           </div>
         </div>
       </div>

@@ -458,5 +458,5 @@ When `src/components/landing/Hero.tsx` exists, it is the craft benchmark: match 
 - **Don't** use monospace, emoji icons, glassmorphism, glowing borders, or decorative gradients.
 - **Don't** introduce a second accent color or use `margin` / `marker` for decoration.
 - **Don't** render Caveat outside `.notebook` and `.pinned-note`.
-- **Don't** add scroll-triggered fade-ups, per-card hover transitions, or looping animation on more than two slips.
+- **Don't** add scroll-triggered fade-ups, bounce effects, or animations violating The Paper Motion Rule (§ Motion). Strictly use canonical paper motion tokens (`.paper-enter`, `.paper-settle`, `.paper-stagger`, `.paper-lift`, `.paper-press`, `.paper-row`, `.margin-draw`).
 - **Don't** display any total the deterministic code did not compute, and never auto-send reminders.

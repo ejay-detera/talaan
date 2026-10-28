@@ -30,8 +30,8 @@ export function DeterministicTrustCard({ className = "" }: DeterministicTrustCar
 
       {/* Explanatory Body */}
       <p className="text-sm text-pencil/85 font-sans leading-relaxed">
-        AI reads the handwriting. Deterministic code counts every total, so there is
-        zero guesswork with your store&apos;s money.
+        AI reads the handwriting. Deterministic code counts every total for exact
+        centavo arithmetic with your store&apos;s money.
       </p>
     </div>
   );

@@ -71,7 +71,7 @@ export function TwoPlyProofBar({
           type="button"
           onClick={onConfirm}
           disabled={isConfirmDisabled || isSubmitting}
-          className="w-full h-[56px] rounded-row bg-ink hover:bg-ink/90 active:scale-[0.99] disabled:bg-rule disabled:text-muted disabled:cursor-not-allowed text-sheet text-base font-bold shadow-paper transition-all flex items-center justify-center gap-2 cursor-pointer select-none"
+          className="w-full h-[56px] rounded-row bg-ink hover:bg-ink/90 active:scale-[0.99] disabled:bg-rule disabled:text-muted disabled:cursor-not-allowed text-sheet text-base font-bold shadow-paper transition-all flex items-center justify-center gap-2 cursor-pointer select-none paper-press"
         >
           {isSubmitting ? (
             <>

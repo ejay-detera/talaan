@@ -200,7 +200,7 @@ export function CustomerList({ customers }: CustomerListProps) {
             : "No customers found in this category."}
         </div>
       ) : (
-        <div className="divide-y divide-[#E6ECE0]">
+        <div className="divide-y divide-[#E6ECE0] paper-stagger">
           {filteredCustomers.map((c) => {
             const hasDebt = c.balance > 0;
             const isPaid = c.balance === 0;
@@ -222,7 +222,7 @@ export function CustomerList({ customers }: CustomerListProps) {
               <Link
                 key={c.id}
                 href={`/customers/${c.id}`}
-                className="px-4 sm:px-5 py-3.5 flex items-center justify-between gap-4 hover:bg-paper/40 transition-colors group cursor-pointer"
+                className="paper-row px-4 sm:px-5 py-3.5 flex items-center justify-between gap-4 transition-colors group cursor-pointer"
               >
                 {/* Left: Customer Info & Status Meta */}
                 <div className="min-w-0 space-y-1">

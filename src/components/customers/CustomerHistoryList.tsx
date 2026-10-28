@@ -59,7 +59,7 @@ export function CustomerHistoryList({ entries, currentBalance }: CustomerHistory
       </div>
 
       {/* Ruled Transaction Rows */}
-      <div className="divide-y divide-[#E6ECE0]">
+      <div className="divide-y divide-[#E6ECE0] paper-stagger">
         {entries.map((entry) => {
           const isPayment = entry.entry_type === "payment";
 
@@ -82,7 +82,7 @@ export function CustomerHistoryList({ entries, currentBalance }: CustomerHistory
           return (
             <div
               key={entry.id}
-              className="px-5 py-3.5 flex items-center justify-between gap-3 hover:bg-paper/40 transition-colors group"
+              className="paper-row px-5 py-3.5 flex items-center justify-between gap-3 transition-colors group"
             >
               {/* Left Column: Date & Item Details */}
               <div className="flex items-start gap-3 min-w-0">

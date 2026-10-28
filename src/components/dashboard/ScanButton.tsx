@@ -109,7 +109,7 @@ export function ScanButton({ className = "" }: ScanButtonProps) {
           type="button"
           onClick={() => fileInputRef.current?.click()}
           disabled={uploading}
-          className="h-[56px] px-6 rounded-full bg-ink hover:bg-ink/90 active:scale-[0.98] disabled:bg-rule disabled:text-muted disabled:cursor-not-allowed text-sheet text-base font-bold shadow-paper-lg transition-all flex items-center justify-center gap-2.5 cursor-pointer select-none border border-sheet/25"
+          className="h-[56px] px-6 rounded-full bg-ink hover:bg-ink/90 active:scale-[0.98] disabled:bg-rule disabled:text-muted disabled:cursor-not-allowed text-sheet text-base font-bold shadow-paper-lg transition-all flex items-center justify-center gap-2.5 cursor-pointer select-none border border-sheet/25 paper-press"
           aria-label="Scan notebook page"
         >
           {uploading ? (

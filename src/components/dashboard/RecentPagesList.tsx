@@ -220,7 +220,7 @@ export function RecentPagesList({
           {/* Foreground Notebook Sheet */}
           <div
             key={currentPage.id}
-            className="relative bg-[#FFFEFA] rounded-sm border border-rule shadow-[0_2px_8px_rgba(35,38,43,0.06)] p-4 sm:p-5 space-y-2.5 overflow-hidden animate-in fade-in-50 duration-200"
+            className="relative paper-lift bg-[#FFFEFA] rounded-sm border border-rule shadow-[0_2px_8px_rgba(35,38,43,0.06)] p-4 sm:p-5 space-y-2.5 overflow-hidden animate-in fade-in-50 duration-200"
           >
             {/* Notebook Sheet Header */}
             <div className="flex items-center justify-between pb-1 border-b border-[#E1E7D8]/70 text-xs font-hand text-muted select-none">
@@ -356,7 +356,7 @@ export function RecentPagesList({
           <div className="pt-2">
             <Link
               href={`/pages/${currentPage.id}/review`}
-              className="inline-flex items-center justify-center px-4 py-2 rounded-row border border-rule bg-sheet text-pencil hover:bg-paper active:scale-[0.99] font-bold text-sm shadow-sm transition-all"
+              className="inline-flex items-center justify-center px-4 py-2 rounded-row border border-rule bg-sheet text-pencil hover:bg-paper active:scale-[0.99] font-bold text-sm shadow-sm transition-all paper-press"
             >
               Open ledger
             </Link>
@@ -381,7 +381,7 @@ export function RecentPagesList({
               <div
                 key={p.id}
                 onClick={() => setActivePageIndex(idx)}
-                className={`px-5 py-3 flex items-center justify-between gap-3 cursor-pointer transition-colors ${
+                className={`paper-row px-5 py-3 flex items-center justify-between gap-3 cursor-pointer transition-colors ${
                   isCurrent
                     ? "bg-sheet ring-1 ring-inset ring-ink/20 shadow-xs"
                     : "hover:bg-sheet/70"

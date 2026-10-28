@@ -23,7 +23,8 @@ export function TotalUtangCard({
 }: TotalUtangCardProps) {
   return (
     <div
-      className={`relative bg-[#FFF9D2] border border-[#EADB85] rounded-row p-5 sm:p-6 shadow-[0_8px_24px_rgba(35,38,43,0.09)] select-none transform rotate-[-1deg] hover:rotate-0 transition-transform duration-300 ${className}`}
+      className={`slip paper-settle relative bg-[#FFF9D2] border border-[#EADB85] rounded-row p-5 sm:p-6 select-none ${className}`}
+      style={{ ["--tilt" as string]: "-1deg" }}
     >
       {/* 3D Red Pushpin Graphic at Top Center */}
       <div

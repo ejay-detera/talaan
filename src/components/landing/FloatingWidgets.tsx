@@ -18,7 +18,10 @@ import { Badge } from "@/components/ui/badge";
  */
 export function PinnedStickyNote() {
   return (
-    <div className="relative w-64 bg-[#FFF9D2] border border-[#EADB85] rounded-row p-4 shadow-sticky animate-float-slow select-none transform rotate-[-2deg] hover:rotate-0 transition-transform duration-300">
+    <div
+      className="slip paper-settle relative w-64 bg-[#FFF9D2] border border-[#EADB85] rounded-row p-4 shadow-sticky select-none paper-drift"
+      style={{ ["--tilt" as string]: "-2deg" }}
+    >
       {/* Pushpin Graphic */}
       <div
         className="absolute -top-3 left-1/2 -translate-x-1/2 w-6 h-6 flex items-center justify-center pointer-events-none"
@@ -55,7 +58,10 @@ export function PinnedStickyNote() {
  */
 export function CustomerBalancesWidget() {
   return (
-    <Card className="w-72 shadow-paper animate-float-delayed select-none">
+    <Card
+      className="slip paper-settle w-72 shadow-paper select-none paper-drift-delayed"
+      style={{ ["--tilt" as string]: "1.5deg", ["--delay" as string]: "90ms" }}
+    >
       <CardHeader className="p-3.5 pb-2">
         <div className="flex items-center justify-between">
           <CardTitle className="text-xs font-bold font-sans uppercase tracking-wider text-muted flex items-center gap-1.5">
@@ -101,7 +107,10 @@ export function CustomerBalancesWidget() {
  */
 export function PaymentReminderDraftWidget() {
   return (
-    <Card className="w-72 shadow-paper animate-float-delayed select-none">
+    <Card
+      className="slip paper-settle w-72 shadow-paper select-none"
+      style={{ ["--tilt" as string]: "-1deg", ["--delay" as string]: "180ms" }}
+    >
       <CardHeader className="p-3.5 pb-2">
         <div className="flex items-center justify-between">
           <CardTitle className="text-xs font-bold font-sans uppercase tracking-wider text-muted flex items-center gap-1.5">
@@ -123,7 +132,7 @@ export function PaymentReminderDraftWidget() {
 
         <div className="flex items-center justify-between text-sm font-sans text-muted">
           <span className="flex items-center gap-1">
-            <Sparkles className="w-3 h-3 text-ink" /> Polite & respectful
+            <Sparkles className="w-3 h-3 text-ink" /> SMS draft
           </span>
           <span className="text-ink font-semibold flex items-center gap-1 cursor-pointer hover:underline">
             <Copy className="w-3 h-3" /> Copy SMS
@@ -141,7 +150,10 @@ export function PaymentReminderDraftWidget() {
  */
 export function DeterministicShieldWidget() {
   return (
-    <Card className="w-72 shadow-paper animate-float-slow select-none">
+    <Card
+      className="slip paper-settle w-72 shadow-paper select-none"
+      style={{ ["--tilt" as string]: "1deg", ["--delay" as string]: "270ms" }}
+    >
       <CardHeader className="p-3.5 pb-2">
         <div className="flex items-center justify-between">
           <CardTitle className="text-xs font-bold font-sans uppercase tracking-wider text-muted flex items-center gap-1.5">

@@ -134,7 +134,10 @@ export function ReminderCard({
   return (
     <div className="space-y-3">
       {/* Pinned Yellow Sticky Note (Matching Image 2) */}
-      <div className="relative w-full rounded-row bg-[#FFF9D2] border border-[#EADB85] shadow-[0_8px_24px_rgba(35,38,43,0.08)] p-5 sm:p-6 select-none space-y-4">
+      <div
+        className="slip paper-settle relative w-full rounded-row bg-[#FFF9D2] border border-[#EADB85] shadow-[0_8px_24px_rgba(35,38,43,0.08)] p-5 sm:p-6 select-none space-y-4"
+        style={{ ["--tilt" as string]: "0.5deg" }}
+      >
         {/* 3D Red Pushpin Graphic at Top Center */}
         <div
           className="absolute -top-3 left-1/2 -translate-x-1/2 w-6 h-6 flex items-center justify-center pointer-events-none z-20"
@@ -156,7 +159,7 @@ export function ReminderCard({
             <button
               type="button"
               onClick={() => handleToneChange("friendly")}
-              className={`px-3.5 py-1.5 rounded-row text-xs font-bold transition-all cursor-pointer ${
+              className={`px-3.5 py-1.5 rounded-row text-xs font-bold transition-all cursor-pointer paper-press ${
                 tone === "friendly"
                   ? "bg-ink text-sheet shadow-xs"
                   : "bg-sheet/80 text-[#383318] border border-[#EADB85] hover:bg-sheet"
@@ -167,7 +170,7 @@ export function ReminderCard({
             <button
               type="button"
               onClick={() => handleToneChange("firm")}
-              className={`px-3.5 py-1.5 rounded-row text-xs font-bold transition-all cursor-pointer ${
+              className={`px-3.5 py-1.5 rounded-row text-xs font-bold transition-all cursor-pointer paper-press ${
                 tone === "firm"
                   ? "bg-ink text-sheet shadow-xs"
                   : "bg-sheet/80 text-[#383318] border border-[#EADB85] hover:bg-sheet"
@@ -214,7 +217,7 @@ export function ReminderCard({
             <button
               type="button"
               onClick={handleCopy}
-              className="flex-1 sm:flex-initial h-[42px] px-5 rounded-row bg-ink hover:bg-ink/90 active:scale-[0.98] text-xs font-bold text-sheet flex items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer font-sans"
+              className="flex-1 sm:flex-initial h-[42px] px-5 rounded-row bg-ink hover:bg-ink/90 active:scale-[0.98] text-xs font-bold text-sheet flex items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer font-sans paper-press"
             >
               {copied ? (
                 <>
