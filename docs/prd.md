@@ -161,17 +161,17 @@ All core user flows below are built and verified (`✅`):
 3. Supabase Auth establishes session; user redirects to `/dashboard` (Store Dashboard & Upload).
 
 **2. Core Notebook-to-Ledger Flow (`✅`, Two-Phase Split, `TAL-02`–`TAL-05`):**
-1. Owner taps **Kunan ng Litrato ang Listahan** on `/dashboard` and captures/uploads a photo.
+1. Owner taps **Scan Page** (Floating Action Button) on `/dashboard` and captures/uploads a photo.
 2. `POST /api/pages/extract` runs `sharp` prep, uploads to private Supabase Storage, calls `src/lib/model.ts` (`extract_rows`), validates with Zod, and runs `src/lib/ledger` (`checkRowDiscrepancy`, `computePageTotals`).
-3. UI navigates to `/pages/[id]/review`, displaying the collapsible notebook preview, active model badge (`Muse Glimmer 30B`), extracted rows with the **Red Margin Gutter** highlighting any `needs_review` or `line_discrepancy` rows, customer match dropdowns, and the sticky **Two-Ply Proof Bar** (`Written Total` vs. `Computed Total`).
-4. Owner resolves any flagged row and taps **Kumpirmahin sa Ledger** (`POST /api/pages/[id]/confirm`).
+3. UI navigates to `/pages/[id]/review`, displaying the collapsible notebook preview, extracted rows with the **Red Margin Gutter** highlighting any `needs_review` or `line_discrepancy` rows, customer match dropdowns, and the sticky **Two-Ply Proof Bar** (`Written Total` vs. `Computed Total`).
+4. Owner resolves any flagged row and taps **Confirm & Save to Ledger** (`POST /api/pages/[id]/confirm`).
 5. Page transitions to `confirmed` and customer balances update immediately.
 
 **3. Taglish Reminder & Weekly Summary Flow (`✅`, `TAL-06`, `US-08`):**
 1. Owner opens `/customers` and selects a customer with an outstanding *utang* balance.
-2. Owner chooses tone (`Malumanay / Friendly` or `Pormal / Firm`) and taps **Bumuo ng Taglish Draft**.
-3. `POST /api/reminders/draft` returns the itemized Taglish message; owner taps **Kopyahin** or **Ipadala sa SMS / I-share**.
-4. Owner opens `/summary` (*Ulat*) to view 7-day/30-day/all-time store totals, top restock items, and 1-tap CSV/Print export.
+2. Owner chooses tone (`Friendly` or `Firm`) and taps **Generate Taglish Draft**.
+3. `POST /api/reminders/draft` returns the itemized Taglish message; owner taps **Copy** or **Send via SMS / Share**.
+4. Owner opens `/summary` to view 7-day/30-day/all-time store totals, top restock items, and 1-tap CSV/Print export.
 
 Full status matrix and diagrams: [`flow.md`](flow.md).
 

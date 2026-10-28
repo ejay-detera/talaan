@@ -28,6 +28,7 @@ interface ShapeGridProps {
   direction?: DirectionType;
   speed?: number;
   lineColor?: string;
+  hover?: boolean;
   hoverColor?: string;
   hoverFillColor?: string;
   fillOpacity?: number;
@@ -413,6 +414,7 @@ export function ShapeGrid({
   direction = "diagonal",
   speed = 0.5,
   lineColor = "#2a2734",
+  hover = true,
   hoverColor = "#ffffff",
   hoverFillColor,
   fillOpacity = 0.15,
@@ -443,6 +445,7 @@ export function ShapeGrid({
     direction: DIRECTIONS[direction] ? direction : "diagonal",
     speed: Math.max(0, speed),
     lineColor,
+    hover,
     hoverColor,
     hoverFillColor: hoverFillColor ?? hoverColor,
     fillOpacity: clamp(fillOpacity, 0, 1),
@@ -583,7 +586,7 @@ export function ShapeGrid({
           state.hues.delete(key);
         } else state.lit.set(key, next);
       }
-      if (state.spotPower < 0.01) return;
+      if (!s.hover || state.spotPower < 0.01) return;
       const wx = state.spotX + state.offsetX;
       const wy = state.spotY + state.offsetY;
       const reach = Math.max(s.radius, 0.5) * s.cellSize;
@@ -879,6 +882,7 @@ export function ShapeGrid({
     };
 
     const onMove = (event: PointerEvent) => {
+      if (!settingsRef.current.hover) return;
       const point = pointFrom(event);
       if (point && !state.inside && state.spotPower < 0.02) {
         state.spotX = point[0];
@@ -900,7 +904,7 @@ export function ShapeGrid({
 
     const onDown = (event: PointerEvent) => {
       const s = settingsRef.current;
-      if (!s.clickCascade) return;
+      if (!s.hover || !s.clickCascade) return;
       const point = pointFrom(event);
       if (!point) return;
       state.cascades.push({

@@ -2,13 +2,13 @@ import { ArrowLeft } from "lucide-react";
 
 export default function CustomerDetailLoading() {
   return (
-    <div className="min-h-screen bg-paper text-pencil font-sans pb-16 animate-pulse select-none">
+    <div className="min-h-screen bg-transparent text-pencil font-sans pb-16 animate-pulse select-none">
       {/* Sticky Header Skeleton */}
       <header className="sticky top-0 z-20 bg-sheet/95 backdrop-blur-sm border-b border-rule px-4 py-3">
         <div className="max-w-xl mx-auto flex items-center justify-between">
           <div className="inline-flex items-center gap-1.5 text-xs text-muted p-1">
             <ArrowLeft className="w-4 h-4" />
-            <span>Mga Suki</span>
+            <span>Customers</span>
           </div>
 
           <div className="h-4 w-28 bg-rule/70 rounded" />

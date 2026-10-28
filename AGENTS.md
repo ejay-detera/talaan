@@ -69,7 +69,7 @@ Every agent operating on this codebase must adhere to these five universal execu
 Active in `docs/foundation.md` §0; their rules are non-negotiable:
 
 - **Payments and ledger (`docs/modules/payments-ledger.md`):** Active for Talaan's Two-Phase Bookkeeping & *Utang* Ledger (`Prepare` extraction via `POST /api/pages/extract` → human `Confirm` via `POST /api/pages/[id]/confirm`, confirmation idempotency, fail-closed integer-centavo math in `src/lib/ledger/` and `numeric(10,2)` in Postgres, zero LLM arithmetic).
-- **AI component (`docs/modules/ai-component.md`):** Active for **Meta Muse Glimmer 30B** (canonical primary engine) and Gemini API (auxiliary developer backup only) via `src/lib/model.ts` (mandatory human-in-the-loop confirmation before DB balance updates, Zod schema validation in `src/lib/schemas.ts`, active model badge in UI, `model` column logged on `pages`, and 30+ page evaluation strictly on Muse Glimmer).
+- **AI component (`docs/modules/ai-component.md`):** Active for **Meta Muse Glimmer 30B** (canonical primary engine) and Gemini API (auxiliary developer backup only) via `src/lib/model.ts` (mandatory human-in-the-loop confirmation before DB balance updates, Zod schema validation in `src/lib/schemas.ts`, no UI pills/badges exposing raw LLM names, `model` column logged on `pages` server-side, and 30+ page evaluation strictly on Muse Glimmer).
 - **Mobile client:** Inactive (deleted; Talaan is a mobile-first Next.js web app governed by `docs/design.md`).
 
 ---
@@ -103,7 +103,9 @@ Rules:
 - Brand colors: Analysis Pad Paper ground (`#F2F5EC`), Notebook Sheet surface (`#FFFFFF`), Ruled line divider (`#D5DEC6`), Graphite Pencil text (`#23262B`), Muted Sage secondary text (`#5B6457`), Ballpen Blue primary action/ink (`#1E3FAE`), Red Margin rule/discrepancy (`#C8302F`), Highlighter Marker review background (`#FFE14D`), and Paid stamp (`#1F7A4D`). Use semantic tokens from `src/app/globals.css` — never hardcode hex values.
 - Typography: Zero monospace. `Bricolage Grotesque` (`--font-display`) for headings, `Atkinson Hyperlegible Next` (`--font-sans` with `tabular-nums`) for all UI, body, peso amounts, and running totals; `Caveat` (`--font-hand`) strictly quarantined to `.notebook` original-handwriting quote blocks.
 - Appearance: **High-Contrast Daylight Mode (Light Mode)** is the supported appearance. Dark Mode is TBD.
+- Language: **English UI across all screens and documentation.** All interface copy, buttons, table headers, forms, dialogs, and error messages are written in clear, concise English. Taglish is strictly quarantined to the reminder SMS draft generator output and prompt (`src/components/customers/ReminderCard.tsx`, `src/lib/prompts/reminder.ts`) and original handwritten quotes (`.notebook`).
 - Signature verification elements: `RedMarginGutter` (left `2px solid #C8302F` status column) and `TwoPlyProofBar` (sticky bottom `Written Total` vs. `Computed Total` reconciliation bar).
+- Navigation & Action Patterns: Floating top dock (`AppHeaderNav.tsx`) with animated `GooeyNav` tabs (`Notebook`, `Customers`, `Summary`). Extended pill Scan Page FAB anchored at fixed bottom-right (`fixed bottom-5 sm:bottom-6 right-4 sm:right-6 z-30`) with `pb-28` container safe-scroll padding.
 - Status presentation: every status must pair a label with an icon or shape, never color alone (`docs/glossary.md` §3).
 
 ---

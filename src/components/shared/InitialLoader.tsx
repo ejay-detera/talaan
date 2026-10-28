@@ -6,7 +6,7 @@ import { ShieldCheck } from "lucide-react";
 
 const STEPS = [
   { label: "Opening counter listahan & notebook pages...", percent: 25 },
-  { label: "Extracting handwritten line items (Meta Muse Glimmer 30B)...", percent: 55 },
+  { label: "Extracting handwritten line items...", percent: 55 },
   { label: "Reconciling integer centavos (zero LLM arithmetic)...", percent: 85 },
   { label: "Two-phase ledger verified. Ready.", percent: 100 },
 ];
@@ -101,12 +101,11 @@ export function InitialLoader() {
           </div>
 
           {/* Micro Verification Guarantee Stamp */}
-          <div className="pt-2 border-t border-rule/60 flex items-center justify-between text-sm text-muted font-sans">
+          <div className="pt-2 border-t border-rule/60 flex items-center justify-center text-sm text-muted font-sans">
             <div className="inline-flex items-center gap-1.5 font-semibold text-paid">
               <ShieldCheck className="w-3.5 h-3.5" />
               <span>Deterministic Math</span>
             </div>
-            <span className="text-muted">Meta Muse Glimmer 30B</span>
           </div>
         </div>
       </div>

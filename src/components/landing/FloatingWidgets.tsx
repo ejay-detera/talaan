@@ -101,7 +101,7 @@ export function CustomerBalancesWidget() {
  */
 export function PaymentReminderDraftWidget() {
   return (
-    <Card className="w-80 shadow-paper animate-float-delayed select-none">
+    <Card className="w-72 shadow-paper animate-float-delayed select-none">
       <CardHeader className="p-3.5 pb-2">
         <div className="flex items-center justify-between">
           <CardTitle className="text-xs font-bold font-sans uppercase tracking-wider text-muted flex items-center gap-1.5">

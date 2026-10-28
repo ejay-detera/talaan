@@ -112,8 +112,7 @@ Everything verified by deterministic code reads like clean ink on ruled paper. E
 - **Signal-only color.** Red (`margin`) and yellow (`marker`) mean uncertainty or discrepancy. Nothing else uses them.
 - **Hyperlegible tabular numerals.** All UI copy and every peso column (`₱`) use Atkinson Hyperlegible Next with `tabular-nums`. No monospace anywhere.
 - **Handwriting quarantine.** Caveat appears only for raw handwritten owner text and landing-page pinned notes. Never in UI labels or controls.
-- **Phone-first thumb geometry.** 360px baseline, one primary action per screen anchored at the bottom (`56px`), `48px` minimum tap targets.
-- **Plain Taglish copy.** Sentence case, plain verbs, actionable errors, explicit model provenance.
+- **Clear English UI copy.** Sentence case, plain verbs, actionable errors. All app UI controls, headers, buttons, and navigation are in English. Taglish is strictly quarantined to the reminder SMS draft generator output and prompt where Filipino cultural nuance is essential.
 
 ---
 
@@ -332,18 +331,18 @@ Governed entirely by **The Paper System** above. Summary:
 
 ### Discrepancy Banner & Confirm Bar
 - Sticky bottom bar on `/pages/[id]/review`, `shadow-bar`, `4px solid margin` left accent when a discrepancy exists.
-- Shows `Nakasulat na total`, `Kompyut ng code`, and the exact peso difference above the `56px` primary confirm button.
+- Shows `Written Total`, `Computed Total`, and the exact peso difference above the `56px` primary confirm button.
 
-### Buttons
+### Buttons & FAB
 - **Primary:** `ink` fill, `sheet` bold text, `56px`, `rounded.row`. Press: `translateY(1px)`.
-- **Scan (pill):** same as primary with `rounded.pill`, dashboard only.
+- **Scan Page (FAB):** Extended floating action button (`h-14 px-6 rounded-full bg-ink text-sheet shadow-paper-lg`) anchored at `fixed bottom-5 sm:bottom-6 right-4 sm:right-6 z-30` exclusively on the `/dashboard` screen with `pb-28` container safe padding.
 - **Secondary:** `sheet` fill, `1.5px solid ink`, `ink` text, `48px` minimum.
 
-### Model Provenance Stamp
-Use the **Stamp** recipe in `muted` (`14px` `small` text, `1px` rule weight allowed here instead of `2px`). Top-right of every extraction and result screen: `Meta Muse Glimmer 30B` or `Gemini (dev backup)`. No pills, no dots, no chips.
+### Model Provenance Policy
+No raw model badges, pills, or LLM chips (`Meta Muse Glimmer 30B` / `Gemini`) in the client UI. The active model name is logged directly to the `pages.model` column server-side for auditability and compliance.
 
 ### Reminder Draft Card
-`sheet` (flat, bordered, `rounded.paper`), tone switch (`Malumanay` / `Pormal`), editable Taglish textarea (`17px`), actions **Kopyahin** and **I-edit / I-share**. Mandatory footer: `"Draft lang. Ikaw ang magpapadala."`
+`sheet` (flat, bordered, `rounded.paper`), tone switch (`Friendly` / `Firm`), editable Taglish textarea (`17px`), actions **Copy** and **Send via SMS** / **Share**. Mandatory footer: `"Draft only. You review and choose when to send."`
 
 ### Pinned Note (landing only)
 `slip`, `.pinned-note` Caveat `22px`, maximum 12 words, one piece of tape, rotation ±2°, never interactive, never yellow.
@@ -355,10 +354,11 @@ Use the **Stamp** recipe in `muted` (`14px` `small` text, `1px` rule weight allo
 | # | Screen | Route | Key content | Paper treatment |
 |---|---|---|---|---|
 | 1 | Landing | `/` | Headline, proof stack, 1-tap demo CTA | Desk, slips, tape, stamp, motion budget B |
-| 2 | Login and 1-tap demo | `/login` | Email form, `Subukan ang demo` primary | One sheet on pad, no slips |
-| 3 | Dashboard and scan | `/` (signed in) | Total *utang*, pill scan button, recent pages | Page stack of slips, sheet for totals |
+| 2 | Login and 1-tap demo | `/login` | Email form, `Try 1-Tap Demo` primary | One sheet on pad, no slips |
+| 3 | Dashboard and scan | `/dashboard` | Floating dock nav, counter ledger summary sheet, recent page notepad slips, Scan FAB | Notepad slips with 3 punch holes and red margin rule, sheet for totals |
 | 4 | Page review | `/pages/[id]/review` | Discrepancy banner, flagged rows, sticky confirm bar | Ruled sheet with margin line, motion budget A |
-| 5 | Customers and reminder | `/customers` | Balances list, itemized history, reminder draft | Sheets only, no slips |
+| 5 | Customers and reminder | `/customers` & `/customers/[id]` | Balances list, itemized history, Taglish reminder draft card | Sheets only, no slips |
+| 6 | Store Summary | `/summary` | Weekly/monthly financials, restock guide, 1-tap CSV export | Ruled summary sheet |
 
 ---
 

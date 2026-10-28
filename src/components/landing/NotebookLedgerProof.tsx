@@ -7,7 +7,7 @@ import {
 } from "@/lib/ledger/sample-proof";
 
 interface NotebookLedgerProofProps {
-  modelName: string;
+  modelName?: string;
 }
 
 /**
@@ -15,7 +15,7 @@ interface NotebookLedgerProofProps {
  * Compares raw handwritten notebook listahan against verified digital ledger.
  * Pure Server Component (zero client bundle cost).
  */
-export function NotebookLedgerProof({ modelName }: NotebookLedgerProofProps) {
+export function NotebookLedgerProof({}: NotebookLedgerProofProps) {
   const totals = getLandingProofTotals(true);
 
   return (
@@ -23,7 +23,7 @@ export function NotebookLedgerProof({ modelName }: NotebookLedgerProofProps) {
       aria-label="Notebook to digital ledger comparison proof"
       className="w-full bg-sheet rounded-sheet border border-rule overflow-hidden"
     >
-      {/* Proof Header with Provenance Badge */}
+      {/* Proof Header */}
       <div className="flex items-center justify-between px-4 py-3 bg-paper border-b border-rule">
         <div className="flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-paid select-none" aria-hidden="true" />
@@ -31,9 +31,9 @@ export function NotebookLedgerProof({ modelName }: NotebookLedgerProofProps) {
             Patunay: Notebook papuntang ledger
           </span>
         </div>
-        <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-row bg-sheet border border-rule text-xs text-muted">
+        <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-row bg-sheet border border-rule text-xs text-paid font-medium">
           <span className="w-1.5 h-1.5 rounded-full bg-paid select-none" aria-hidden="true" />
-          <span>{modelName}</span>
+          <span>Deterministic</span>
         </div>
       </div>
 

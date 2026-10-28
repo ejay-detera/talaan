@@ -23,10 +23,10 @@ export default async function StoreSummaryPage() {
     listConfirmedStoreLedgerRows(supabase),
   ]);
 
-  const storeName = storeRes.data?.name || "Aking Tindahan";
+  const storeName = storeRes.data?.name || "My Store";
 
   return (
-    <div className="min-h-screen bg-paper text-pencil font-sans selection:bg-marker selection:text-pencil pb-16">
+    <div className="min-h-screen bg-transparent text-pencil font-sans selection:bg-marker selection:text-pencil pb-16">
       <AppHeaderNav storeName={storeName} activeTab="summary" />
       <main className="max-w-xl mx-auto px-4 pt-5">
         <StoreSummarySheet storeName={storeName} rows={rows} />

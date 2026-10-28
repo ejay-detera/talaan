@@ -71,7 +71,7 @@ Talaan runs as a unified **Next.js App Router** application in TypeScript. On th
 4. If readable, **Deterministic Ledger Code (`src/lib/ledger`)** validates the Zod payload, checks row math (`quantity * unit_price === amount`) and page math (`computed_total === written_total`), auto-matches customer names against existing store `customers`, and stages the page (`pages.status = 'needs_review'`).
 5. **Store Owner** inspects the **Review & Discrepancy Screen** (featuring the Red Margin Gutter for row flags and the Two-Ply Proof Bar comparing `Written Total` vs. `Computed Total`), edits or confirms flagged rows, and resolves customer links.
 6. **Backend Confirm Route (`POST /api/pages/[id]/confirm`)** re-verifies arithmetic and commits confirmed rows (`confirmed_by_user = true`, `pages.status = 'confirmed'`) to Supabase Postgres.
-7. **Store Owner** views updated **Customer Balances** (`sum(credit) - sum(payment)`) and requests a **Taglish Reminder Draft** (`Malumanay / Friendly` or `Pormal / Firm` tone) to copy or share manually via SMS/Messenger (`navigator.share` / `sms:`).
+7. **Store Owner** views updated **Customer Balances** (`sum(credit) - sum(payment)`) and requests a **Taglish Reminder Draft** (`Friendly` or `Firm` tone) to copy or share manually via SMS/Messenger (`navigator.share` / `sms:`).
 
 ### Scope and status truth table
 
@@ -170,7 +170,7 @@ Cash sales (`entry_type = 'cash_sale'`) are recorded for store sales/restock tra
 
 ### 3.4 Control Plane 4: Taglish Reminder & Restock Assistant (`Act`)
 
-From the Customer Balances view, the owner selects a customer with an overdue balance, picks a communication tone (`Malumanay / Friendly` or `Pormal / Firm`), and invokes `draft_reminder(customer, tone)`. The agent drafts a culturally natural Taglish message listing the confirmed items and exact balance owed. The owner copies the message or launches their phone's native SMS/Messenger app via Web Share (`navigator.share` / `sms:?body=`)—keeping the owner in full control of every outbound message.
+From the Customer Balances view, the owner selects a customer with an overdue balance, picks a communication tone (`Friendly` or `Firm`), and invokes `draft_reminder(customer, tone)`. The agent drafts a culturally natural Taglish message listing the confirmed items and exact balance owed. The owner copies the message or launches their phone's native SMS/Messenger app via Web Share (`navigator.share` / `sms:?body=`)—keeping the owner in full control of every outbound message.
 
 ---
 
@@ -246,7 +246,7 @@ It also fuzzy-matches extracted customer strings against the store's existing `c
 On the **Review & Discrepancy Screen**, low-confidence rows (`confidence < 0.80`) and arithmetic mismatches are flagged in the left **Red Margin Gutter**, and the sticky **Two-Ply Proof Bar** displays `Written Total` vs. `Computed Total`. The owner edits any misread value, confirms customer matches, and taps **Confirm & Save to Ledger** (`POST /api/pages/[id]/confirm`).
 
 #### Step 5 — Balances & Taglish Reminder Handoff (`Act`)
-Confirmed rows update customer balances (`sum(credit) - sum(payment)`). On the **Customer Balances Screen**, the owner taps a customer, selects a tone (`Malumanay / Friendly` or `Pormal / Firm`), generates a **Taglish Reminder Draft**, and taps **Copy** or **Share via SMS / Messenger**.
+Confirmed rows update customer balances (`sum(credit) - sum(payment)`). On the **Customer Balances Screen**, the owner taps a customer, selects a tone (`Friendly` or `Firm`), generates a **Taglish Reminder Draft**, and taps **Copy** or **Share via SMS / Messenger**.
 
 ### 7.2 Proposed core and stretch features
 
@@ -257,7 +257,7 @@ Confirmed rows update customer balances (`sum(credit) - sum(payment)`). On the *
 | 3 | **Review Screen & Customer Matching** | MVP (Must) | Highlights `needs_review` rows (`confidence < 0.80` or math mismatch) in the Red Margin Gutter; auto-matches customer names to existing `customers` or creates a new customer in 1 tap; blocks DB ledger commit until owner confirms. |
 | 4 | **Two-Level Discrepancy Finder** | MVP (Must) | Deterministic TypeScript (`src/lib/ledger`) recomputes row math (`quantity * unit_price === amount`) and page math (`computed_total === written_total`) in integer centavos; displays side-by-side comparison in the Two-Ply Proof Bar. |
 | 5 | **Customer Balances Ledger** | MVP (Must) | Per-customer running balance (`sum(credit) - sum(payment)`), last activity date, and itemized history of confirmed `credit` and `payment` entries. |
-| 6 | **Taglish Reminder Drafts** | MVP (Must) | Tone selector (`Malumanay / Friendly` vs. `Pormal / Firm`); generates polite Taglish message citing itemized unpaid rows and total balance; 1-tap Copy + Web Share API / `sms:?body=` deep-link. Never auto-sends. |
+| 6 | **Taglish Reminder Drafts** | MVP (Must) | Tone selector (`Friendly` vs. `Firm`); generates polite Taglish message citing itemized unpaid rows and total balance; 1-tap Copy + Web Share API / `sms:?body=` deep-link. Never auto-sends. |
 | 7 | **Unreadable Page Retake Request** | MVP (Must) | When `flag_unreadable` is triggered or overall page confidence fails threshold, sets `pages.status = 'retake_requested'` and tells the owner exactly which section/lighting issue to re-photograph. |
 | S1 | **Supplier Receipt to Restock List** | Stretch | Extracts supplier receipts into cost records and suggests restock items (`restock_list`). |
 | S2 | **Weekly Summary** | Stretch | Aggregates top-selling items, total outstanding *utang*, and estimated profit across confirmed pages. |

@@ -33,7 +33,7 @@ export function SignOutButton({ className = "" }: SignOutButtonProps) {
       type="button"
       onClick={handleSignOut}
       disabled={loading}
-      className={`inline-flex items-center gap-1.5 text-xs text-muted hover:text-margin transition-colors cursor-pointer py-1.5 px-2 rounded-row focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink ${className}`}
+      className={`inline-flex items-center gap-1.5 text-xs text-muted hover:text-margin transition-colors cursor-pointer py-1.5 px-2 rounded-full hover:bg-paper focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink ${className}`}
       aria-label="Sign out"
     >
       {loading ? (
@@ -41,7 +41,7 @@ export function SignOutButton({ className = "" }: SignOutButtonProps) {
       ) : (
         <LogOut className="w-3.5 h-3.5" />
       )}
-      <span>{loading ? "Signing out..." : "Sign out"}</span>
+      <span className="hidden sm:inline">{loading ? "Signing out..." : "Sign out"}</span>
     </button>
   );
 }

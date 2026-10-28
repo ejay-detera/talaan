@@ -23,18 +23,18 @@ Unlike POS or inventory apps that require store owners to abandon paper and type
 - **Physical Scene:** Storefront counter with a wire-bound or stitched school notebook, ballpen (blue, black, or red ink), calculator, sachets, and canned goods; accessed primarily on a budget Android smartphone browser (`web`, mobile-first viewport).
 - **Two-Phase Workflow:**
   1. **Prepare (Capture & Check):** Owner photographs a notebook page -> `sharp` pre-processes image -> Vision model (`extract_rows` or `flag_unreadable`) extracts structured rows (`credit`, `payment`, `cash_sale`, optional `quantity` and `unit_price`, `amount`, `confidence`) -> deterministic code (`lib/ledger`) checks row-level (`quantity * unit_price === amount`) and page-level (`computed_total === written_total`) math -> returns staged rows to the Review UI.
-  2. **Confirm & Act:** Owner fixes or confirms flagged rows and links/creates customer names -> confirmed entries save to Supabase Postgres -> owner views per-customer balances and generates Taglish reminder drafts (`Malumanay / Friendly` or `Pormal / Firm`) to copy or share via SMS/Messenger (`navigator.share` / `sms:`).
+  2. **Confirm & Act:** Owner fixes or confirms flagged rows and links/creates customer names -> confirmed entries save to Supabase Postgres -> owner views per-customer balances and generates Taglish reminder drafts (`Friendly` or `Firm`) to copy or share via SMS/Messenger (`navigator.share` / `sms:`).
 
 ## Capabilities and Constraints
 
 - **Confirmed Capabilities (MVP Scope — Planned):** Photo upload, structured extraction with row confidence, review screen with low-confidence highlights and customer auto-matching, two-level deterministic discrepancy finder, customer balance ledger, Taglish reminder drafts (copy/share only), and unreadable page retake request.
-- **Model Policy:** **Meta Muse Glimmer 30B** (Q4_K_M GGUF via `llama-server` on Kaggle 2x T4) is the canonical primary engine and mandatory for the Day 3 handwriting gate, 30+ page evaluation, and final demo. Gemini API (`MODEL_PROVIDER=gemini`) is strictly an auxiliary developer backup used for rapid local offline iteration. Active model is always badged in UI and logged per page in the database.
+- **Model Policy:** **Meta Muse Glimmer 30B** (Q4_K_M GGUF via `llama-server` on Kaggle 2x T4) is the canonical primary engine and mandatory for the Day 3 handwriting gate, 30+ page evaluation, and final demo. Gemini API (`MODEL_PROVIDER=gemini`) is strictly an auxiliary developer backup used for rapid local offline iteration. Active model is logged per page in the database (`pages.model`) with zero raw LLM pills exposed in the UI.
 - **Hard Boundaries:** No automated message sending (owner sends manually), no payment processing or e-wallet movement, no voice/audio input, and zero LLM-computed arithmetic (all math happens in deterministic code using integer centavos / `numeric(10,2)`).
 
 ## Brand Commitments
 
 - **Name:** Talaan — *Notebook-to-Ledger Agent for Sari-Sari Stores*.
-- **Language:** English UI with natural Filipino/Taglish domain terms (*Utang*, *Bayad*, *Listahan*) and Taglish reminder outputs.
+- **Language:** All application UI screens, controls, forms, navigation, and feedback are in clean English. Taglish is strictly quarantined to the reminder SMS draft generator output and prompt (`src/components/customers/ReminderCard.tsx`, `src/lib/prompts/reminder.ts`) and original handwritten quotes.
 
 ## Evidence on Hand
 

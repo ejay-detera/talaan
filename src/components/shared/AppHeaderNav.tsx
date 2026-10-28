@@ -1,5 +1,10 @@
+"use client";
+
+import React from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Store, BookOpen, Users, BarChart3 } from "lucide-react";
+import Image from "next/image";
+import GooeyNav from "@/components/shared/GooeyNav";
 import { SignOutButton } from "@/components/shared/SignOutButton";
 
 interface AppHeaderNavProps {
@@ -7,67 +12,77 @@ interface AppHeaderNavProps {
   activeTab: "pages" | "customers" | "summary";
 }
 
-export function AppHeaderNav({ storeName, activeTab }: AppHeaderNavProps) {
-  return (
-    <header className="sticky top-0 z-20 bg-sheet/95 backdrop-blur-sm border-b border-rule px-4 py-3 print:hidden">
-      <div className="max-w-xl mx-auto flex flex-col gap-3">
-        {/* Top bar: Store Name & Sign Out */}
-        <div className="flex items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
-            <div className="p-1.5 rounded-row bg-paper border border-rule text-ink">
-              <Store className="w-4 h-4" />
-            </div>
-            <div>
-              <h1 className="font-display font-bold text-sm sm:text-base text-pencil leading-tight">
-                {storeName}
-              </h1>
-              <p className="text-sm text-muted">Talaan &bull; Sari-Sari Store Ledger</p>
-            </div>
-          </div>
+const TABS = [
+  { label: "Notebook", href: "/dashboard" },
+  { label: "Customers", href: "/customers" },
+  { label: "Summary", href: "/summary" },
+];
 
-          <SignOutButton />
+export function AppHeaderNav({ activeTab }: AppHeaderNavProps) {
+  const router = useRouter();
+
+  const tabIndex = activeTab === "pages" ? 0 : activeTab === "customers" ? 1 : 2;
+
+  const handleTabChange = (idx: number) => {
+    if (idx !== tabIndex && TABS[idx]) {
+      router.push(TABS[idx].href);
+    }
+  };
+
+  return (
+    <div className="sticky top-2.5 sm:top-4 z-40 flex justify-center items-center px-3 sm:px-4 pointer-events-none print:hidden mb-4">
+      {/* Floating Center Dock with GooeyNav */}
+      <header className="pointer-events-auto flex items-center gap-1.5 sm:gap-2.5 p-1.5 sm:p-2 pl-2 sm:pl-3 rounded-full bg-sheet/95 backdrop-blur-md border border-rule shadow-paper-lg transition-all duration-300">
+        {/* Placement Icon & Brand */}
+        <Link
+          href="/dashboard"
+          className="flex items-center gap-2 p-1 pr-1.5 sm:pr-2.5 rounded-full hover:bg-paper transition-all select-none group active:scale-[0.98]"
+          title="Talaan Dashboard"
+        >
+          <Image
+            src="/assets/talaan-icon.png"
+            alt="Talaan logo"
+            width={28}
+            height={28}
+            className="flex-shrink-0 object-contain transition-transform duration-200 group-hover:scale-105"
+          />
+          <span className="font-display font-black text-sm tracking-tight text-pencil hidden md:inline">
+            Talaan
+          </span>
+        </Link>
+
+        {/* Divider */}
+        <div className="h-5 sm:h-6 w-[1px] bg-rule" aria-hidden="true" />
+
+        {/* Centered Gooey Nav Component */}
+        <div className="flex items-center">
+          <GooeyNav
+            items={TABS}
+            activeIndex={tabIndex}
+            onChange={handleTabChange}
+            theme="light"
+            color="#1E3FAE"
+            activeTextColor="#FFFFFF"
+            colors={["#1E3FAE", "#2550D8", "#1A3694"]}
+            size="sm"
+            frame={false}
+            particleCount={12}
+            animationTime={420}
+            spread={45}
+            gooeyness={0.5}
+            wobble={0.35}
+            hoverEffect={true}
+          />
         </div>
 
-        {/* Tab Switcher: Kuwaderno (Pages) | Mga Suki (Customers) | Ulat (Summary) */}
-        <nav aria-label="Pangunahing nabigasyon" className="flex border-t border-rule/60 pt-2 gap-2">
-          <Link
-            href="/dashboard"
-            className={`flex-1 flex items-center justify-center gap-1.5 py-2 px-2.5 rounded-row text-sm font-bold transition-all select-none min-h-[48px] ${
-              activeTab === "pages"
-                ? "bg-ink text-sheet shadow-paper"
-                : "bg-paper text-pencil hover:bg-paper/80 border border-rule/60"
-            }`}
-          >
-            <BookOpen className="w-4 h-4 flex-shrink-0" />
-            <span>Kuwaderno</span>
-          </Link>
+        {/* Divider */}
+        <div className="h-5 sm:h-6 w-[1px] bg-rule" aria-hidden="true" />
 
-          <Link
-            href="/customers"
-            className={`flex-1 flex items-center justify-center gap-1.5 py-2 px-2.5 rounded-row text-sm font-bold transition-all select-none min-h-[48px] ${
-              activeTab === "customers"
-                ? "bg-ink text-sheet shadow-paper"
-                : "bg-paper text-pencil hover:bg-paper/80 border border-rule/60"
-            }`}
-          >
-            <Users className="w-4 h-4 flex-shrink-0" />
-            <span>Mga Suki</span>
-          </Link>
-
-          <Link
-            href="/summary"
-            className={`flex-1 flex items-center justify-center gap-1.5 py-2 px-2.5 rounded-row text-sm font-bold transition-all select-none min-h-[48px] ${
-              activeTab === "summary"
-                ? "bg-ink text-sheet shadow-paper"
-                : "bg-paper text-pencil hover:bg-paper/80 border border-rule/60"
-            }`}
-          >
-            <BarChart3 className="w-4 h-4 flex-shrink-0" />
-            <span>Ulat</span>
-          </Link>
-        </nav>
-      </div>
-    </header>
+        {/* Sign Out Action Button */}
+        <div className="flex items-center pr-1">
+          <SignOutButton />
+        </div>
+      </header>
+    </div>
   );
 }
-

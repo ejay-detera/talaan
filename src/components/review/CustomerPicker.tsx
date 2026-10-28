@@ -48,9 +48,9 @@ export function CustomerPicker({
           type="text"
           value={newCustomerName || ""}
           onChange={handleNewNameChange}
-          placeholder="Bagong customer..."
-          className="h-[44px] px-2.5 text-xs font-semibold rounded-row border border-rule bg-sheet text-pencil focus:outline-none focus:ring-2 focus:ring-ink w-full"
-          aria-label="Pangalan ng bagong customer"
+          placeholder="New customer name..."
+          className="h-[44px] px-2.5 text-xs font-semibold rounded-row border border-rule bg-sheet text-pencil focus:outline-none focus:ring-2 focus:ring-ink w-full font-sans"
+          aria-label="New customer name"
         />
         <button
           type="button"
@@ -58,9 +58,9 @@ export function CustomerPicker({
             setIsCreatingNew(false);
             onSelectCustomer(null, null);
           }}
-          className="text-sm text-muted hover:text-pencil px-1.5 py-1 whitespace-nowrap cursor-pointer"
+          className="text-xs text-muted hover:text-pencil px-1.5 py-1 whitespace-nowrap cursor-pointer font-sans"
         >
-          Pumili sa listahan
+          Select from list
         </button>
       </div>
     );
@@ -72,16 +72,16 @@ export function CustomerPicker({
       <select
         value={customerId || ""}
         onChange={handleSelectChange}
-        className="h-[44px] px-2 text-xs font-semibold rounded-row border border-rule bg-sheet text-pencil focus:outline-none focus:ring-2 focus:ring-ink w-full cursor-pointer"
-        aria-label="Pumili ng customer"
+        className="h-[44px] px-2 text-xs font-semibold rounded-row border border-rule bg-sheet text-pencil focus:outline-none focus:ring-2 focus:ring-ink w-full cursor-pointer font-sans"
+        aria-label="Select customer"
       >
-        <option value="">-- Walang customer --</option>
+        <option value="">-- Select customer --</option>
         {customerCandidates.map((c) => (
           <option key={c.id} value={c.id}>
             {c.name}
           </option>
         ))}
-        <option value="__new__">+ Gumawa ng Bagong Customer...</option>
+        <option value="__new__">+ Add New Customer...</option>
       </select>
     </div>
   );

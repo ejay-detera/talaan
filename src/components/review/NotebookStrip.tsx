@@ -10,7 +10,7 @@ interface NotebookStripProps {
 
 /**
  * Collapsible notebook image viewer per decision D3.
- * shortcut: full-page display instead of per-row crops because extraction does not return bounding boxes.
+ * Full-page display for storekeeper verification against original photo.
  */
 export function NotebookStrip({ imageUrl, className = "" }: NotebookStripProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -27,12 +27,12 @@ export function NotebookStrip({ imageUrl, className = "" }: NotebookStripProps) 
         className="w-full flex items-center justify-between p-3.5 sm:p-4 text-xs font-bold text-pencil hover:bg-paper/50 transition-colors cursor-pointer select-none"
         aria-expanded={isOpen}
       >
-        <span className="flex items-center gap-2">
+        <span className="flex items-center gap-2 font-sans">
           <ImageIcon className="w-4 h-4 text-ink" />
-          <span>Orihinal na Litrato ng Kuwaderno</span>
+          <span>Original Notebook Photo</span>
         </span>
-        <span className="flex items-center gap-1 text-muted text-sm">
-          <span>{isOpen ? "Itago" : "Ipakita"}</span>
+        <span className="flex items-center gap-1 text-muted text-xs font-sans">
+          <span>{isOpen ? "Hide" : "Show"}</span>
           {isOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
         </span>
       </button>

@@ -161,36 +161,36 @@ export function PaperMockupShowcase() {
             })}
           </div>
         </div>
+      </div>
 
-        {/* Bottom Proof Reconciliation Bar (The TwoPlyProofBar) */}
-        <div className="mt-6 pt-4 border-t-2 border-rule bg-paper/60 -mx-5 -mb-5 sm:-mx-7 sm:-mb-7 p-4 sm:p-5 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 select-none">
-          <div className="flex items-center justify-between sm:justify-start gap-4 sm:gap-6 text-xs font-sans">
-            <div>
-              <span className="text-muted block text-sm">Written Total</span>
-              <span className="font-bold text-pencil text-sm tabular-nums">
-                <Amount amount={LANDING_SAMPLE_WRITTEN_TOTAL} />
-              </span>
-            </div>
-
-            <div className="w-[1px] h-8 bg-rule" aria-hidden="true" />
-
-            <div>
-              <span className="text-muted block text-sm">Computed Total</span>
-              <span className="font-bold text-paid text-sm tabular-nums">
-                <Amount amount={totals.computedTotal} />
-              </span>
-            </div>
+      {/* Bottom Proof Reconciliation Bar (The TwoPlyProofBar) */}
+      <div className="border-t-2 border-rule bg-paper/60 p-4 sm:p-5 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 select-none">
+        <div className="flex items-center justify-between sm:justify-start gap-4 sm:gap-6 text-xs font-sans">
+          <div>
+            <span className="text-muted block text-sm">Written Total</span>
+            <span className="font-bold text-pencil text-sm tabular-nums">
+              <Amount amount={LANDING_SAMPLE_WRITTEN_TOTAL} />
+            </span>
           </div>
 
-          {/* Discrepancy Signal Pill */}
-          <div className="flex items-center gap-2 px-3 py-2 rounded-row bg-sheet border border-margin/40 text-xs text-margin font-sans font-semibold shadow-xs">
-            <ShieldCheck className="w-4 h-4 text-paid" />
-            <div className="flex flex-col sm:flex-row sm:items-center sm:gap-1.5">
-              <span className="text-pencil font-bold">₱10.00 Overcharge Caught</span>
-              <span className="text-muted text-sm font-normal">
-                (Fixed before DB update)
-              </span>
-            </div>
+          <div className="w-[1px] h-8 bg-rule" aria-hidden="true" />
+
+          <div>
+            <span className="text-muted block text-sm">Computed Total</span>
+            <span className="font-bold text-paid text-sm tabular-nums">
+              <Amount amount={totals.computedTotal} />
+            </span>
+          </div>
+        </div>
+
+        {/* Discrepancy Signal Pill */}
+        <div className="flex items-center gap-2 px-3 py-2 rounded-row bg-sheet border border-margin/40 text-xs text-margin font-sans font-semibold shadow-xs">
+          <ShieldCheck className="w-4 h-4 text-paid flex-shrink-0" />
+          <div className="flex flex-col sm:flex-row sm:items-center sm:gap-1.5">
+            <span className="text-pencil font-bold">₱10.00 Overcharge Caught</span>
+            <span className="text-muted text-sm font-normal">
+              (Fixed before DB update)
+            </span>
           </div>
         </div>
       </div>

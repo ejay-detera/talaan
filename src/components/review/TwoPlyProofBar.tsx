@@ -37,15 +37,15 @@ export function TwoPlyProofBar({
       <div className="max-w-2xl mx-auto space-y-3">
         <div className="flex items-center justify-between gap-4 text-xs">
           <div>
-            <span className="block text-muted font-semibold">Nakasulat na total:</span>
+            <span className="block text-muted font-semibold">Written Total:</span>
             {writtenTotal !== null ? (
               <Amount amount={writtenTotal} size="base" />
             ) : (
-              <span className="text-muted font-bold">Walang nakasulat</span>
+              <span className="text-muted font-bold">Not written</span>
             )}
           </div>
           <div className="text-right">
-            <span className="block text-muted font-semibold">Kompyut ng code:</span>
+            <span className="block text-muted font-semibold">Computed Total:</span>
             <Amount amount={computedTotal} size="base" />
           </div>
         </div>
@@ -54,8 +54,8 @@ export function TwoPlyProofBar({
           <div className="flex items-center gap-1.5 text-xs font-bold text-margin bg-[#FFF5F5] p-2 rounded-row border border-margin/40">
             <AlertCircle className="w-4 h-4 flex-shrink-0" />
             <span>
-              May pagkakaiba: {discrepancyDiff > 0 ? "+" : ""}
-              ₱{discrepancyDiff.toFixed(2)}. Masusunod ang kompyut ng code sa ledger.
+              Discrepancy: {discrepancyDiff > 0 ? "+" : ""}
+              ₱{discrepancyDiff.toFixed(2)}. Computed total will be recorded in the ledger.
             </span>
           </div>
         )}
@@ -76,12 +76,12 @@ export function TwoPlyProofBar({
           {isSubmitting ? (
             <>
               <Loader2 className="w-5 h-5 animate-spin" />
-              <span>Itinatala sa Ledger...</span>
+              <span>Saving to Ledger...</span>
             </>
           ) : (
             <>
               <ShieldCheck className="w-5 h-5" />
-              <span>Kumpirmahin at I-save sa Ledger</span>
+              <span>Confirm & Save to Ledger</span>
             </>
           )}
         </button>

@@ -2,13 +2,20 @@
 
 import React, { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Camera, Loader2, AlertCircle } from "lucide-react";
+import { Camera, Loader2, AlertCircle, X } from "lucide-react";
 import { downscaleImage } from "@/lib/image-client";
 
 interface ScanButtonProps {
   className?: string;
 }
 
+/**
+ * ScanButton
+ *
+ * Implements the Floating Action Button (FAB) pattern per user directive.
+ * Anchors in the bottom-right thumb zone, keeping the counter workspace
+ * uncluttered while maintaining one-tap access to camera capture.
+ */
 export function ScanButton({ className = "" }: ScanButtonProps) {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -38,13 +45,13 @@ export function ScanButton({ className = "" }: ScanButtonProps) {
       const data = await res.json();
 
       if (!res.ok) {
-        setErrorMessage(data.error?.message || "Hindi ma-extract ang kuwaderno. Pakisubukang muli.");
+        setErrorMessage(data.error?.message || "Could not read notebook page. Please try again.");
         return;
       }
 
       if (data.status === "retake_requested") {
         setErrorMessage(
-          `Malabo ang litrato: ${data.reason}. Paki-ulit ang pagkuha nang mas maliwanag.`
+          `Photo is blurry: ${data.reason}. Please retake in brighter lighting.`
         );
         return;
       }
@@ -52,10 +59,10 @@ export function ScanButton({ className = "" }: ScanButtonProps) {
       if (data.page_id) {
         router.push(`/pages/${data.page_id}/review`);
       } else {
-        setErrorMessage("Walang nabuong review page. Pakisubukang muli.");
+        setErrorMessage("Could not generate review page. Please try again.");
       }
     } catch {
-      setErrorMessage("Network error habang ina-upload ang litrato. Pakisubukang muli.");
+      setErrorMessage("Network error while uploading photo. Please try again.");
     } finally {
       setUploading(false);
       if (fileInputRef.current) {
@@ -65,7 +72,7 @@ export function ScanButton({ className = "" }: ScanButtonProps) {
   };
 
   return (
-    <div className={`w-full space-y-2 ${className}`}>
+    <>
       <input
         ref={fileInputRef}
         type="file"
@@ -74,37 +81,50 @@ export function ScanButton({ className = "" }: ScanButtonProps) {
         onChange={handleFileChange}
         className="hidden"
         disabled={uploading}
-        aria-label="Kumuha o mag-upload ng litrato ng kuwaderno"
+        aria-label="Capture or upload photo of notebook page"
       />
 
-      <button
-        type="button"
-        onClick={() => fileInputRef.current?.click()}
-        disabled={uploading}
-        className="w-full h-[56px] rounded-full bg-ink hover:bg-ink/90 active:scale-[0.99] disabled:bg-rule disabled:text-muted disabled:cursor-not-allowed text-sheet text-base font-bold shadow-paper transition-all flex items-center justify-center gap-2.5 cursor-pointer select-none px-7"
-      >
-        {uploading ? (
-          <>
-            <Loader2 className="w-5 h-5 animate-spin" />
-            <span>Binabasa ng Muse Glimmer AI...</span>
-          </>
-        ) : (
-          <>
-            <Camera className="w-5 h-5" />
-            <span>Kunan ang Kuwaderno (Scan Page)</span>
-          </>
-        )}
-      </button>
-
+      {/* Floating Error Toast */}
       {errorMessage && (
         <div
           role="alert"
-          className="p-3 rounded-row bg-[#FDF2F2] border border-margin text-margin text-xs font-semibold flex items-start gap-2"
+          className="fixed bottom-24 right-4 sm:right-6 max-w-sm p-3.5 rounded-row bg-[#FDF2F2] border border-margin text-margin text-xs font-semibold shadow-paper-lg flex items-start gap-2.5 z-40 animate-in fade-in slide-in-from-bottom-2 duration-200"
         >
           <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
-          <span>{errorMessage}</span>
+          <span className="flex-1 leading-relaxed">{errorMessage}</span>
+          <button
+            type="button"
+            onClick={() => setErrorMessage(null)}
+            className="text-margin hover:opacity-75 p-0.5 cursor-pointer"
+            aria-label="Dismiss error"
+          >
+            <X className="w-3.5 h-3.5" />
+          </button>
         </div>
       )}
-    </div>
+
+      {/* Floating Action Button (FAB) */}
+      <div className={`fixed bottom-5 sm:bottom-6 right-4 sm:right-6 z-30 ${className}`}>
+        <button
+          type="button"
+          onClick={() => fileInputRef.current?.click()}
+          disabled={uploading}
+          className="h-[56px] px-6 rounded-full bg-ink hover:bg-ink/90 active:scale-[0.98] disabled:bg-rule disabled:text-muted disabled:cursor-not-allowed text-sheet text-base font-bold shadow-paper-lg transition-all flex items-center justify-center gap-2.5 cursor-pointer select-none border border-sheet/25"
+          aria-label="Scan notebook page"
+        >
+          {uploading ? (
+            <>
+              <Loader2 className="w-5 h-5 animate-spin" />
+              <span>Reading notebook...</span>
+            </>
+          ) : (
+            <>
+              <Camera className="w-5 h-5" />
+              <span>Scan Page</span>
+            </>
+          )}
+        </button>
+      </div>
+    </>
   );
 }

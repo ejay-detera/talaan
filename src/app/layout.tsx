@@ -38,6 +38,8 @@ export const metadata: Metadata = {
   },
 };
 
+import { SystemBackground } from "@/components/shared/SystemBackground";
+
 export default function RootLayout({
   children,
 }: {
@@ -45,12 +47,15 @@ export default function RootLayout({
 }) {
   return (
     <html
-      lang="tl"
+      lang="en"
       data-scroll-behavior="smooth"
       className={`${bricolageGrotesque.variable} ${atkinsonHyperlegible.variable} ${caveat.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-paper text-pencil font-sans">
-        {children}
+      <body className="min-h-full flex flex-col bg-paper text-pencil font-sans relative">
+        <SystemBackground />
+        <div className="relative z-10 flex-1 flex flex-col">
+          {children}
+        </div>
       </body>
     </html>
   );

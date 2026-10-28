@@ -59,12 +59,11 @@ export default function Loading() {
           </div>
 
           {/* Micro Verification Guarantee Stamp */}
-          <div className="pt-2 border-t border-rule/60 flex items-center justify-between text-sm text-muted font-sans">
+          <div className="pt-2 border-t border-rule/60 flex items-center justify-center text-sm text-muted font-sans">
             <div className="inline-flex items-center gap-1.5 font-semibold text-paid">
               <ShieldCheck className="w-3.5 h-3.5" />
               <span>Zero LLM Arithmetic</span>
             </div>
-            <span className="text-muted">Meta Muse Glimmer 30B</span>
           </div>
         </div>
       </div>

@@ -29,10 +29,10 @@ export function StoreSummarySheet({ storeName, rows }: StoreSummarySheetProps) {
 
   const periodLabel =
     period === "7d"
-      ? "Nakaraang 7 Araw"
+      ? "Last 7 Days"
       : period === "30d"
-      ? "Nakaraang 30 Araw"
-      : "Lahat ng Panahon";
+      ? "Last 30 Days"
+      : "All Time";
 
   return (
     <div className="space-y-5 select-none">
@@ -41,10 +41,10 @@ export function StoreSummarySheet({ storeName, rows }: StoreSummarySheetProps) {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <h2 className="font-display font-bold text-base sm:text-lg text-pencil">
-              Ulat ng Tindahan at Paninda
+              Store &amp; Inventory Summary
             </h2>
             <p className="text-sm text-muted">
-              Kompyut mula sa {summary.transactionCount} kumpirmadong transaksyon ({periodLabel})
+              Computed from {summary.transactionCount} confirmed transactions ({periodLabel})
             </p>
           </div>
 
@@ -55,12 +55,12 @@ export function StoreSummarySheet({ storeName, rows }: StoreSummarySheetProps) {
         </div>
 
         {/* Period Switcher */}
-        <div className="flex gap-2" role="group" aria-label="Piliin ang saklaw ng petsa">
+        <div className="flex gap-2" role="group" aria-label="Select date range">
           {(
             [
-              { id: "7d", label: "7 Araw (Lingguhan)" },
-              { id: "30d", label: "30 Araw (Buwanan)" },
-              { id: "all", label: "Lahat" },
+              { id: "7d", label: "7 Days (Weekly)" },
+              { id: "30d", label: "30 Days (Monthly)" },
+              { id: "all", label: "All Time" },
             ] as const
           ).map((tab) => (
             <button
@@ -86,7 +86,7 @@ export function StoreSummarySheet({ storeName, rows }: StoreSummarySheetProps) {
             className="flex-1 min-w-[180px] min-h-[48px] px-4 py-2.5 rounded-row bg-ink text-sheet hover:bg-ink/90 active:scale-[0.99] text-sm font-bold flex items-center justify-center gap-2 shadow-paper transition-all cursor-pointer"
           >
             <Download className="w-4 h-4" />
-            <span>I-download ang CSV (Excel)</span>
+            <span>Download CSV (Excel)</span>
           </a>
 
           <button
@@ -95,7 +95,7 @@ export function StoreSummarySheet({ storeName, rows }: StoreSummarySheetProps) {
             className="min-h-[48px] px-4 py-2.5 rounded-row bg-paper border border-rule hover:bg-paper/80 active:scale-[0.99] text-sm font-bold text-pencil flex items-center justify-center gap-2 transition-all cursor-pointer"
           >
             <Printer className="w-4 h-4 text-ink" />
-            <span>I-print / PDF</span>
+            <span>Print / PDF</span>
           </button>
         </div>
       </div>
@@ -103,7 +103,7 @@ export function StoreSummarySheet({ storeName, rows }: StoreSummarySheetProps) {
       {/* Print-Only Header */}
       <div className="hidden print:block p-4 border-b border-rule">
         <h1 className="font-display font-bold text-xl text-pencil">
-          {storeName} — Ulat ng Talaan ({periodLabel})
+          {storeName} — Store Summary ({periodLabel})
         </h1>
         <p className="text-sm text-muted">
           Deterministic Store Ledger Summary &bull; {summary.transactionCount} confirmed rows
@@ -111,10 +111,10 @@ export function StoreSummarySheet({ storeName, rows }: StoreSummarySheetProps) {
       </div>
 
       {/* Store Financial Summary Grid */}
-      <section aria-label="Buod ng Pananalapi" className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+      <section aria-label="Financial Summary" className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
         <div className="p-4 rounded-sheet border border-rule bg-sheet space-y-1.5">
           <div className="flex items-center justify-between text-sm font-bold text-muted">
-            <span>Kabuuang Pautang (Credit)</span>
+            <span>Total Credit Extended</span>
             <AlertCircle className="w-4 h-4 text-margin" />
           </div>
           <Amount
@@ -122,12 +122,12 @@ export function StoreSummarySheet({ storeName, rows }: StoreSummarySheetProps) {
             size="lg"
             className="text-2xl font-extrabold text-margin"
           />
-          <p className="text-sm text-muted">Lahat ng inutang na paninda sa panahong ito</p>
+          <p className="text-sm text-muted">All credit goods released in this period</p>
         </div>
 
         <div className="p-4 rounded-sheet border border-rule bg-sheet space-y-1.5">
           <div className="flex items-center justify-between text-sm font-bold text-muted">
-            <span>Kabuuang Koleksyon (Bayad)</span>
+            <span>Total Collections (Payments)</span>
             <CheckCircle2 className="w-4 h-4 text-paid" />
           </div>
           <Amount
@@ -135,12 +135,12 @@ export function StoreSummarySheet({ storeName, rows }: StoreSummarySheetProps) {
             size="lg"
             className="text-2xl font-extrabold text-paid"
           />
-          <p className="text-sm text-muted">Binayad ng mga suki sa kanilang utang</p>
+          <p className="text-sm text-muted">Payments received from customers</p>
         </div>
 
         <div className="p-4 rounded-sheet border border-rule bg-sheet space-y-1.5">
           <div className="flex items-center justify-between text-sm font-bold text-muted">
-            <span>Natitirang Singilin (Net Utang)</span>
+            <span>Net Outstanding Credit</span>
             <AlertCircle className="w-4 h-4 text-pencil" />
           </div>
           <Amount
@@ -148,12 +148,12 @@ export function StoreSummarySheet({ storeName, rows }: StoreSummarySheetProps) {
             size="lg"
             className="text-2xl font-extrabold text-pencil"
           />
-          <p className="text-sm text-muted">Pautang bawas ang nakolektang bayad</p>
+          <p className="text-sm text-muted">Credit minus collected payments</p>
         </div>
 
         <div className="p-4 rounded-sheet border border-rule bg-sheet space-y-1.5">
           <div className="flex items-center justify-between text-sm font-bold text-muted">
-            <span>Tinatayang Kita (~10% Margin)</span>
+            <span>Estimated Margin (~10%)</span>
             <TrendingUp className="w-4 h-4 text-ink" />
           </div>
           <Amount
@@ -162,30 +162,30 @@ export function StoreSummarySheet({ storeName, rows }: StoreSummarySheetProps) {
             className="text-2xl font-extrabold text-ink"
           />
           <p className="text-sm text-muted">
-            Mula sa ₱{summary.grossGoodsVolume.toFixed(2)} kabuuang labas ng paninda
+            From ₱{summary.grossGoodsVolume.toFixed(2)} total goods volume
           </p>
         </div>
       </section>
 
       {/* Top Fast-Moving Items for Restock (Pamimili Guide) */}
       <section
-        aria-label="Mabentang Paninda para sa Pamimili"
+        aria-label="Fast-Moving Items for Restock"
         className="rounded-sheet border border-rule bg-sheet overflow-hidden"
       >
         <div className="p-4 border-b border-rule flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <PackageCheck className="w-4 h-4 text-ink" />
             <h3 className="text-sm font-bold text-pencil uppercase tracking-wider">
-              Listahan sa Pamimili (Mabentang Paninda)
+              Restock Guide (Top Moving Items)
             </h3>
           </div>
-          <span className="text-sm text-muted">Batay sa dami ng benta</span>
+          <span className="text-sm text-muted">Ranked by sales volume</span>
         </div>
 
         {summary.topItems.length === 0 ? (
           <div className="p-6 text-center">
             <p className="text-sm font-semibold text-muted">
-              Wala pang naitalang paninda sa panahong ito.
+              No items recorded in this period.
             </p>
           </div>
         ) : (
@@ -202,7 +202,7 @@ export function StoreSummarySheet({ storeName, rows }: StoreSummarySheetProps) {
                   <div className="min-w-0">
                     <p className="text-sm font-bold text-pencil truncate">{item.item}</p>
                     <p className="text-sm text-muted">
-                      {item.totalQuantity} piraso/yunit &bull; {item.occurrenceCount} transaksyon
+                      {item.totalQuantity} units &bull; {item.occurrenceCount} transactions
                     </p>
                   </div>
                 </div>
@@ -213,7 +213,7 @@ export function StoreSummarySheet({ storeName, rows }: StoreSummarySheetProps) {
                     size="base"
                     className="font-bold text-pencil"
                   />
-                  <span className="block text-sm text-muted">Kabuuang halaga</span>
+                  <span className="block text-sm text-muted">Total amount</span>
                 </div>
               </div>
             ))}

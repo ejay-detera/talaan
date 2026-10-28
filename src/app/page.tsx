@@ -10,31 +10,13 @@ import {
   DeterministicShieldWidget,
 } from "@/components/landing/FloatingWidgets";
 import { FeaturesSection } from "@/components/landing/FeaturesSection";
-import ShapeGrid from "@/components/shared/ShapeGrid";
 import { InitialLoader } from "@/components/shared/InitialLoader";
 
 export default function HomePage() {
   return (
-    <div className="relative flex min-h-screen flex-col bg-paper text-pencil font-sans selection:bg-marker selection:text-pencil overflow-x-hidden">
+    <div className="relative flex min-h-screen flex-col bg-transparent text-pencil font-sans selection:bg-marker selection:text-pencil overflow-x-hidden">
       {/* Quick Initial Page Load / Reload Overlay */}
       <InitialLoader />
-
-      {/* Living Interactive Accounting Grid Canvas Background */}
-      <div className="fixed inset-0 pointer-events-none z-0 opacity-55">
-        <ShapeGrid
-          shape="square"
-          direction="diagonal"
-          lineColor="#D5DEC6"
-          hoverColor="#1E3FAE"
-          hoverFillColor="#FFE14D"
-          fillOpacity={0.12}
-          cellSize={42}
-          speed={0.25}
-          glow={0.25}
-          fade={0.8}
-          backgroundColor="transparent"
-        />
-      </div>
 
       {/* Floating Centered Gooey Navigation */}
       <Navbar />
@@ -48,9 +30,9 @@ export default function HomePage() {
               Turn handwritten store notebooks into verified digital ledgers.
             </h1>
             <p className="text-base sm:text-xl text-pencil/80 leading-relaxed font-sans max-w-2xl mx-auto text-balance">
-              Keep your physical notebook habit at the counter. Talaan uses{" "}
-              <strong className="text-pencil font-semibold">Meta Muse Glimmer 30B</strong> vision to extract
-              rows and <strong className="text-pencil font-semibold">deterministic code</strong> to verify every
+              Keep your physical notebook habit at the counter. Talaan extracts rows directly
+              from photos of your notebook and uses{" "}
+              <strong className="text-pencil font-semibold">deterministic code</strong> to verify every
               centavo before you save.
             </p>
           </div>
@@ -64,24 +46,9 @@ export default function HomePage() {
         </section>
 
         {/* Hero Paper Artifact Workspace (Mockup 1 & 2 inspired) */}
-        <section id="verification" className="w-full max-w-6xl mx-auto px-4 sm:px-6 pb-16">
+        <section id="verification" className="w-full max-w-7xl mx-auto px-4 sm:px-6 pb-16">
           <h2 className="sr-only">Counter Ledger Verification Workspace</h2>
-          <div className="relative p-2 sm:p-6 lg:p-8 overflow-hidden">
-            {/* Window / Desk Surface Header */}
-            <div className="flex items-center justify-between pb-4 sm:pb-6 mb-6 border-b border-rule select-none">
-              <div className="flex items-center gap-2">
-                <span className="w-3 h-3 rounded-full bg-[#E5B5B5] border border-margin/30" />
-                <span className="w-3 h-3 rounded-full bg-[#EADFBA] border border-[#C5B367]/40" />
-                <span className="w-3 h-3 rounded-full bg-[#BFE0CD] border border-paid/30" />
-                <span className="text-xs text-muted font-sans ml-2 font-medium hidden sm:inline">
-                  talaan.ph &bull; Counter Ledger Verification Workspace
-                </span>
-              </div>
-              <span className="text-xs font-semibold text-pencil font-sans">
-                Daylight High-Contrast Mode
-              </span>
-            </div>
-
+          <div className="relative p-2 sm:p-6 lg:p-8">
             {/* Desktop Composition: Central Paper Hero Flanked by Micro-Widgets */}
             <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
               {/* Left Column (Desktop Widgets) */}
@@ -138,7 +105,7 @@ export default function HomePage() {
       </main>
 
       {/* Footer */}
-      <footer className="w-full border-t border-rule py-8 bg-paper">
+      <footer className="w-full border-t border-rule py-8 bg-sheet/80 backdrop-blur-xs">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted font-sans">
           <div className="flex items-center gap-2.5">
             <Image

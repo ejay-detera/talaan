@@ -10,21 +10,21 @@ interface CustomerHistoryListProps {
 export function CustomerHistoryList({ entries }: CustomerHistoryListProps) {
   if (entries.length === 0) {
     return (
-      <div className="p-6 text-center rounded-sheet border border-dashed border-rule bg-sheet/60 select-none">
-        <p className="text-xs font-semibold text-muted">
-          Wala pang kumpirmadong transaksyon para sa suking ito.
+      <div className="p-6 text-center rounded-[2px] border border-dashed border-rule bg-sheet/60 select-none">
+        <p className="text-xs font-semibold text-muted font-sans">
+          No confirmed transactions for this customer yet.
         </p>
       </div>
     );
   }
 
   return (
-    <div className="rounded-sheet border border-rule bg-sheet overflow-hidden select-none">
+    <div className="rounded-[2px] border border-rule bg-sheet shadow-paper overflow-hidden select-none">
       <div className="p-3.5 sm:p-4 border-b border-rule flex items-center justify-between">
-        <h3 className="text-xs font-bold text-pencil uppercase tracking-wider">
-          Kasaysayan ng Transaksyon ({entries.length})
+        <h3 className="text-xs font-bold text-pencil uppercase tracking-wider font-sans">
+          Transaction History ({entries.length})
         </h3>
-        <span className="text-sm text-muted">Mula sa kumpirmadong kuwaderno</span>
+        <span className="text-xs text-muted font-sans">From confirmed notebook pages</span>
       </div>
 
       <div className="divide-y divide-rule/60">
@@ -54,22 +54,22 @@ export function CustomerHistoryList({ entries }: CustomerHistoryListProps) {
 
                 <div className="space-y-0.5 min-w-0">
                   <div className="flex items-center gap-1.5 flex-wrap">
-                    <span className="text-xs font-bold text-pencil truncate">
+                    <span className="text-xs font-bold text-pencil truncate font-sans">
                       {entry.item}
                     </span>
                     <span
-                      className={`text-sm font-bold px-1.5 py-0.2 rounded-row border ${
+                      className={`text-xs font-bold px-1.5 py-0.2 rounded-row border ${
                         isPayment
                           ? "bg-paid/10 text-paid border-paid/30"
                           : "bg-paper text-pencil border-rule"
                       }`}
                     >
-                      {isPayment ? "Bayad" : "Utang"}
+                      {isPayment ? "Payment" : "Credit"}
                     </span>
                   </div>
 
-                  <div className="flex items-center gap-2 text-sm text-muted">
-                    <span>{entry.page_date || "Listahan"}</span>
+                  <div className="flex items-center gap-2 text-xs text-muted font-sans">
+                    <span>{entry.page_date || "Notebook Page"}</span>
                     {entry.quantity && entry.unit_price && (
                       <span>
                         &bull; {entry.quantity} &times; ₱{Number(entry.unit_price).toFixed(2)}
@@ -87,14 +87,14 @@ export function CustomerHistoryList({ entries }: CustomerHistoryListProps) {
                     size="base"
                     className={`font-bold ${isPayment ? "text-paid" : "text-pencil"}`}
                   />
-                  <span className="block text-sm text-muted">
-                    {isPayment ? "- Bayad" : "+ Utang"}
+                  <span className="block text-xs text-muted font-sans">
+                    {isPayment ? "- Payment" : "+ Credit"}
                   </span>
                 </div>
 
                 <Link
                   href={`/pages/${entry.page_id}/review`}
-                  title="Tingnan ang pinagmulang pahina"
+                  title="View source notebook page"
                   className="p-2 text-muted hover:text-ink rounded-row hover:bg-paper transition-colors"
                 >
                   <ExternalLink className="w-3.5 h-3.5" />
@@ -107,4 +107,3 @@ export function CustomerHistoryList({ entries }: CustomerHistoryListProps) {
     </div>
   );
 }
-

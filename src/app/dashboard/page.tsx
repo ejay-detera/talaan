@@ -5,8 +5,10 @@ import { listRecentPages } from "@/services/pages";
 import { listCustomersWithBalances } from "@/services/customers";
 import { AppHeaderNav } from "@/components/shared/AppHeaderNav";
 import { TotalUtangCard } from "@/components/dashboard/TotalUtangCard";
+import { RecentPagesList, type PreviewRow } from "@/components/dashboard/RecentPagesList";
+import { WhoOwesCreditCard } from "@/components/dashboard/WhoOwesCreditCard";
+import { DeterministicTrustCard } from "@/components/dashboard/DeterministicTrustCard";
 import { ScanButton } from "@/components/dashboard/ScanButton";
-import { RecentPagesList } from "@/components/dashboard/RecentPagesList";
 
 export default async function DashboardPage() {
   await connection();
@@ -17,7 +19,7 @@ export default async function DashboardPage() {
     redirect("/login");
   }
 
-  // Fetch store and summary data in parallel
+  // Fetch store, recent pages, and customer debt balances in parallel
   const [storeRes, recentPages, customersResult] = await Promise.all([
     supabase
       .from("stores")
@@ -28,33 +30,97 @@ export default async function DashboardPage() {
     listCustomersWithBalances(supabase),
   ]);
 
-  const storeName = storeRes.data?.name || "Aking Tindahan";
+  const storeName = storeRes.data?.name || "My Store";
+
+  // Format today's date (e.g. "Thursday, October 29, 2026")
+  const todayFormatted = new Intl.DateTimeFormat("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  }).format(new Date());
+
+  // Count confirmed pages
+  const confirmedPages = recentPages.filter((p) => p.status === "confirmed");
+  const confirmedPageCount = confirmedPages.length || (recentPages.length > 0 ? 1 : 0);
+
+  // Fetch preview entries for the top featured page if available
+  let previewRows: PreviewRow[] = [];
+  if (recentPages.length > 0) {
+    const { data: entriesData } = await supabase
+      .from("entries")
+      .select("id, item, amount, extracted_customer_name, customer_id")
+      .eq("page_id", recentPages[0].id)
+      .limit(3);
+
+    if (entriesData && entriesData.length > 0) {
+      const customerMap = new Map(customersResult.customers.map((c) => [c.id, c.name]));
+      previewRows = entriesData.map((e) => ({
+        customer_name:
+          (e.customer_id ? customerMap.get(e.customer_id) : null) ||
+          e.extracted_customer_name ||
+          "Suki",
+        item: e.item,
+        amount: Number(e.amount),
+      }));
+    }
+  }
 
   return (
-    <div className="min-h-screen bg-paper text-pencil font-sans selection:bg-marker selection:text-pencil pb-16">
-      {/* Sticky App Header Nav */}
+    <div className="min-h-screen bg-transparent text-pencil font-sans selection:bg-marker selection:text-pencil pb-28">
+      {/* Floating Center Dock Navigation */}
       <AppHeaderNav storeName={storeName} activeTab="pages" />
 
-      {/* Main Content Area */}
-      <main className="max-w-xl mx-auto px-4 pt-5 space-y-6">
-        {/* Total Utang Summary Sheet */}
-        <section aria-label="Kabuuang Pautang">
-          <TotalUtangCard
-            totalStoreUtang={customersResult.totalStoreUtang}
-            activeDebtorCount={customersResult.activeDebtorCount}
-          />
-        </section>
+      {/* Main Dashboard Layout */}
+      <main className="max-w-5xl mx-auto px-4 sm:px-6 pt-2 sm:pt-4 space-y-6">
+        {/* Store Title & Date Header */}
+        <header className="space-y-1 select-none">
+          <h1 className="font-display font-bold text-2xl sm:text-3xl text-pencil tracking-tight">
+            {storeName}
+          </h1>
+          <p className="text-xs sm:text-sm text-muted font-sans font-medium">
+            {todayFormatted}
+          </p>
+        </header>
 
-        {/* Primary Scan Action */}
-        <section aria-label="Kumuha ng litrato ng kuwaderno">
-          <ScanButton />
-        </section>
+        {/* 2-Column Responsive Dashboard Grid matching the wireframe */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+          {/* Left Column: Total Store Credit & Notebook Pages */}
+          <div className="space-y-6">
+            <section aria-label="Total Customer Credit">
+              <TotalUtangCard
+                totalStoreUtang={customersResult.totalStoreUtang}
+                activeDebtorCount={customersResult.activeDebtorCount}
+                confirmedPageCount={confirmedPageCount}
+              />
+            </section>
 
-        {/* Recent Pages List */}
-        <section aria-label="Kamakailang mga pahina">
-          <RecentPagesList pages={recentPages} />
-        </section>
+            <section aria-label="Notebook Pages">
+              <RecentPagesList
+                pages={recentPages}
+                previewRows={previewRows}
+              />
+            </section>
+          </div>
+
+          {/* Right Column: Who Owes Credit & Trust Stamp Card */}
+          <div className="space-y-6">
+            <section aria-label="Who Owes Credit">
+              <WhoOwesCreditCard
+                customers={customersResult.customers}
+                totalStoreUtang={customersResult.totalStoreUtang}
+              />
+            </section>
+
+            <section aria-label="Deterministic Engine Verification">
+              <DeterministicTrustCard />
+            </section>
+          </div>
+        </div>
       </main>
+
+      {/* Persistent Scan Floating Action Button (FAB) anchored at bottom-right */}
+      <ScanButton />
     </div>
   );
 }

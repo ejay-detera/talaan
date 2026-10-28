@@ -31,7 +31,7 @@ flowchart TB
   end
   S0 --> A1["✅ 1-Tap Demo Store Login & Email/Password Auth (TAL-01)"]
   S1 --> B1["✅ English Landing Page: Paper Sovereign Showcase & Direct CTA (src/app/page.tsx)"]
-  S1b --> B2["✅ /dashboard: Photo Upload & Recent Pages List (TAL-05)"]
+  S1b --> B2["✅ /dashboard: Floating Dock, Counter Ledger Sheet, Notepad Slips & Scan FAB (TAL-05)"]
   S2 --> C1["✅ Review Screen: Red Margin Gutter + Two-Ply Proof Bar + Confirm API (TAL-05)"]
   S3 --> D1["✅ Customer Utang Balances & History (TAL-06)"]
   S3 --> D2["✅ Taglish Reminder Card: Friendly/Firm + Copy/Share (TAL-06)"]

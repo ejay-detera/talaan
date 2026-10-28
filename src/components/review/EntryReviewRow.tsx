@@ -65,18 +65,18 @@ export function EntryReviewRow({
             value={entry.entry_type}
             onChange={(e) => onUpdate({ ...entry, entry_type: e.target.value as EntryType })}
             className="h-[36px] px-2 text-xs font-semibold rounded-row border border-rule bg-sheet text-pencil focus:ring-2 focus:ring-ink"
-            aria-label="Uri ng transaksyon"
+            aria-label="Transaction type"
           >
-            <option value="credit">Utang (Credit)</option>
-            <option value="payment">Bayad (Payment)</option>
+            <option value="credit">Credit</option>
+            <option value="payment">Payment</option>
             <option value="cash_sale">Cash Sale</option>
           </select>
           <button
             type="button"
             onClick={onRemove}
             className="min-h-[44px] min-w-[44px] flex items-center justify-center text-muted hover:text-margin p-1 rounded-row cursor-pointer transition-colors"
-            title="Tanggalin ang linya"
-            aria-label={`Tanggalin ang linya ${index + 1}`}
+            title="Remove row"
+            aria-label={`Remove row ${index + 1}`}
           >
             <Trash2 className="w-4 h-4" />
           </button>
@@ -103,16 +103,16 @@ export function EntryReviewRow({
             type="text"
             value={entry.item}
             onChange={(e) => onUpdate({ ...entry, item: e.target.value })}
-            placeholder="Paninda / Item..."
-            className="h-[44px] px-2.5 text-xs font-semibold rounded-row border border-rule bg-sheet text-pencil w-full focus:ring-2 focus:ring-ink"
-            aria-label="Pangalan ng paninda"
+            placeholder="Item description..."
+            className="h-[44px] px-2.5 text-xs font-semibold rounded-row border border-rule bg-sheet text-pencil w-full focus:ring-2 focus:ring-ink font-sans"
+            aria-label="Item description"
           />
         </div>
       </div>
 
       <div className="grid grid-cols-3 gap-2 pt-2.5 items-center">
         <div>
-          <label className="block text-sm text-muted font-bold uppercase tracking-wider mb-0.5">Dami (Qty)</label>
+          <label className="block text-xs text-muted font-bold uppercase tracking-wider mb-0.5 font-sans">Qty</label>
           <input
             type="number"
             step="any"
@@ -126,7 +126,7 @@ export function EntryReviewRow({
           />
         </div>
         <div>
-          <label className="block text-sm text-muted font-bold uppercase tracking-wider mb-0.5">Presyo (₱)</label>
+          <label className="block text-xs text-muted font-bold uppercase tracking-wider mb-0.5 font-sans">Unit Price (₱)</label>
           <input
             type="number"
             step="0.01"
@@ -140,7 +140,7 @@ export function EntryReviewRow({
           />
         </div>
         <div>
-          <label className="block text-sm text-muted font-bold uppercase tracking-wider mb-0.5">Halaga (₱)</label>
+          <label className="block text-xs text-muted font-bold uppercase tracking-wider mb-0.5 font-sans">Amount (₱)</label>
           <input
             type="number"
             step="0.01"
@@ -156,23 +156,23 @@ export function EntryReviewRow({
 
       {isMismatch && !entry.accept_written && (
         <div className="mt-3 p-2.5 rounded-row bg-[#FDF2F2] border border-margin text-xs space-y-2">
-          <div className="font-semibold text-margin flex items-center justify-between">
-            <span>May pagkakaiba sa kwenta: {qty} × ₱{price} = ₱{computedRowAmount.toFixed(2)}, pero ₱{entry.amount.toFixed(2)} ang nakasulat.</span>
+          <div className="font-semibold text-margin flex items-center justify-between font-sans">
+            <span>Math mismatch: {qty} &times; ₱{price} = ₱{computedRowAmount.toFixed(2)}, but ₱{entry.amount.toFixed(2)} is written.</span>
           </div>
           <div className="flex flex-wrap gap-2 pt-1">
             <button
               type="button"
               onClick={handleUseComputed}
-              className="px-3 py-1.5 rounded-row bg-ink text-sheet text-xs font-bold cursor-pointer hover:bg-ink/90"
+              className="px-3 py-1.5 rounded-row bg-ink text-sheet text-xs font-bold cursor-pointer hover:bg-ink/90 font-sans"
             >
-              Gamitin ang Kompyut (₱{computedRowAmount.toFixed(2)})
+              Use Computed (₱{computedRowAmount.toFixed(2)})
             </button>
             <button
               type="button"
               onClick={handleKeepWritten}
-              className="px-3 py-1.5 rounded-row border border-margin text-margin bg-sheet text-xs font-bold cursor-pointer hover:bg-[#FFF0F0]"
+              className="px-3 py-1.5 rounded-row border border-margin text-margin bg-sheet text-xs font-bold cursor-pointer hover:bg-[#FFF0F0] font-sans"
             >
-              Panatilihin ang Nakasulat (₱{entry.amount.toFixed(2)})
+              Keep Written (₱{entry.amount.toFixed(2)})
             </button>
           </div>
         </div>

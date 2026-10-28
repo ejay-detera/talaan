@@ -7,7 +7,7 @@ export function FeaturesSection() {
       step: "01",
       icon: Camera,
       title: "1. Capture & Vision Extraction",
-      subtitle: "Powered by Meta Muse Glimmer 30B",
+      subtitle: "Direct From Notebook Photos",
       description:
         "Snap a photo of your counter notebook. The vision model extracts customer names, items, and handwritten amounts directly from the page without altering or fabricating numbers.",
     },

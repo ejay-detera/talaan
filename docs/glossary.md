@@ -32,7 +32,7 @@
 | **Page Discrepancy** | A deterministic mismatch where `computed_total !== written_total` on a page. | "balance drift" | [`foundation.md`](foundation.md) §3.2 | `has_page_discrepancy` |
 | **Confidence Score (`confidence`)** | Model-reported probability (`0.00` to `1.00`) that an extracted row accurately reflects the handwriting. Rows `< 0.80` require review. | "accuracy score" | [`foundation.md`](foundation.md) §3.1 | `confidence` |
 | **Needs Review (`needs_review`)** | Boolean flag set when `confidence < 0.80`, `line_discrepancy === true`, or customer match is ambiguous. | "unverified" | [`foundation.md`](foundation.md) §3.2 | `needs_review` |
-| **Taglish Reminder Draft (`Reminder`)** | An agent-generated message in Taglish (`friendly` / *Malumanay* or `firm` / *Pormal*) summarizing a customer's owed balance for manual owner sharing. | "automated SMS", "collection notice" | [`foundation.md`](foundation.md) §7.2 | `Reminder` / `reminders` |
+| **Taglish Reminder Draft (`Reminder`)** | An agent-generated message in Taglish (`friendly` or `firm`) summarizing a customer's owed balance for manual owner sharing. | "automated SMS", "collection notice" | [`foundation.md`](foundation.md) §7.2 | `Reminder` / `reminders` |
 | **Two-Ply Proof Bar** | The sticky bottom reconciliation bar on the Review screen comparing `Written Total` vs. `Computed Total` side by side. | "footer summary" | [`dsd.md`](dsd.md) §4.5 | `TwoPlyProofBar` |
 | **Red Margin Gutter** | The vertical red margin column on the left side of the ledger review table that houses row status icons and discrepancy flags. | "left sidebar" | [`dsd.md`](dsd.md) §4.5 | `RedMarginGutter` |
 | **Handwriting Gate** | The Day 3 milestone testing 10 real notebook pages on Muse Glimmer with a required ≥80% row-level accuracy threshold (`A-05`). | "OCR benchmark" | [`foundation.md`](foundation.md) §14 | `handwriting_gate` |
@@ -56,13 +56,13 @@ Every enum or state machine value, with its meaning. The legal transitions live 
 | `pages.status` | `'needs_review'` | Rows extracted and checked by `src/lib/ledger`; awaiting owner review and confirmation | No | `Needs Review` |
 | `pages.status` | `'retake_requested'` | Agent invoked `flag_unreadable`; owner must upload a clearer photo | Yes | `Retake Photo` |
 | `pages.status` | `'confirmed'` | Owner reviewed and confirmed all rows; entries committed to customer balances | Yes | `Confirmed in Ledger` |
-| `entries.entry_type` | `'credit'` | Unpaid *utang* purchase; adds to customer balance | N/A | `Utang (Credit)` |
-| `entries.entry_type` | `'payment'` | Customer *bayad* payment; subtracts from customer balance | N/A | `Bayad (Payment)` |
+| `entries.entry_type` | `'credit'` | Unpaid *utang* purchase; adds to customer balance | N/A | `Credit` |
+| `entries.entry_type` | `'payment'` | Customer *bayad* payment; subtracts from customer balance | N/A | `Payment` |
 | `entries.entry_type` | `'cash_sale'` | Paid cash purchase; does not affect customer *utang* balance | N/A | `Cash Sale` |
-| `reminders.tone` | `'friendly'` | Polite, neighborly Taglish reminder (*Malumanay*) | N/A | `Malumanay (Friendly)` |
-| `reminders.tone` | `'firm'` | Clear, direct Taglish due-balance reminder (*Pormal*) | N/A | `Pormal (Firm)` |
-| `MODEL_PROVIDER` | `'glimmer'` | Meta Muse Glimmer 30B via `llama-server` (CANONICAL PRIMARY: Gate, Eval, Demo, Production) | N/A | `Muse Glimmer 30B (Primary)` |
-| `MODEL_PROVIDER` | `'gemini'` | Gemini API via OpenAI-compatible client (Auxiliary Developer Backup Only — excluded from evals) | N/A | `Gemini API (Dev Backup)` |
+| `reminders.tone` | `'friendly'` | Polite, neighborly Taglish reminder | N/A | `Friendly` |
+| `reminders.tone` | `'firm'` | Clear, direct Taglish due-balance reminder | N/A | `Firm` |
+| `MODEL_PROVIDER` | `'glimmer'` | Meta Muse Glimmer 30B via `llama-server` (CANONICAL PRIMARY: Gate, Eval, Demo, Production) | N/A | Logged server-side (`pages.model`) |
+| `MODEL_PROVIDER` | `'gemini'` | Gemini API via OpenAI-compatible client (Auxiliary Developer Backup Only — excluded from evals) | N/A | Logged server-side (`pages.model`) |
 
 ## 4. Acronyms and Abbreviations
 

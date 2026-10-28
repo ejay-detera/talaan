@@ -17,7 +17,6 @@ import {
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
-import ShapeGrid from "@/components/shared/ShapeGrid";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -76,23 +75,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="relative min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 lg:p-8 bg-paper font-sans text-pencil selection:bg-marker selection:text-pencil overflow-x-hidden">
-      {/* Living Interactive Accounting Grid Canvas Background */}
-      <div className="fixed inset-0 pointer-events-none z-0 opacity-55">
-        <ShapeGrid
-          shape="square"
-          direction="diagonal"
-          lineColor="#D5DEC6"
-          hoverColor="#1E3FAE"
-          hoverFillColor="#FFE14D"
-          fillOpacity={0.12}
-          cellSize={40}
-          speed={0.25}
-          glow={0.25}
-          fade={0.8}
-          backgroundColor="transparent"
-        />
-      </div>
+    <div className="relative min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 lg:p-8 bg-transparent font-sans text-pencil selection:bg-marker selection:text-pencil overflow-x-hidden">
 
       {/* Prominent Header / Back to Home Navigation */}
       <div className="relative z-10 w-full max-w-4xl flex items-center justify-between mb-4 sm:mb-5">
@@ -136,7 +119,7 @@ export default function LoginPage() {
                 </h1>
                 <p className="text-sm text-muted leading-relaxed font-sans">
                   Access your store ledger and verify notebook transactions with{" "}
-                  <strong className="text-pencil font-medium">Meta Muse Glimmer 30B</strong>.
+                  <strong className="text-pencil font-medium">deterministic math</strong>.
                 </p>
               </div>
 
