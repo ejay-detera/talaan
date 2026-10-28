@@ -1,6 +1,7 @@
 // impeccable-disable side-tab -- intentional red margin line per docs/design.md and counter wireframe
 import React from "react";
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { Amount } from "@/components/shared/Amount";
 
 export interface DebtorCustomer {
@@ -20,8 +21,8 @@ interface WhoOwesCreditCardProps {
  * WhoOwesCreditCard
  *
  * Implements the "Who owes credit" (Sino ang may utang) counter card.
- * Styled as an authentic lined counter notepad slip with a top tape strip,
- * the signature left red margin line (2px solid #C8302F), and running debtor balances.
+ * Styled as an authentic lined counter notepad slip with the signature left red margin line
+ * (2px solid #C8302F) and running debtor balances. Entire row navigates to customer profile.
  */
 export function WhoOwesCreditCard({
   customers,
@@ -37,23 +38,24 @@ export function WhoOwesCreditCard({
     <div
       className={`relative rounded-row border border-[#D5DEC6] bg-[#FFFEF8] border-l-4 border-l-margin shadow-paper overflow-hidden select-none transform rotate-[0.5deg] hover:rotate-0 transition-transform duration-300 ${className}`}
     >
-      {/* Decorative Counter Paper Tape on Top */}
-      <div
-        className="absolute -top-2.5 left-1/2 -translate-x-1/2 w-28 h-5 bg-[#EAE3CE]/80 border border-[#DDD3BC]/70 shadow-[0_1px_3px_rgba(35,38,43,0.08)] pointer-events-none rounded-[2px] z-10"
-        aria-hidden="true"
-      />
-
-      {/* Header Strip with Customer Count */}
-      <div className="px-5 py-3.5 pt-4 border-b border-rule flex items-center justify-between bg-[#FBFDF6]/60">
-        <h2 className="font-display font-bold text-base sm:text-lg text-pencil tracking-tight">
-          Who owes credit
-        </h2>
+      {/* Header Strip with Customer Count and Notebook Binder Punches */}
+      <div className="px-5 py-3.5 border-b border-rule flex items-center justify-between bg-[#FBFDF6]/80">
+        <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-1" aria-hidden="true">
+            <span className="w-2 h-2 rounded-full bg-paper border border-[#C5D0B4]" />
+            <span className="w-2 h-2 rounded-full bg-paper border border-[#C5D0B4]" />
+            <span className="w-2 h-2 rounded-full bg-paper border border-[#C5D0B4]" />
+          </div>
+          <h2 className="font-display font-bold text-base sm:text-lg text-pencil tracking-tight">
+            Who owes credit
+          </h2>
+        </div>
         <span className="text-xs font-semibold text-muted font-sans">
           {debtors.length === 1 ? "1 customer" : `${debtors.length} customers`}
         </span>
       </div>
 
-      {/* Customer List */}
+      {/* Customer List: Clicking any row opens that customer's profile */}
       {debtors.length === 0 ? (
         <div className="p-6 text-center text-sm text-muted font-sans">
           No outstanding customer credit recorded.
@@ -74,12 +76,13 @@ export function WhoOwesCreditCard({
             }
 
             return (
-              <div
+              <Link
                 key={cust.id}
-                className="px-5 py-3.5 flex items-center justify-between gap-3 hover:bg-paper/40 transition-colors"
+                href={`/customers/${cust.id}`}
+                className="px-5 py-3.5 flex items-center justify-between gap-3 hover:bg-paper/40 transition-colors group cursor-pointer"
               >
                 <div className="min-w-0">
-                  <p className="font-bold text-sm sm:text-base text-pencil truncate font-sans">
+                  <p className="font-bold text-sm sm:text-base text-pencil truncate font-sans group-hover:text-ink transition-colors">
                     {cust.name}
                   </p>
                   <p className="text-xs text-muted font-sans">
@@ -87,20 +90,18 @@ export function WhoOwesCreditCard({
                   </p>
                 </div>
 
-                <div className="text-right flex-shrink-0">
+                <div className="flex flex-col items-end justify-center text-right flex-shrink-0 gap-0.5">
                   <Amount
                     amount={cust.balance}
                     size="base"
-                    className="font-extrabold text-pencil tabular-nums block"
+                    className="font-extrabold text-pencil tabular-nums group-hover:text-ink transition-colors"
                   />
-                  <Link
-                    href={`/customers/${cust.id}`}
-                    className="text-xs font-bold text-ink hover:underline block text-right mt-0.5"
-                  >
-                    Draft reminder
-                  </Link>
+                  <span className="text-xs font-bold text-ink group-hover:underline inline-flex items-center gap-1">
+                    <span>Draft reminder</span>
+                    <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5" />
+                  </span>
                 </div>
-              </div>
+              </Link>
             );
           })}
         </div>

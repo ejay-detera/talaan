@@ -183,18 +183,15 @@ Grain alpha stays at or below `0.08`. If it is visible as a pattern at arm's len
 
 **Page stack** (recent notebook pages on the dashboard): the top page is a Slip; two copies sit behind it using pseudo-elements offset `translate(3px, 4px)` and `translate(6px, 8px)`, same `sheet` fill, `shadow-slip` on the lowest only.
 
-### Motion
+### Motion: The Paper Motion Rule
 
-Two budgets. Never mix them.
+Paper is laid down, settles, lifts, and presses flat. Nothing else.
 
-**App screens (dashboard, review, customers):** exactly one authored moment. When `/pages/[id]/review` opens, the `2px` margin line draws down the sheet (`scaleY(0)` to `scaleY(1)`, `420ms cubic-bezier(0.22, 1, 0.36, 1)`). Everything else is response to touch: buttons press down `1px`, rows highlight on tap. No idle motion, no entrance animations, no hover-lift on ledger rows.
-
-**Landing page:** three allowed layers.
-1. **Settle-in, once on load:** each hero slip starts `-14px` up with `+3°` extra rotation and `opacity 0`, then settles to its resting transform. `600ms cubic-bezier(0.22, 1, 0.36, 1)`, `90ms` stagger, hero only. No scroll-triggered fade-ups on later sections.
-2. **Idle drift:** at most **two** secondary slips in the hero drift (`translateY` ±4px, `7s` and `9s ease-in-out infinite`). Transform only; never animate shadow or filter in a loop.
-3. **Hover-lift:** only on slips that are interactive (the demo CTA slip). `translateY(-4px)`, swap to `shadow-slip-lift`, `160ms ease-out`.
-
-All motion is disabled under `@media (prefers-reduced-motion: reduce)`; slips render at their resting transform.
+- **App screens (dashboard, review, customers, summary):** one `paper-enter` per route (`260ms`, `cubic-bezier(0.22, 1, 0.36, 1)`), a capped stagger on lists (`45ms` steps, max 6), one slip `paper-settle` for the memo, the `margin-draw` on Review, and `paper-press` on buttons. No idle or looping motion except the loading state.
+- **Landing page:** `paper-settle` on the hero slips, two secondary slips with `paper-drift`, and `paper-lift` on interactive slips.
+- **Never:** animate sheets with shadows, animate on scroll, add route exit animations, use `transform` where `translate` / `rotate` will do, or animate anything but `opacity`, `translate`, `rotate`, and `scaleY` on the margin line.
+- **Sticky & Fixed Bar Isolation:** Fixed floating buttons (FAB), sticky navigation docks, and bottom reconciliation proof bars live outside transformed containers so their coordinates never jump during route transitions.
+- Everything is disabled under `@media (prefers-reduced-motion: reduce)`; slips and pages render at their static resting state.
 
 ---
 
@@ -214,7 +211,7 @@ Engineered for high-glare tropical daylight and storefront fluorescent bulbs. (C
 - **Desk** (`#E3E9D3` · `desk`): Landing hero and footer backgrounds only. Text on `desk` is always `pencil`. Its job is to give white sheets and slips something to separate from.
 - **Analysis Pad Paper** (`#F2F5EC` · `paper`): App canvas (cuts white screen glare).
 - **Notebook Sheet** (`#FFFFFF` · `sheet`): Ledger sheets, form inputs, cards.
-- **Loose Slip** (`#FFFEF8` · `slip`): Receipts, proof slips, pinned notes. Warmer than `sheet` so a slip reads as different paper when overlapping a sheet. **Not yellow**: sticky notes are `slip`, never `marker`.
+- **Loose Slip** (`#FFFEF8` · `slip`): Receipts, proof slips, pinned notes. Warmer than `sheet` so a slip reads as different paper when overlapping a sheet. The counter memo is the one yellow paper in the app (`#FFF9D2`); general sticky notes and proof slips are `slip`, never `marker`.
 - **Ruled Line** (`#D5DEC6` · `rule`): `1px` ledger rules, sheet borders, dividers, tape.
 - **Graphite Pencil** (`#23262B` · `pencil`): Body text and amounts (`15.1:1` on `paper`, `13.2:1` on `marker`).
 - **Muted Sage** (`#5B6457` · `muted`): Secondary metadata and timestamps (`4.9:1` on `paper`, `5.9:1` on `sheet`). Not for use on `desk`.

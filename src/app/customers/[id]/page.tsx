@@ -35,107 +35,159 @@ export default async function CustomerDetailPage({
   const hasDebt = balance > 0;
   const isPaid = balance === 0;
 
+  // Format last activity date from entries
+  let lastActiveFormatted = "Recent";
+  if (entries.length > 0) {
+    const latestDate = entries[0].page_date || entries[0].created_at;
+    try {
+      lastActiveFormatted = new Intl.DateTimeFormat("en-US", {
+        month: "short",
+        day: "numeric",
+      }).format(new Date(latestDate));
+    } catch {
+      lastActiveFormatted = entries[0].page_date || "Recent";
+    }
+  }
+
   return (
-    <div className="min-h-screen bg-transparent text-pencil font-sans selection:bg-marker selection:text-pencil pb-16">
-      {/* Sticky Header */}
-      <header className="sticky top-0 z-20 bg-sheet/95 backdrop-blur-sm border-b border-rule px-4 py-3">
-        <div className="max-w-xl mx-auto flex items-center justify-between gap-3">
+    <div className="min-h-screen bg-transparent text-pencil font-sans selection:bg-marker selection:text-pencil pb-24">
+      {/* Sticky Header matching Image 2 */}
+      <header className="sticky top-0 z-20 bg-sheet/95 backdrop-blur-sm border-b border-rule px-4 sm:px-6 py-4">
+        <div className="max-w-5xl mx-auto flex items-center justify-between gap-4">
+          {/* Back to Customers link */}
           <Link
             href="/customers"
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-pencil hover:text-ink transition-colors p-1"
+            className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-pencil hover:text-ink transition-colors p-1"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Customers</span>
           </Link>
 
+          {/* Customer Title & Status Subtext */}
           <div className="text-center">
-            <h1 className="font-display font-bold text-base text-pencil leading-tight">
+            <h1 className="font-display font-bold text-lg sm:text-2xl text-pencil leading-tight tracking-tight">
               {customer.name}
             </h1>
-            {customer.phone_optional && (
-              <p className="text-xs text-muted flex items-center justify-center gap-1 font-sans">
-                <Phone className="w-2.5 h-2.5" />
-                <span>{customer.phone_optional}</span>
-              </p>
-            )}
+            <p className="text-xs text-muted font-sans flex items-center justify-center gap-1.5">
+              <span>{hasDebt ? "Owing credit" : isPaid ? "Settled" : "Advance payment"}</span>
+              <span>&bull;</span>
+              <span>Last active: {lastActiveFormatted}</span>
+              {customer.phone_optional && (
+                <>
+                  <span>&bull;</span>
+                  <span className="inline-flex items-center gap-0.5">
+                    <Phone className="w-2.5 h-2.5" />
+                    <span>{customer.phone_optional}</span>
+                  </span>
+                </>
+              )}
+            </p>
           </div>
 
-          <div className="w-24 text-right">
+          {/* Status Badge */}
+          <div className="w-28 text-right">
             <span
-              className={`text-xs font-bold px-2 py-0.5 rounded-[2px] border ${
+              className={`inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-row border ${
                 hasDebt
-                  ? "bg-margin/10 text-margin border-margin/30"
+                  ? "bg-[#FDF2F2] text-margin border-margin/40"
                   : isPaid
-                  ? "bg-paid/10 text-paid border-paid/30"
-                  : "bg-ink/10 text-ink border-ink/30"
+                  ? "bg-[#EAF5EE] text-paid border-paid/40"
+                  : "bg-[#EEF2FC] text-ink border-ink/40"
               }`}
             >
-              {hasDebt ? "Payment Due" : isPaid ? "Settled" : "Advance"}
+              {hasDebt ? (
+                <>
+                  <AlertCircle className="w-3 h-3" />
+                  <span>Payment Due</span>
+                </>
+              ) : (
+                <>
+                  <CheckCircle2 className="w-3 h-3" />
+                  <span>Settled</span>
+                </>
+              )}
             </span>
           </div>
         </div>
       </header>
 
-      {/* Main Container */}
-      <main className="max-w-xl mx-auto px-4 pt-4 space-y-5">
-        {/* Customer Balance Summary Card */}
-        <section aria-label="Customer Credit Balance">
-          <div className="p-4 sm:p-5 rounded-[2px] border border-rule bg-sheet shadow-paper space-y-3 select-none">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-muted uppercase tracking-wider font-sans">
-                Current Balance
-              </span>
-              <span className="text-xs font-semibold text-muted flex items-center gap-1 font-sans">
-                {hasDebt ? (
-                  <span className="text-margin flex items-center gap-1 font-bold">
-                    <AlertCircle className="w-3.5 h-3.5" />
-                    <span>Payment Due</span>
+      {/* Main 2-Column Responsive Layout matching Image 2 */}
+      <main className="max-w-5xl mx-auto px-4 sm:px-6 pt-6 space-y-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          {/* Left Column: Current Balance Card & Transaction History */}
+          <div className="lg:col-span-6 space-y-6">
+            {/* Current Balance Card (Matching Image 2) */}
+            <section aria-label="Current Customer Balance">
+              <div className="p-5 sm:p-6 rounded-row border border-rule bg-sheet shadow-paper select-none space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-muted uppercase tracking-wider font-sans">
+                    Current balance
                   </span>
-                ) : (
-                  <span className="text-paid flex items-center gap-1 font-bold">
-                    <CheckCircle2 className="w-3.5 h-3.5" />
-                    <span>Zero Balance</span>
+                  <span
+                    className={`text-xs font-bold inline-flex items-center gap-1 ${
+                      hasDebt ? "text-margin" : "text-paid"
+                    }`}
+                  >
+                    {hasDebt ? (
+                      <>
+                        <AlertCircle className="w-3 h-3" />
+                        <span>Payment Due</span>
+                      </>
+                    ) : (
+                      <>
+                        <CheckCircle2 className="w-3 h-3" />
+                        <span>Zero Balance</span>
+                      </>
+                    )}
                   </span>
-                )}
-              </span>
-            </div>
+                </div>
 
-            <div>
-              <Amount
-                amount={Math.abs(balance)}
-                size="lg"
-                className={`text-2xl sm:text-3xl font-black ${hasDebt ? "text-margin" : isPaid ? "text-paid" : "text-ink"}`}
-              />
-              <div className="flex items-center gap-4 text-xs text-muted pt-2 border-t border-rule/50 mt-2 font-sans">
-                <span>
-                  Total Credit:{" "}
-                  <strong className="text-pencil font-bold">₱{total_credit.toFixed(2)}</strong>
-                </span>
-                <span>&bull;</span>
-                <span>
-                  Total Paid:{" "}
-                  <strong className="text-paid font-bold">₱{total_payment.toFixed(2)}</strong>
-                </span>
+                {/* Big Tabular Balance Amount */}
+                <Amount
+                  amount={Math.abs(balance)}
+                  size="lg"
+                  className={`text-3xl sm:text-4xl font-black tracking-tight block ${
+                    hasDebt ? "text-margin" : isPaid ? "text-paid" : "text-ink"
+                  }`}
+                />
+
+                {/* Sub-totals Rule */}
+                <div className="pt-3 border-t border-rule/60 grid grid-cols-2 gap-4 text-xs font-sans">
+                  <div>
+                    <span className="text-muted block">Total credit:</span>
+                    <strong className="text-pencil font-bold text-sm block mt-0.5">
+                      ₱{total_credit.toFixed(2)}
+                    </strong>
+                  </div>
+                  <div>
+                    <span className="text-muted block">Total paid:</span>
+                    <strong className="text-paid font-bold text-sm block mt-0.5">
+                      ₱{total_payment.toFixed(2)}
+                    </strong>
+                  </div>
+                </div>
               </div>
-            </div>
+            </section>
+
+            {/* Itemized Transaction History Pad */}
+            <section aria-label="Transaction History">
+              <CustomerHistoryList entries={entries} currentBalance={balance} />
+            </section>
           </div>
-        </section>
 
-        {/* Taglish Reminder Generator Section */}
-        <section aria-label="Taglish Payment Reminder">
-          <ReminderCard
-            customerId={customer.id}
-            customerName={customer.name}
-            phoneOptional={customer.phone_optional}
-            balance={balance}
-            initialDraft={latest_reminder}
-          />
-        </section>
-
-        {/* Itemized Transaction History Section */}
-        <section aria-label="Transaction History">
-          <CustomerHistoryList entries={entries} />
-        </section>
+          {/* Right Column: Pinned Yellow Memo Reminder Note (Matching Image 2) */}
+          <div className="lg:col-span-6">
+            <section aria-label="Payment Reminder Note">
+              <ReminderCard
+                customerId={customer.id}
+                customerName={customer.name}
+                phoneOptional={customer.phone_optional}
+                balance={balance}
+                initialDraft={latest_reminder}
+              />
+            </section>
+          </div>
+        </div>
       </main>
     </div>
   );

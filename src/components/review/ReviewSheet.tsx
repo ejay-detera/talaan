@@ -164,7 +164,7 @@ export function ReviewSheet({
   };
 
   return (
-    <div className="relative pb-36 space-y-4">
+    <div className="relative space-y-4">
       {/* Collapsible Notebook Preview Strip */}
       <NotebookStrip imageUrl={imageUrl} />
 

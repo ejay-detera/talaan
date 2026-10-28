@@ -1,6 +1,5 @@
 import { connection } from "next/server";
 import { redirect } from "next/navigation";
-import { ShieldCheck } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { listCustomersWithBalances } from "@/services/customers";
 import { AppHeaderNav } from "@/components/shared/AppHeaderNav";
@@ -68,10 +67,6 @@ export default async function CustomersPage() {
                 <div className="flex items-center justify-between pb-2 border-b border-rule/60">
                   <span className="text-xs font-bold uppercase tracking-wider text-muted font-sans">
                     Suki Credit Guide
-                  </span>
-                  <span className="text-xs font-bold text-paid inline-flex items-center gap-1">
-                    <ShieldCheck className="w-3.5 h-3.5" />
-                    <span>Polite & Respectful</span>
                   </span>
                 </div>
                 <p className="text-xs sm:text-sm text-pencil/80 font-sans leading-relaxed">

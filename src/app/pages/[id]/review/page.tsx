@@ -50,7 +50,7 @@ export default async function ReviewPage({ params }: ReviewPageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-transparent text-pencil font-sans selection:bg-marker selection:text-pencil pb-12">
+    <div className="flex-1 flex flex-col bg-transparent text-pencil font-sans selection:bg-marker selection:text-pencil pb-6">
       {/* Top Header matching Image 1 */}
       <header className="bg-sheet/95 backdrop-blur-sm border-b border-rule px-4 sm:px-6 py-4">
         <div className="max-w-5xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-3">

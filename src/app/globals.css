@@ -26,6 +26,42 @@
   color: #23262B;            /* pencil dark text: 13.2:1 AAA contrast */
 }
 
+/* Tactile Paper Custom Scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(35, 38, 43, 0.22) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(35, 38, 43, 0.22);
+  border-radius: 9999px;
+  border: 1px solid transparent;
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(30, 62, 174, 0.55); /* Ballpen Blue */
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
 html[data-scroll-behavior="smooth"] {
   scroll-behavior: smooth;
 }
@@ -164,11 +200,26 @@ p {
   transition: transform 0.2s ease-out;
 }
 
+/* Fluid Ink Shimmer Runner */
+@keyframes shimmer-slide {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(250%);
+  }
+}
+
+.animate-shimmer-slide {
+  animation: shimmer-slide 1.4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .margin-draw,
   .animate-float-slow,
   .animate-float-delayed,
-  .section-arrival-pulse {
+  .section-arrival-pulse,
+  .animate-shimmer-slide {
     animation: none !important;
     transform: none !important;
   }

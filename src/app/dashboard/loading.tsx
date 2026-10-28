@@ -53,7 +53,6 @@ export default function DashboardLoading() {
           <div className="space-y-6">
             {/* Who Owes Credit Lined Note Skeleton */}
             <div className="relative h-68 w-full rounded-row bg-[#FFFEF8] border border-[#D5DEC6] border-l-4 border-l-margin/50 shadow-paper overflow-hidden">
-              <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-24 h-4 bg-[#EAE3CE] rounded-[2px]" />
               <div className="h-12 border-b border-rule px-5 flex items-center justify-between">
                 <div className="h-4 w-32 bg-rule/70 rounded" />
                 <div className="h-3 w-20 bg-rule/40 rounded" />

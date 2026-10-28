@@ -74,7 +74,7 @@ export function ConfirmedPageSheet({
   const isMatch = !page.has_page_discrepancy;
 
   return (
-    <div className="space-y-4 select-none pb-12">
+    <div className="space-y-4 select-none pb-6">
       {/* Status & Action Banner */}
       <div className="p-4 sm:p-5 rounded-sheet border border-rule bg-sheet shadow-paper flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">

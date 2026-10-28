@@ -105,8 +105,43 @@ export function Navbar({}: NavbarProps) {
       <header className="pointer-events-auto flex items-center gap-2 sm:gap-3.5 p-2 sm:p-2.5 pl-2.5 sm:pl-3.5 rounded-full bg-sheet/95 backdrop-blur-md border border-rule shadow-paper-lg transition-all duration-300">
         {/* Placement Icon & Brand */}
         <Link
-          href="/"
+          href="#hero"
+          onClick={(e) => {
+            e.preventDefault();
+            const hero = document.getElementById("hero");
+            if (hero) {
+              const targetY = 0;
+              const startY = window.scrollY;
+              const distance = Math.abs(targetY - startY);
+              const duration = Math.min(460, Math.max(300, distance * 0.18));
+              const startTime = performance.now();
+              const ease = (t: number) =>
+                t < 0.5 ? 8 * t * t * t * t : 1 - Math.pow(-2 * t + 2, 4) / 2;
+
+              isAnimatingRef.current = true;
+              const animateScroll = (now: number) => {
+                const elapsed = now - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const easedProgress = ease(progress);
+
+                window.scrollTo(0, startY + (targetY - startY) * easedProgress);
+
+                if (progress < 1) {
+                  requestAnimationFrame(animateScroll);
+                } else {
+                  isAnimatingRef.current = false;
+                  setActiveIndex(0);
+                  window.history.pushState(null, "", "#hero");
+                }
+              };
+
+              requestAnimationFrame(animateScroll);
+            } else {
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }
+          }}
           className="flex items-center gap-2.5 p-1 pr-2.5 sm:pr-3.5 rounded-full hover:bg-paper transition-all select-none group active:scale-[0.98]"
+          title="Talaan - Back to top"
         >
           <Image
             src="/assets/talaan-icon.png"

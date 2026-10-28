@@ -10,7 +10,6 @@ import {
   Phone,
   Clock,
   Users,
-  MessageSquare,
   Search,
   X,
 } from "lucide-react";
@@ -220,19 +219,17 @@ export function CustomerList({ customers }: CustomerListProps) {
             }
 
             return (
-              <div
+              <Link
                 key={c.id}
-                className="px-4 sm:px-5 py-3.5 flex items-center justify-between gap-3 hover:bg-paper/40 transition-colors group"
+                href={`/customers/${c.id}`}
+                className="px-4 sm:px-5 py-3.5 flex items-center justify-between gap-4 hover:bg-paper/40 transition-colors group cursor-pointer"
               >
                 {/* Left: Customer Info & Status Meta */}
                 <div className="min-w-0 space-y-1">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <Link
-                      href={`/customers/${c.id}`}
-                      className="font-display font-bold text-base text-pencil group-hover:text-ink transition-colors truncate hover:underline"
-                    >
+                    <span className="font-display font-bold text-base text-pencil group-hover:text-ink transition-colors truncate">
                       {c.name}
-                    </Link>
+                    </span>
 
                     {c.phone_optional && (
                       <span className="inline-flex items-center gap-1 text-xs text-muted font-sans font-medium">
@@ -271,12 +268,12 @@ export function CustomerList({ customers }: CustomerListProps) {
                   </div>
                 </div>
 
-                {/* Right: Tabular Balance Due & Direct Action Link */}
-                <div className="text-right flex-shrink-0 space-y-0.5">
+                {/* Right: Tabular Balance Due & Direct Action with Generous Spacing */}
+                <div className="flex items-center gap-3 sm:gap-6 flex-shrink-0 text-right">
                   <Amount
                     amount={Math.abs(c.balance)}
                     size="base"
-                    className={`font-black tabular-nums block ${
+                    className={`font-black tabular-nums text-right ${
                       hasDebt
                         ? "text-margin"
                         : isPaid
@@ -285,26 +282,16 @@ export function CustomerList({ customers }: CustomerListProps) {
                     }`}
                   />
 
-                  {hasDebt ? (
-                    <Link
-                      href={`/customers/${c.id}`}
-                      className="text-xs font-bold text-ink hover:underline inline-flex items-center gap-1 group/link"
-                    >
-                      <MessageSquare className="w-2.5 h-2.5" />
-                      <span>Draft reminder</span>
-                      <ArrowRight className="w-3 h-3 transition-transform group-hover/link:translate-x-0.5" />
-                    </Link>
-                  ) : (
-                    <Link
-                      href={`/customers/${c.id}`}
-                      className="text-xs font-semibold text-muted hover:text-ink inline-flex items-center gap-1 group/link"
-                    >
-                      <span>Open ledger</span>
-                      <ArrowRight className="w-3 h-3 transition-transform group-hover/link:translate-x-0.5" />
-                    </Link>
-                  )}
+                  <span
+                    className={`text-xs font-bold inline-flex items-center gap-1 group-hover:underline min-w-[90px] justify-end ${
+                      hasDebt ? "text-ink" : "text-muted group-hover:text-ink"
+                    }`}
+                  >
+                    <span>{hasDebt ? "Draft reminder" : "Open ledger"}</span>
+                    <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
+                  </span>
                 </div>
-              </div>
+              </Link>
             );
           })}
         </div>

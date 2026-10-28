@@ -59,9 +59,9 @@ export default function CustomersLoading() {
                       <div className="h-4 w-28 bg-rule/70 rounded" />
                       <div className="h-3 w-36 bg-rule/40 rounded" />
                     </div>
-                    <div className="space-y-1 text-right">
-                      <div className="h-4 w-16 bg-rule/70 rounded ml-auto" />
-                      <div className="h-3 w-20 bg-rule/40 rounded ml-auto" />
+                    <div className="flex items-center gap-4 text-right">
+                      <div className="h-5 w-16 bg-rule/70 rounded" />
+                      <div className="h-4 w-20 bg-rule/40 rounded" />
                     </div>
                   </div>
                 ))}

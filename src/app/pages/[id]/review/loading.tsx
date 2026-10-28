@@ -2,7 +2,7 @@ import { ArrowLeft } from "lucide-react";
 
 export default function ReviewLoading() {
   return (
-    <div className="min-h-screen bg-transparent text-pencil font-sans pb-12 animate-pulse select-none">
+    <div className="flex-1 flex flex-col bg-transparent text-pencil font-sans pb-6 animate-pulse select-none">
       {/* Top Header Skeleton */}
       <header className="bg-sheet/95 backdrop-blur-sm border-b border-rule px-4 sm:px-6 py-4">
         <div className="max-w-5xl mx-auto flex items-center gap-4">

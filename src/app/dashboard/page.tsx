@@ -44,27 +44,43 @@ export default async function DashboardPage() {
   const confirmedPages = recentPages.filter((p) => p.status === "confirmed");
   const confirmedPageCount = confirmedPages.length || (recentPages.length > 0 ? 1 : 0);
 
-  // Fetch preview entries for the top featured page if available
-  let previewRows: PreviewRow[] = [];
-  if (recentPages.length > 0) {
+  // Fetch preview entries and row counts for all recent pages
+  const pageIds = recentPages.map((p) => p.id);
+  const previewRowsByPageId: Record<string, PreviewRow[]> = {};
+  const pageEntryCounts: Record<string, number> = {};
+
+  if (pageIds.length > 0) {
     const { data: entriesData } = await supabase
       .from("entries")
-      .select("id, item, amount, extracted_customer_name, customer_id")
-      .eq("page_id", recentPages[0].id)
-      .limit(3);
+      .select("id, page_id, item, amount, extracted_customer_name, customer_id, created_at")
+      .in("page_id", pageIds)
+      .order("created_at", { ascending: true });
 
     if (entriesData && entriesData.length > 0) {
       const customerMap = new Map(customersResult.customers.map((c) => [c.id, c.name]));
-      previewRows = entriesData.map((e) => ({
-        customer_name:
-          (e.customer_id ? customerMap.get(e.customer_id) : null) ||
-          e.extracted_customer_name ||
-          "Suki",
-        item: e.item,
-        amount: Number(e.amount),
-      }));
+      for (const entry of entriesData) {
+        if (!previewRowsByPageId[entry.page_id]) {
+          previewRowsByPageId[entry.page_id] = [];
+        }
+        pageEntryCounts[entry.page_id] = (pageEntryCounts[entry.page_id] || 0) + 1;
+        if (previewRowsByPageId[entry.page_id].length < 3) {
+          previewRowsByPageId[entry.page_id].push({
+            customer_name:
+              (entry.customer_id ? customerMap.get(entry.customer_id) : null) ||
+              entry.extracted_customer_name ||
+              "Suki",
+            item: entry.item,
+            amount: Number(entry.amount),
+          });
+        }
+      }
     }
   }
+
+  const previewRows: PreviewRow[] =
+    recentPages.length > 0 && previewRowsByPageId[recentPages[0].id]
+      ? previewRowsByPageId[recentPages[0].id]
+      : [];
 
   return (
     <div className="min-h-screen bg-transparent text-pencil font-sans selection:bg-marker selection:text-pencil pb-28">
@@ -99,6 +115,8 @@ export default async function DashboardPage() {
               <RecentPagesList
                 pages={recentPages}
                 previewRows={previewRows}
+                previewRowsByPageId={previewRowsByPageId}
+                pageEntryCounts={pageEntryCounts}
               />
             </section>
           </div>

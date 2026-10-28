@@ -24,7 +24,7 @@ export default function HomePage() {
       {/* Main Persuade Hero */}
       <main className="relative z-10 flex-1 w-full">
         {/* Top Centered Hero Header */}
-        <section className="w-full max-w-5xl mx-auto px-4 sm:px-6 pt-24 sm:pt-32 pb-8 text-center space-y-6">
+        <section id="hero" className="w-full max-w-5xl mx-auto px-4 sm:px-6 pt-24 sm:pt-32 pb-8 text-center space-y-6">
           <div className="space-y-4 max-w-3xl mx-auto">
             <h1 className="font-display font-bold text-3xl sm:text-5xl lg:text-5xl leading-[1.08] tracking-tight text-pencil text-balance">
               Turn handwritten store notebooks into verified digital ledgers.

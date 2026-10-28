@@ -2,7 +2,6 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import Image from "next/image";
 import GooeyNav from "@/components/shared/GooeyNav";
 import { SignOutButton } from "@/components/shared/SignOutButton";
@@ -33,23 +32,19 @@ export function AppHeaderNav({ activeTab }: AppHeaderNavProps) {
     <div className="sticky top-2.5 sm:top-4 z-40 flex justify-center items-center px-3 sm:px-4 pointer-events-none print:hidden mb-4">
       {/* Floating Center Dock with GooeyNav */}
       <header className="pointer-events-auto flex items-center gap-1.5 sm:gap-2.5 p-1.5 sm:p-2 pl-2 sm:pl-3 rounded-full bg-sheet/95 backdrop-blur-md border border-rule shadow-paper-lg transition-all duration-300">
-        {/* Placement Icon & Brand */}
-        <Link
-          href="/dashboard"
-          className="flex items-center gap-2 p-1 pr-1.5 sm:pr-2.5 rounded-full hover:bg-paper transition-all select-none group active:scale-[0.98]"
-          title="Talaan Dashboard"
-        >
+        {/* Placement Icon & Brand (Static & non-interactive on user pages) */}
+        <div className="flex items-center gap-2 p-1 pr-1.5 sm:pr-2.5 select-none pointer-events-none cursor-default">
           <Image
             src="/assets/talaan-icon.png"
             alt="Talaan logo"
             width={28}
             height={28}
-            className="flex-shrink-0 object-contain transition-transform duration-200 group-hover:scale-105"
+            className="flex-shrink-0 object-contain"
           />
           <span className="font-display font-black text-sm tracking-tight text-pencil hidden md:inline">
             Talaan
           </span>
-        </Link>
+        </div>
 
         {/* Divider */}
         <div className="h-5 sm:h-6 w-[1px] bg-rule" aria-hidden="true" />

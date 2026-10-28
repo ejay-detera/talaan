@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Sparkles, Copy, Share2, MessageSquare, Check, RefreshCw } from "lucide-react";
+import { Copy, Share2, MessageSquare, Check, RefreshCw } from "lucide-react";
 import type { ReminderDraft, ReminderTone } from "@/types/ledger";
 
 interface ReminderCardProps {
@@ -12,6 +12,24 @@ interface ReminderCardProps {
   initialDraft: ReminderDraft | null;
 }
 
+function getDefaultDraft(name: string, bal: number, t: ReminderTone): string {
+  if (t === "firm") {
+    return `Magandang araw po, ${name}. Nais ko lang pong ipaalala ang natitirang balanse na ₱${bal.toFixed(
+      2
+    )} sa tindahan. Paki-settle na lang po sa lalong madaling panahon. Maraming salamat po!`;
+  }
+  return `Magandang araw po, ${name}! Paalala lang po na may balanse po kayo na ₱${bal.toFixed(
+    2
+  )} sa tindahan. Kung may pagkakataon po, pwede po kayong dumaan. Maraming salamat po!`;
+}
+
+/**
+ * ReminderCard
+ *
+ * Implements the Pinned Yellow Sticky Note Reminder (matching Image 2).
+ * Styled as a yellow counter memo with a 3D red pushpin, tone selectors,
+ * authentic handwriting preview (Caveat font) in Taglish, and instant copy/SMS sharing.
+ */
 export function ReminderCard({
   customerId,
   customerName,
@@ -20,12 +38,17 @@ export function ReminderCard({
   initialDraft,
 }: ReminderCardProps) {
   const [tone, setTone] = useState<ReminderTone>(initialDraft?.tone || "friendly");
-  const [message, setMessage] = useState<string>(initialDraft?.message || "");
+  const hasDebt = balance > 0;
+
+  const [message, setMessage] = useState<string>(() => {
+    if (initialDraft?.message) return initialDraft.message;
+    if (hasDebt) return getDefaultDraft(customerName, balance, tone);
+    return "";
+  });
+
   const [isGenerating, setIsGenerating] = useState(false);
   const [copied, setCopied] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  const hasDebt = balance > 0;
 
   async function handleGenerate(targetTone = tone) {
     if (!hasDebt) return;
@@ -44,12 +67,15 @@ export function ReminderCard({
 
       const data = await res.json();
       if (!res.ok) {
-        throw new Error(data.error?.message || "Could not generate reminder draft.");
+        // Fallback to local deterministic draft template if backend error
+        setMessage(getDefaultDraft(customerName, balance, targetTone));
+        return;
       }
 
       setMessage(data.reminder.message);
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "An unexpected error occurred.");
+    } catch {
+      // Fallback cleanly without blocking user
+      setMessage(getDefaultDraft(customerName, balance, targetTone));
     } finally {
       setIsGenerating(false);
     }
@@ -57,9 +83,8 @@ export function ReminderCard({
 
   function handleToneChange(newTone: ReminderTone) {
     setTone(newTone);
-    if (message) {
-      handleGenerate(newTone);
-    }
+    setMessage(getDefaultDraft(customerName, balance, newTone));
+    handleGenerate(newTone);
   }
 
   async function handleCopy() {
@@ -78,7 +103,7 @@ export function ReminderCard({
     if (navigator.share) {
       try {
         await navigator.share({
-          title: `Talaan: Reminder for ${customerName}`,
+          title: `Talaan Reminder for ${customerName}`,
           text: message,
         });
       } catch {
@@ -93,155 +118,158 @@ export function ReminderCard({
     ? `sms:${phoneOptional ?? ""}?body=${encodeURIComponent(message)}`
     : undefined;
 
-  return (
-    <div className="rounded-[2px] border border-rule bg-sheet shadow-paper p-4 sm:p-5 space-y-4 select-none">
-      {/* Header */}
-      <div className="border-b border-rule/60 pb-3">
-        <h3 className="text-xs font-bold text-pencil uppercase tracking-wider flex items-center gap-1.5 font-sans">
-          <Sparkles className="w-3.5 h-3.5 text-ink" />
-          <span>Taglish Payment Reminder</span>
-        </h3>
+  if (!hasDebt) {
+    return (
+      <div className="relative rounded-row border border-[#D5DEC6] bg-[#FFFEF8] shadow-paper p-6 text-center select-none space-y-2">
+        <p className="font-display font-bold text-base text-paid">
+          Account Settled
+        </p>
         <p className="text-xs text-muted font-sans">
-          Culturally calibrated, polite payment reminder draft
+          {customerName} has no outstanding customer credit. No payment reminder needed!
         </p>
       </div>
+    );
+  }
 
-      {!hasDebt ? (
-        <div className="p-4 rounded-row bg-paper/60 text-center border border-rule/50">
-          <p className="text-xs text-paid font-bold font-sans">
-            This customer is all settled up. No payment reminder needed.
-          </p>
+  return (
+    <div className="space-y-3">
+      {/* Pinned Yellow Sticky Note (Matching Image 2) */}
+      <div className="relative w-full rounded-row bg-[#FFF9D2] border border-[#EADB85] shadow-[0_8px_24px_rgba(35,38,43,0.08)] p-5 sm:p-6 select-none space-y-4">
+        {/* 3D Red Pushpin Graphic at Top Center */}
+        <div
+          className="absolute -top-3 left-1/2 -translate-x-1/2 w-6 h-6 flex items-center justify-center pointer-events-none z-20"
+          aria-hidden="true"
+        >
+          <span className="w-4 h-4 rounded-full bg-margin border border-[#9A1F1E] shadow-[0_2px_4px_rgba(35,38,43,0.3)] block relative">
+            <span className="w-1.5 h-1.5 rounded-full bg-white/70 absolute top-0.5 left-0.5" />
+          </span>
         </div>
-      ) : (
-        <>
-          {/* Tone Selector */}
+
+        {/* Note Header: Title & Tone Selector */}
+        <div className="space-y-3">
+          <h2 className="font-display font-bold text-base sm:text-lg text-[#383318] tracking-tight">
+            Reminder for {customerName}
+          </h2>
+
+          {/* Tone Selector Pills */}
           <div className="flex items-center gap-2">
-            <span className="text-xs font-bold text-pencil font-sans">Tone:</span>
-            <div className="flex gap-1.5 flex-1 max-w-xs">
-              <button
-                type="button"
-                onClick={() => handleToneChange("friendly")}
-                className={`flex-1 py-1.5 px-3 rounded-row text-xs font-bold transition-all min-h-[40px] cursor-pointer ${
-                  tone === "friendly"
-                    ? "bg-ink text-sheet"
-                    : "bg-paper text-pencil hover:bg-paper/80 border border-rule"
-                }`}
-              >
-                Friendly
-              </button>
-
-              <button
-                type="button"
-                onClick={() => handleToneChange("firm")}
-                className={`flex-1 py-1.5 px-3 rounded-row text-xs font-bold transition-all min-h-[40px] cursor-pointer ${
-                  tone === "firm"
-                    ? "bg-ink text-sheet"
-                    : "bg-paper text-pencil hover:bg-paper/80 border border-rule"
-                }`}
-              >
-                Firm
-              </button>
-            </div>
-          </div>
-
-          {/* Generate Button (if empty) */}
-          {!message && (
             <button
               type="button"
-              disabled={isGenerating}
-              onClick={() => handleGenerate()}
-              className="w-full h-[52px] rounded-row bg-ink text-sheet font-bold text-sm shadow-paper hover:bg-ink/90 active:scale-[0.99] transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+              onClick={() => handleToneChange("friendly")}
+              className={`px-3.5 py-1.5 rounded-row text-xs font-bold transition-all cursor-pointer ${
+                tone === "friendly"
+                  ? "bg-ink text-sheet shadow-xs"
+                  : "bg-sheet/80 text-[#383318] border border-[#EADB85] hover:bg-sheet"
+              }`}
             >
-              {isGenerating ? (
-                <>
-                  <RefreshCw className="w-4 h-4 animate-spin" />
-                  <span>Generating Reminder...</span>
-                </>
-              ) : (
-                <>
-                  <Sparkles className="w-4 h-4" />
-                  <span>Generate Taglish Draft</span>
-                </>
-              )}
+              Friendly
             </button>
-          )}
+            <button
+              type="button"
+              onClick={() => handleToneChange("firm")}
+              className={`px-3.5 py-1.5 rounded-row text-xs font-bold transition-all cursor-pointer ${
+                tone === "firm"
+                  ? "bg-ink text-sheet shadow-xs"
+                  : "bg-sheet/80 text-[#383318] border border-[#EADB85] hover:bg-sheet"
+              }`}
+            >
+              Firm
+            </button>
+          </div>
+        </div>
+
+        {/* Note Instruction & Ruled Handwriting Textarea */}
+        <div className="space-y-1.5">
+          <label
+            htmlFor="reminder-draft-text"
+            className="block text-xs font-semibold text-[#6E5D1E] font-sans"
+          >
+            Click to edit message
+          </label>
+
+          <div className="relative">
+            <textarea
+              id="reminder-draft-text"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              rows={6}
+              className="w-full bg-transparent font-hand text-xl sm:text-2xl text-[#2A2510] leading-relaxed resize-y focus:outline-none select-text border-b border-[#EADB85]/70 pb-2 pr-2 placeholder:text-[#6E5D1E]/60"
+              placeholder="Magandang araw po..."
+            />
+          </div>
 
           {error && (
             <p className="text-xs text-margin font-semibold font-sans">{error}</p>
           )}
+        </div>
 
-          {/* Drafted Message Textarea (Output preserved in Taglish) */}
-          {message && (
-            <div className="space-y-3">
-              <div className="relative">
-                <textarea
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  rows={4}
-                  className="w-full p-3 rounded-row border border-rule bg-paper/40 text-[17px] text-pencil font-sans leading-relaxed focus:bg-sheet focus:border-ink focus:outline-none transition-all resize-y select-text"
-                  placeholder="Type or edit the Taglish reminder message..."
-                />
-              </div>
+        {/* Note Footer: Notice & Action Buttons */}
+        <div className="pt-2 border-t border-[#EADB85]/60 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <p className="text-xs text-[#6E5D1E] font-sans italic">
+            Draft only. You send it.
+          </p>
 
-              {/* Action Buttons: Copy, SMS, Share */}
-              <div className="flex flex-wrap items-center gap-2">
-                <button
-                  type="button"
-                  onClick={handleCopy}
-                  className="flex-1 min-w-[120px] h-[48px] px-4 rounded-row bg-paper border border-rule hover:bg-paper/80 active:scale-[0.98] text-xs font-bold text-pencil flex items-center justify-center gap-1.5 transition-all cursor-pointer font-sans"
-                >
-                  {copied ? (
-                    <>
-                      <Check className="w-4 h-4 text-paid" />
-                      <span className="text-paid">Copied!</span>
-                    </>
-                  ) : (
-                    <>
-                      <Copy className="w-4 h-4 text-ink" />
-                      <span>Copy</span>
-                    </>
-                  )}
-                </button>
+          <div className="flex items-center gap-2 w-full sm:w-auto">
+            {/* Copy Button */}
+            <button
+              type="button"
+              onClick={handleCopy}
+              className="flex-1 sm:flex-initial h-[42px] px-5 rounded-row bg-ink hover:bg-ink/90 active:scale-[0.98] text-xs font-bold text-sheet flex items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer font-sans"
+            >
+              {copied ? (
+                <>
+                  <Check className="w-3.5 h-3.5 text-sheet" />
+                  <span>Copied!</span>
+                </>
+              ) : (
+                <>
+                  <Copy className="w-3.5 h-3.5" />
+                  <span>Copy</span>
+                </>
+              )}
+            </button>
 
-                {smsHref && (
-                  <a
-                    href={smsHref}
-                    className="flex-1 min-w-[120px] h-[48px] px-4 rounded-row bg-ink text-sheet hover:bg-ink/90 active:scale-[0.98] text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer font-sans"
-                  >
-                    <MessageSquare className="w-4 h-4" />
-                    <span>Send via SMS</span>
-                  </a>
-                )}
+            {/* Send via SMS Button (if phone recorded) */}
+            {smsHref && (
+              <a
+                href={smsHref}
+                className="flex-1 sm:flex-initial h-[42px] px-4 rounded-row bg-[#1F7A4D] hover:bg-[#1A6841] active:scale-[0.98] text-xs font-bold text-sheet flex items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer font-sans"
+              >
+                <MessageSquare className="w-3.5 h-3.5" />
+                <span>Send SMS</span>
+              </a>
+            )}
 
-                <button
-                  type="button"
-                  onClick={handleShare}
-                  className="h-[48px] px-4 rounded-row bg-paper border border-rule hover:bg-paper/80 active:scale-[0.98] text-xs font-bold text-pencil flex items-center justify-center gap-1.5 transition-all cursor-pointer font-sans"
-                  title="Share via Messenger or messaging apps"
-                >
-                  <Share2 className="w-4 h-4 text-ink" />
-                  <span className="hidden sm:inline">Share</span>
-                </button>
+            {/* Share via native web share */}
+            <button
+              type="button"
+              onClick={handleShare}
+              title="Share draft"
+              className="h-[42px] px-3 rounded-row bg-sheet/80 hover:bg-sheet border border-[#EADB85] text-[#383318] flex items-center justify-center transition-all cursor-pointer shadow-xs"
+            >
+              <Share2 className="w-3.5 h-3.5" />
+            </button>
 
-                <button
-                  type="button"
-                  disabled={isGenerating}
-                  onClick={() => handleGenerate()}
-                  title="Generate new draft"
-                  className="h-[48px] px-3 rounded-row bg-paper border border-rule hover:bg-paper/80 active:scale-[0.98] text-muted hover:text-pencil flex items-center justify-center transition-all cursor-pointer disabled:opacity-50"
-                >
-                  <RefreshCw className={`w-4 h-4 ${isGenerating ? "animate-spin" : ""}`} />
-                </button>
-              </div>
+            {/* Refresh / Regenerate button */}
+            <button
+              type="button"
+              disabled={isGenerating}
+              onClick={() => handleGenerate()}
+              title="Generate new draft"
+              className="h-[42px] px-3 rounded-row bg-sheet/80 hover:bg-sheet border border-[#EADB85] text-[#383318] flex items-center justify-center transition-all cursor-pointer shadow-xs disabled:opacity-50"
+            >
+              <RefreshCw className={`w-3.5 h-3.5 ${isGenerating ? "animate-spin" : ""}`} />
+            </button>
+          </div>
+        </div>
+      </div>
 
-              {/* Mandatory Footer per docs/design.md line 346 */}
-              <p className="text-xs text-muted text-center italic font-sans">
-                Draft only. You review and choose when to send.
-              </p>
-            </div>
-          )}
-        </>
-      )}
+      {/* Helper Guidance Below Note */}
+      <p className="text-xs text-muted font-sans px-1 leading-relaxed">
+        {phoneOptional
+          ? `Recorded phone: ${phoneOptional}. Tap Send SMS to open your text app or Copy to paste into Messenger.`
+          : `No phone number on notebook for ${customerName}. Copy the reminder to send directly via SMS or Messenger.`}
+      </p>
     </div>
   );
 }

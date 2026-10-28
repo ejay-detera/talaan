@@ -1,108 +1,149 @@
+// impeccable-disable side-tab -- intentional red margin line per docs/design.md
+import React from "react";
 import Link from "next/link";
-import { ExternalLink, ShoppingBag, ArrowDownLeft } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import type { CustomerLedgerEntry } from "@/types/ledger";
 import { Amount } from "@/components/shared/Amount";
 
 interface CustomerHistoryListProps {
   entries: CustomerLedgerEntry[];
+  currentBalance?: number;
 }
 
-export function CustomerHistoryList({ entries }: CustomerHistoryListProps) {
+/**
+ * CustomerHistoryList
+ *
+ * Implements the Customer Transaction History Notebook Pad.
+ * Styled with the signature red margin line (border-l-4 border-l-margin),
+ * ruled transaction rows, source notebook page links, and bottom balance proof.
+ */
+export function CustomerHistoryList({ entries, currentBalance }: CustomerHistoryListProps) {
   if (entries.length === 0) {
     return (
-      <div className="p-6 text-center rounded-[2px] border border-dashed border-rule bg-sheet/60 select-none">
-        <p className="text-xs font-semibold text-muted font-sans">
-          No confirmed transactions for this customer yet.
+      <div className="relative rounded-row border border-[#D5DEC6] bg-[#FFFEF8] border-l-4 border-l-margin/60 shadow-paper p-6 text-center select-none">
+        <p className="font-display font-bold text-base text-pencil">
+          No confirmed transactions yet
+        </p>
+        <p className="text-xs text-muted font-sans mt-1">
+          Transactions will appear here once you scan and confirm counter notebook pages.
         </p>
       </div>
     );
   }
 
+  // Calculate balance if not explicitly provided
+  const computedBalance =
+    currentBalance ??
+    entries.reduce((acc, e) => {
+      const centavos = Math.round(Number(e.amount) * 100);
+      return acc + (e.entry_type === "payment" ? -centavos : centavos);
+    }, 0) / 100;
+
   return (
-    <div className="rounded-[2px] border border-rule bg-sheet shadow-paper overflow-hidden select-none">
-      <div className="p-3.5 sm:p-4 border-b border-rule flex items-center justify-between">
-        <h3 className="text-xs font-bold text-pencil uppercase tracking-wider font-sans">
-          Transaction History ({entries.length})
-        </h3>
-        <span className="text-xs text-muted font-sans">From confirmed notebook pages</span>
+    <div className="relative rounded-row border border-[#D5DEC6] bg-[#FFFEF8] border-l-4 border-l-margin shadow-paper overflow-hidden select-none">
+      {/* Header Pad Strip */}
+      <div className="px-5 py-3.5 border-b border-rule bg-[#FBFDF6]/80 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1" aria-hidden="true">
+            <span className="w-2 h-2 rounded-full bg-paper border border-[#C5D0B4]" />
+            <span className="w-2 h-2 rounded-full bg-paper border border-[#C5D0B4]" />
+            <span className="w-2 h-2 rounded-full bg-paper border border-[#C5D0B4]" />
+          </div>
+          <h2 className="font-display font-bold text-base sm:text-lg text-pencil tracking-tight">
+            Transaction History
+          </h2>
+        </div>
+        <span className="text-xs font-semibold text-muted font-sans">
+          From confirmed pages ({entries.length})
+        </span>
       </div>
 
-      <div className="divide-y divide-rule/60">
+      {/* Ruled Transaction Rows */}
+      <div className="divide-y divide-[#E6ECE0]">
         {entries.map((entry) => {
           const isPayment = entry.entry_type === "payment";
+
+          let formattedDate = entry.page_date || "Notebook page";
+          if (entry.page_date) {
+            try {
+              const parts = entry.page_date.split("-");
+              if (parts.length === 3) {
+                const d = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+                formattedDate = new Intl.DateTimeFormat("en-US", {
+                  month: "short",
+                  day: "numeric",
+                }).format(d);
+              }
+            } catch {
+              formattedDate = entry.page_date;
+            }
+          }
 
           return (
             <div
               key={entry.id}
-              className="p-3.5 flex items-center justify-between gap-3 hover:bg-paper/40 transition-colors"
+              className="px-5 py-3.5 flex items-center justify-between gap-3 hover:bg-paper/40 transition-colors group"
             >
-              {/* Left: Icon, Date, Item, Qty */}
-              <div className="flex items-start gap-2.5 min-w-0">
-                <div
-                  className={`p-1.5 rounded-row border mt-0.5 flex-shrink-0 ${
-                    isPayment
-                      ? "bg-paid/10 text-paid border-paid/30"
-                      : "bg-paper text-ink border-rule"
-                  }`}
-                >
-                  {isPayment ? (
-                    <ArrowDownLeft className="w-3.5 h-3.5" />
-                  ) : (
-                    <ShoppingBag className="w-3.5 h-3.5" />
-                  )}
-                </div>
+              {/* Left Column: Date & Item Details */}
+              <div className="flex items-start gap-3 min-w-0">
+                <span className="text-xs font-bold text-pencil font-sans min-w-[50px] pt-0.5">
+                  {formattedDate}
+                </span>
 
                 <div className="space-y-0.5 min-w-0">
-                  <div className="flex items-center gap-1.5 flex-wrap">
-                    <span className="text-xs font-bold text-pencil truncate font-sans">
-                      {entry.item}
-                    </span>
-                    <span
-                      className={`text-xs font-bold px-1.5 py-0.2 rounded-row border ${
-                        isPayment
-                          ? "bg-paid/10 text-paid border-paid/30"
-                          : "bg-paper text-pencil border-rule"
-                      }`}
-                    >
-                      {isPayment ? "Payment" : "Credit"}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center gap-2 text-xs text-muted font-sans">
-                    <span>{entry.page_date || "Notebook Page"}</span>
-                    {entry.quantity && entry.unit_price && (
+                  <p className="font-bold text-sm text-pencil truncate font-sans">
+                    {entry.item}
+                  </p>
+                  <p className="text-xs text-muted font-sans flex items-center gap-1">
+                    {entry.quantity && entry.unit_price ? (
                       <span>
-                        &bull; {entry.quantity} &times; ₱{Number(entry.unit_price).toFixed(2)}
+                        {entry.quantity} &times; ₱{Number(entry.unit_price).toFixed(2)}, {isPayment ? "payment" : "credit"}
                       </span>
+                    ) : (
+                      <span>{isPayment ? "Payment applied" : "Credit added"}</span>
                     )}
-                  </div>
+                  </p>
                 </div>
               </div>
 
-              {/* Right: Amount & Source Page link */}
-              <div className="text-right flex items-center gap-2 flex-shrink-0">
-                <div>
-                  <Amount
-                    amount={entry.amount}
-                    size="base"
-                    className={`font-bold ${isPayment ? "text-paid" : "text-pencil"}`}
-                  />
-                  <span className="block text-xs text-muted font-sans">
-                    {isPayment ? "- Payment" : "+ Credit"}
-                  </span>
-                </div>
-
+              {/* Right Column: Amount & Source Link */}
+              <div className="flex flex-col items-end justify-center text-right flex-shrink-0 gap-0.5">
+                <Amount
+                  amount={entry.amount}
+                  size="base"
+                  className={`font-black tabular-nums ${
+                    isPayment ? "text-paid" : "text-pencil"
+                  }`}
+                />
                 <Link
                   href={`/pages/${entry.page_id}/review`}
-                  title="View source notebook page"
-                  className="p-2 text-muted hover:text-ink rounded-row hover:bg-paper transition-colors"
+                  className="text-xs font-bold text-ink hover:underline inline-flex items-center gap-0.5 group/link"
                 >
-                  <ExternalLink className="w-3.5 h-3.5" />
+                  <span>View page</span>
+                  <ArrowRight className="w-3 h-3 transition-transform group-hover/link:translate-x-0.5" />
                 </Link>
               </div>
             </div>
           );
         })}
+      </div>
+
+      {/* Bottom Proof Bar: Balance */}
+      <div className="px-5 py-3.5 bg-[#F6F9EF]/80 border-t-2 border-rule flex items-center justify-between">
+        <span className="font-display font-bold text-sm sm:text-base text-pencil">
+          Balance
+        </span>
+        <Amount
+          amount={Math.abs(computedBalance)}
+          size="base"
+          className={`font-black tabular-nums ${
+            computedBalance > 0
+              ? "text-margin"
+              : computedBalance === 0
+              ? "text-paid"
+              : "text-ink"
+          }`}
+        />
       </div>
     </div>
   );
