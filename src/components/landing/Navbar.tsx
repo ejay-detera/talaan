@@ -114,7 +114,6 @@ export function Navbar({}: NavbarProps) {
             width={34}
             height={34}
             className="flex-shrink-0 object-contain transition-transform duration-200 group-hover:scale-105"
-            priority
           />
           <span className="font-display font-black text-base tracking-tight text-pencil hidden sm:inline">
             Talaan

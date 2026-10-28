@@ -26,7 +26,7 @@
   color: #23262B;            /* pencil dark text: 13.2:1 AAA contrast */
 }
 
-html {
+html[data-scroll-behavior="smooth"] {
   scroll-behavior: smooth;
 }
 

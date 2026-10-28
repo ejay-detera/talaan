@@ -46,6 +46,7 @@ export default function RootLayout({
   return (
     <html
       lang="tl"
+      data-scroll-behavior="smooth"
       className={`${bricolageGrotesque.variable} ${atkinsonHyperlegible.variable} ${caveat.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-paper text-pencil font-sans">

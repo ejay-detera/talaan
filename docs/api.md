@@ -33,8 +33,9 @@
 
 | ID | Method | Path | Role | Purpose | Status | Idempotent | Tests |
 |---|---|---|---|---|---|:---:|---|
-| **API-01** | `POST` | `/api/pages/extract` | `store_owner` | **Phase 1 (`Prepare`):** Upload notebook photo, run `sharp` prep, invoke vision model (`extract_rows` / `flag_unreadable`), run deterministic discrepancy check (`src/lib/ledger`), and stage unconfirmed rows | ⬜ Planned (`TAL-02`) | No (creates new `page`) | `T-001`, `T-002`, `T-003` |
-| **API-02** | `POST` | `/api/pages/[id]/confirm` | `store_owner` | **Phase 2 (`Confirm`):** Validate human-reviewed rows & customer links, re-verify centavo math in `src/lib/ledger`, and atomically commit `confirmed_by_user = true` & `pages.status = 'confirmed'` | ⬜ Planned (`TAL-05`) | **Yes** (by `page_id`) | `T-005` |
+| **API-01** | `POST` | `/api/pages/extract` | `store_owner` | **Phase 1 (`Prepare`):** Upload notebook photo, run `sharp` prep, invoke vision model (`extract_rows` / `flag_unreadable`), run deterministic discrepancy check (`src/lib/ledger`), and stage unconfirmed rows | ✅ Built (`TAL-02`, `TAL-05`) | No (creates new `page`) | `T-001`, `T-002`, `T-003` |
+| **API-02** | `POST` | `/api/pages/[id]/confirm` | `store_owner` | **Phase 2 (`Confirm`):** Validate human-reviewed rows & customer links, re-verify centavo math in `src/lib/ledger`, and atomically commit `confirmed_by_user = true` & `pages.status = 'confirmed'` via Postgres RPC | ✅ Built (`TAL-05`) | **Yes** (by `page_id`) | `T-005` |
+| **CRON-01** | `GET` | `/api/cron/cleanup-demo` | `vercel_cron` | **Scheduled Cleanup:** Delete expired anonymous demo users (>7 days) and remove associated Storage objects | ✅ Built (`TAL-05`) | **Yes** | `demo-cleanup.test.ts` |
 | **API-03** | `GET` | `/api/customers` & `/api/customers/[id]/balance` | `store_owner` | List store customers with deterministic *utang* balances (`sum(credit) - sum(payment)` from confirmed entries) and itemized history | ⬜ Planned (`TAL-06`) | Yes | `T-006` |
 | **API-04** | `POST` | `/api/reminders/draft` | `store_owner` | Generate a polite Taglish payment reminder draft (`friendly` / *Malumanay* or `firm` / *Pormal*) from confirmed unpaid entries using `src/lib/model.ts` (`draft_reminder`) | ⬜ Planned (`TAL-06`) | No (creates new draft) | `T-007` |
 

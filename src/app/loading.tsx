@@ -31,7 +31,6 @@ export default function Loading() {
               width={44}
               height={44}
               className="flex-shrink-0 object-contain"
-              priority
             />
             <div>
               <h2 className="font-display font-black text-xl text-pencil leading-tight">

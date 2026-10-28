@@ -25,13 +25,14 @@ flowchart TB
   subgraph app ["Talaan Web App (Next.js 16.4.3)"]
     S0["/login (anon)"]
     S1["/ (anon & store_owner)"]
+    S1b["/dashboard (store_owner)"]
     S2["/pages/[id]/review (store_owner)"]
     S3["/customers & /customers/[id] (store_owner)"]
   end
   S0 --> A1["✅ 1-Tap Demo Store Login & Email/Password Auth (TAL-01)"]
-  S1 --> B1["✅ English Landing Page: Paper Sovereign Showcase, Floating Contextual Widgets & 1-Tap Demo CTA (src/app/page.tsx)"]
-  S1 --> B2["⬜ Photo Upload & Recent Pages List (TAL-05)"]
-  S2 --> C1["⬜ Review Screen: Red Margin Gutter + Two-Ply Proof Bar (TAL-05)"]
+  S1 --> B1["✅ English Landing Page: Paper Sovereign Showcase & Direct CTA (src/app/page.tsx)"]
+  S1b --> B2["✅ /dashboard: Photo Upload & Recent Pages List (TAL-05)"]
+  S2 --> C1["✅ Review Screen: Red Margin Gutter + Two-Ply Proof Bar + Confirm API (TAL-05)"]
   S3 --> D1["⬜ Customer Utang Balances & History (TAL-06)"]
   S3 --> D2["⬜ Taglish Reminder Drawer: Friendly/Firm + Copy/Share (TAL-06)"]
 ```
@@ -100,7 +101,9 @@ Kept in lockstep with [`prd.md`](prd.md) §3:
 | 3. Structured Extraction (`credit`/`payment`/`cash_sale`, confidence, model badge) | Must | 🟡 partial | `src/lib/model.ts`, `src/lib/schemas.ts`, `src/app/api/pages/extract/route.ts` (`TAL-02`, `TAL-03`) | `npm run lint`, `npx tsc --noEmit` (Glimmer gate in `TAL-03`) |
 | 4. Unreadable Page Retake Request (`flag_unreadable`) | Must | ✅ | `src/app/api/pages/extract/route.ts`, `src/lib/schemas.ts` (`TAL-02`) | `npm run lint`, `npx tsc --noEmit` |
 | 5. Two-Level Deterministic Discrepancy Finder | Must | ✅ | `src/lib/ledger/math.ts` (`TAL-04`) | `npm test` (`T-003`, `T-004`) |
-| 6. Review Screen (Red Margin Gutter, Two-Ply Proof Bar, Customer Auto-Match) | Must | ⬜ planned | `src/app/pages/[id]/review/page.tsx`, `src/app/api/pages/[id]/confirm/route.ts` (`TAL-05`) | `T-005` |
+| 6. Review Screen (Red Margin Gutter, Two-Ply Proof Bar, Confirm API) | Must | ✅ | `src/app/pages/[id]/review/page.tsx`, `src/app/api/pages/[id]/confirm/route.ts` (`TAL-05`) | `npm test` (`T-005`), `npx tsc --noEmit` |
+| 6b. Upload Dashboard & Pill Scan Button (`/dashboard`) | Must | ✅ | `src/app/dashboard/page.tsx`, `src/components/dashboard/` (`TAL-05`) | `npm run lint`, `npx tsc --noEmit` |
+| 6c. Daily Demo Data & Storage Cleanup (`/api/cron/cleanup-demo`) | Should | ✅ | `src/app/api/cron/cleanup-demo/route.ts`, `vercel.json` | `npm test` |
 | 7. Customer Balances Ledger (`sum(credit) - sum(payment)`) | Must | 🟡 partial | `src/lib/ledger/match.ts` (`TAL-04`, `TAL-06`) | `npm test` (`T-006`) |
 | 8. Taglish Reminder Drafts (Tone Selector + Copy & Web Share / `sms:`) | Must | ⬜ planned | `src/app/customers/[id]/page.tsx`, `src/app/api/reminders/draft/route.ts` (`TAL-06`) | `T-007` |
 | 9. 30+ Page Muse Glimmer Evaluation Harness | Must | ⬜ planned | `scripts/eval-glimmer.ts`, `eval/` (`TAL-03`, `TAL-07`) | `T-008` |

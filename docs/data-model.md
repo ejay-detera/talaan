@@ -150,7 +150,7 @@ stateDiagram-v2
 |---|---|---|---|---|
 | `pages.status` | `'processing'` | `'retake_requested'` | `flag_unreadable` tool called by model | `POST /api/pages/extract` |
 | `pages.status` | `'processing'` | `'needs_review'` | Zod validation + `src/lib/ledger` check succeed | `POST /api/pages/extract` |
-| `pages.status` | `'needs_review'` | `'confirmed'` | Owner submits reviewed rows (`confirmed_by_user = true`) and all `credit`/`payment` rows have a `customer_id` | `POST /api/pages/[id]/confirm` + DB transaction |
+| `pages.status` | `'needs_review'` | `'confirmed'` | Owner submits reviewed rows (`confirmed_by_user = true`) and all `credit`/`payment` rows have a `customer_id` | `POST /api/pages/[id]/confirm` + `confirm_page` Postgres RPC (`ADR-0003`) |
 
 ---
 

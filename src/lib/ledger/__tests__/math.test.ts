@@ -82,4 +82,19 @@ describe("T-004: Page Totals and Discrepancy Detection", () => {
     expect(result.hasPageDiscrepancy).toBe(false);
     expect(result.discrepancyDiff).toBe(0);
   });
+
+  it("accurately subtracts payment (bayad) rows from net page total", () => {
+    // Matches sample notebook: 36 (credit) + 40 (credit) - 50 (payment) + 45 (credit) = 71
+    const rows = [
+      { amount: 36.0, entry_type: "credit" as const },
+      { amount: 40.0, entry_type: "credit" as const },
+      { amount: 50.0, entry_type: "payment" as const },
+      { amount: 45.0, entry_type: "credit" as const },
+    ];
+
+    const result = computePageTotals(rows, 71.0);
+    expect(result.computedTotal).toBe(71.0);
+    expect(result.hasPageDiscrepancy).toBe(false);
+    expect(result.discrepancyDiff).toBe(0);
+  });
 });

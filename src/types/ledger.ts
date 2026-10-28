@@ -27,6 +27,7 @@ export interface RetakeRequestData {
 
 export type ExtractionResponse =
   | {
+      page_id?: string;
       status: "needs_review";
       page_date?: string;
       written_total?: number;
@@ -38,9 +39,38 @@ export type ExtractionResponse =
       latency_ms: number;
     }
   | {
+      page_id?: string;
       status: "retake_requested";
       region?: string;
       reason: string;
       model: string;
       latency_ms: number;
     };
+
+export interface ReviewEntry {
+  id?: string;
+  customer_id?: string | null;
+  extracted_customer_name?: string | null;
+  customer_name: string;
+  item: string;
+  quantity?: number | null;
+  unit_price?: number | null;
+  amount: number;
+  entry_type: EntryType;
+  confidence: number;
+  needs_review: boolean;
+  line_discrepancy: boolean;
+  accept_written?: boolean;
+}
+
+export interface ConfirmEntryInput {
+  id?: string | null;
+  customer_id?: string | null;
+  new_customer_name?: string | null;
+  item: string;
+  quantity?: number | null;
+  unit_price?: number | null;
+  amount: number;
+  entry_type: EntryType;
+  accept_written?: boolean;
+}

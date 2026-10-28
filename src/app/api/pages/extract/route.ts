@@ -4,6 +4,8 @@ import { normalizeNotebookImage } from "@/lib/image";
 import { PageExtractionSchema, RetakeRequestSchema } from "@/lib/schemas";
 import { EXTRACTION_SYSTEM_PROMPT, EXTRACTION_TOOLS } from "@/lib/prompts/extraction";
 import { checkRowDiscrepancy, computePageTotals } from "@/lib/ledger/math";
+import { createClient } from "@/lib/supabase/server";
+import { persistExtraction } from "@/services/pages";
 import type { ExtractedRow, ExtractionResponse } from "@/types/ledger";
 
 export const maxDuration = 60; // Allow sufficient time for vision inference
@@ -12,6 +14,31 @@ export async function POST(request: NextRequest) {
   const startTime = Date.now();
 
   try {
+    // 1. Authenticate caller and obtain store under Postgres RLS
+    const supabase = await createClient();
+    const { data: authData } = await supabase.auth.getUser();
+
+    if (!authData?.user) {
+      return NextResponse.json(
+        { error: { code: "UNAUTHORIZED", message: "Kailangan mag-sign in para mag-upload ng notebook page." } },
+        { status: 401 }
+      );
+    }
+
+    const { data: store } = await supabase
+      .from("stores")
+      .select("id")
+      .eq("owner_id", authData.user.id)
+      .maybeSingle();
+
+    if (!store) {
+      return NextResponse.json(
+        { error: { code: "STORE_NOT_FOUND", message: "Walang nahanap na tindahan para sa user na ito." } },
+        { status: 404 }
+      );
+    }
+
+    // 2. Validate uploaded file at trust boundary
     const formData = await request.formData();
     const file = formData.get("file") as File | null;
 
@@ -22,16 +49,30 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 1. Pre-process image with sharp
+    if (!file.type.startsWith("image/")) {
+      return NextResponse.json(
+        { error: { code: "BAD_REQUEST", message: "Larawan (image file) lamang ang maaaring i-upload." } },
+        { status: 400 }
+      );
+    }
+
+    if (file.size > 10 * 1024 * 1024) {
+      return NextResponse.json(
+        { error: { code: "BAD_REQUEST", message: "Masyadong malaki ang larawan. Hanggang 10 MB lamang." } },
+        { status: 400 }
+      );
+    }
+
+    // 3. Pre-process image with sharp
     const inputBuffer = Buffer.from(await file.arrayBuffer());
     const normalized = await normalizeNotebookImage(inputBuffer);
     const base64Data = normalized.buffer.toString("base64");
     const dataUrl = `data:${normalized.mimeType};base64,${base64Data}`;
 
-    // 2. Obtain model client
+    // 4. Obtain model client
     const { client, model } = getModelClient();
 
-    // 3. Invoke multimodal vision tool completion
+    // 5. Invoke multimodal vision tool completion
     const response = await client.chat.completions.create({
       model,
       messages: [
@@ -74,13 +115,23 @@ export async function POST(request: NextRequest) {
           model,
           latency_ms,
         };
+
+        const pageId = await persistExtraction(
+          supabase,
+          store.id,
+          result,
+          normalized.buffer,
+          normalized.mimeType
+        );
+        result.page_id = pageId;
+
         return NextResponse.json(result);
       }
 
       if (toolName === "extract_rows") {
         const parsed = PageExtractionSchema.parse(rawArgs);
 
-        // 4. Run deterministic ledger arithmetic in TypeScript
+        // Run deterministic ledger arithmetic in TypeScript
         const processedRows: ExtractedRow[] = parsed.rows.map((row) => {
           const line_discrepancy = checkRowDiscrepancy(row.quantity, row.unit_price, row.amount);
           const needs_review = row.confidence < 0.8 || line_discrepancy;
@@ -112,6 +163,15 @@ export async function POST(request: NextRequest) {
           latency_ms,
         };
 
+        const pageId = await persistExtraction(
+          supabase,
+          store.id,
+          result,
+          normalized.buffer,
+          normalized.mimeType
+        );
+        result.page_id = pageId;
+
         return NextResponse.json(result);
       }
     }
@@ -136,7 +196,7 @@ export async function POST(request: NextRequest) {
 
           const totals = computePageTotals(processedRows, parsed.written_total);
 
-          return NextResponse.json({
+          const result: ExtractionResponse = {
             status: "needs_review",
             page_date: parsed.page_date,
             written_total: parsed.written_total,
@@ -146,7 +206,18 @@ export async function POST(request: NextRequest) {
             rows: processedRows,
             model,
             latency_ms,
-          });
+          };
+
+          const pageId = await persistExtraction(
+            supabase,
+            store.id,
+            result,
+            normalized.buffer,
+            normalized.mimeType
+          );
+          result.page_id = pageId;
+
+          return NextResponse.json(result);
         }
       } catch {
         // Fall through to error

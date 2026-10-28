@@ -45,7 +45,11 @@ export function computePageTotals(
 ): PageTotalComputation {
   let computedCentavos = 0;
   for (const row of rows) {
-    computedCentavos += toCentavos(row.amount);
+    if (row.entry_type === "payment") {
+      computedCentavos -= toCentavos(row.amount);
+    } else {
+      computedCentavos += toCentavos(row.amount);
+    }
   }
 
   const computedTotal = toPesos(computedCentavos);

@@ -1,9 +1,7 @@
 import { Suspense } from "react";
-import { cookies } from "next/headers";
 import Image from "next/image";
-import { createClient } from "@/lib/supabase/server";
 import { Navbar } from "@/components/landing/Navbar";
-import { DemoCtaBar } from "@/components/landing/DemoCtaBar";
+import { LandingCta } from "@/components/landing/LandingCta";
 import { PaperMockupShowcase } from "@/components/landing/PaperMockupShowcase";
 import {
   PinnedStickyNote,
@@ -14,27 +12,6 @@ import {
 import { FeaturesSection } from "@/components/landing/FeaturesSection";
 import ShapeGrid from "@/components/shared/ShapeGrid";
 import { InitialLoader } from "@/components/shared/InitialLoader";
-
-async function DemoCtaSection() {
-  const cookieStore = await cookies();
-  const demoCookie = cookieStore.get("talaan_demo_user");
-
-  let isDemoActive = Boolean(demoCookie?.value);
-  let storeName = "Aling Nena's Sari-Sari Store";
-
-  try {
-    const supabase = await createClient();
-    const { data } = await supabase.auth.getUser();
-    if (data?.user) {
-      isDemoActive = true;
-      storeName = data.user.user_metadata?.full_name || storeName;
-    }
-  } catch {
-    // Fall back to cookie state if offline or unconfigured
-  }
-
-  return <DemoCtaBar isDemoActive={isDemoActive} storeName={storeName} />;
-}
 
 export default function HomePage() {
   return (
@@ -78,10 +55,10 @@ export default function HomePage() {
             </p>
           </div>
 
-          {/* Action Zone: Interactive Demo and Sign In */}
+          {/* Action Zone: Sign In or Open App */}
           <div className="max-w-md mx-auto pt-2">
-            <Suspense fallback={<DemoCtaBar isDemoActive={false} />}>
-              <DemoCtaSection />
+            <Suspense fallback={<div className="h-[56px] w-full min-w-[240px] rounded-row bg-sheet/40 animate-pulse" />}>
+              <LandingCta />
             </Suspense>
           </div>
         </section>

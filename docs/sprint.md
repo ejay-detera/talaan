@@ -129,7 +129,7 @@
 |---|---|
 | Priority | P1 |
 | Points | 5 |
-| Status | 🟡 Partial |
+| Status | ✅ Done |
 | Developer | Dev Ejay |
 | Traces | BR-04 · US-04 · tests T-000, T-004, T-005 |
 
@@ -137,10 +137,10 @@
 
 **Acceptance criteria:**
 - [x] Apply [`docs/design.md`](design.md) High-Contrast Daylight tokens (`#F2F5EC`, `#FFFFFF`, `#1E3FAE`, `#C8302F`, `#FFE14D`, `tabular-nums`) in `src/app/globals.css`.
-- [x] Build Landing Page (`src/app/page.tsx`, `src/components/landing/*`) showing active **Model Provenance Badge** (`Muse Glimmer 30B` vs. `Gemini Dev`), `.notebook`-to-ledger visual proof, and 1-tap Demo Store CTA.
-- [ ] Build Upload Dashboard showing recent notebook pages list and image capture trigger.
-- [ ] Build `/pages/[id]/review` with cropped notebook strip, `RedMarginGutter` (`✓`, `▲ Needs Review`, `✕ Math Mismatch`), inline row editor, 1-tap customer match/create dropdown, and sticky `TwoPlyProofBar` (`Written Total` vs. `Computed Total`).
-- [ ] Implement `POST /api/pages/[id]/confirm` (`API-02`) with idempotency guard (`409 ALREADY_CONFIRMED`), centavo re-verification, and atomic commit (`confirmed_by_user = true`, `pages.status = 'confirmed'`).
+- [x] Build Landing Page (`src/app/page.tsx`, `src/components/landing/*`) showing active **Model Provenance Badge** (`Muse Glimmer 30B` vs. `Gemini Dev`), `.notebook`-to-ledger visual proof, and single direct CTA to `/login` or `/dashboard`.
+- [x] Build Upload Dashboard showing recent notebook pages list and image capture trigger (`src/app/dashboard/page.tsx`, `src/components/dashboard/*`).
+- [x] Build `/pages/[id]/review` with collapsible notebook strip, `RedMarginGutter` (`✓`, `▲ Needs Review`, `✕ Math Mismatch`), inline row editor, 1-tap customer match/create dropdown, and sticky `TwoPlyProofBar` (`Written Total` vs. `Computed Total`).
+- [x] Implement `POST /api/pages/[id]/confirm` (`API-02`) with idempotency guard (`409 ALREADY_CONFIRMED`), centavo re-verification, and atomic commit (`confirmed_by_user = true`, `pages.status = 'confirmed'`).
 
 ---
 
@@ -247,6 +247,7 @@
 | 2026-10-27 | Created 3-sprint hackathon backlog (`TAL-01` to `TAL-08`) from Project Brief v1 (`S-01`) and locked `/grill-me` decisions. | Initial project planning | `TAL-01`–`TAL-08` |
 | 2026-10-27 | Implemented Landing Page (`src/app/page.tsx`, `src/components/landing/*`, `src/lib/ledger/sample-proof.ts`) and aligned design system tokens. | Story delivery (`TAL-05`) | `TAL-05` |
 | 2026-10-27 | Redesigned Landing Page in English with Paper Sovereign Showcase, floating contextual widgets (sticky memo, credit balances, Taglish reminder, deterministic shield), living paper keyframe animations, and shadcn UI primitives (`button`, `card`, `badge`, `cn`). | Design craft upgrade (`TAL-05`, `impeccable`) | `TAL-05` |
+| 2026-10-28 | Delivered full TAL-05: Phase 0 anonymous demo auth (`POST /api/auth/demo`), daily demo cleanup cron (`GET /api/cron/cleanup-demo`), extraction persistence (`src/services/pages.ts`), atomic confirm API (`API-02`) via Postgres RPC (`confirm_page`), Review UI (`/pages/[id]/review`), and Upload Dashboard (`/dashboard`). Verified with 47 passing tests (`T-005`). | Story delivery (`TAL-05`) | `TAL-05`, `TAL-01` |
 
 
 ---

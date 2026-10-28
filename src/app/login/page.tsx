@@ -44,7 +44,7 @@ export default function LoginPage() {
       if (error) {
         setErrorMessage(error.message);
       } else {
-        router.push("/");
+        router.push("/dashboard");
         router.refresh();
       }
     } catch {
@@ -65,7 +65,7 @@ export default function LoginPage() {
       if (!res.ok) {
         setErrorMessage(data.error || "Could not launch demo store.");
       } else {
-        router.push("/");
+        router.push("/dashboard");
         router.refresh();
       }
     } catch {

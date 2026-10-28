@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { createAdminClient } from "@/lib/supabase/admin";
 
 export async function POST() {
   const isSupabaseConfigured =
@@ -24,59 +23,66 @@ export async function POST() {
 
   try {
     const supabase = await createClient();
-    const admin = createAdminClient();
-    const demoEmail = "demo@talaan.ph";
-    const demoPassword = "DemoStorePassword2026!";
 
-    // 1. Try signing in with demo credentials
-    const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
-      email: demoEmail,
-      password: demoPassword,
-    });
+    // 1. Check if caller already has an active session
+    let currentUser = (await supabase.auth.getUser()).data?.user ?? null;
 
-    if (!signInError && signInData?.user) {
-      return NextResponse.json({ success: true, user: signInData.user });
+    // 2. If not signed in, create a dedicated anonymous user session
+    if (!currentUser) {
+      const { data: anonData, error: anonError } = await supabase.auth.signInAnonymously({
+        options: { data: { full_name: "Aling Nena" } },
+      });
+
+      if (anonError || !anonData?.user) {
+        return NextResponse.json(
+          { error: anonError?.message || "Failed to sign in anonymously" },
+          { status: 500 }
+        );
+      }
+
+      currentUser = anonData.user;
     }
 
-    // 2. If user doesn't exist, create demo user via admin client
-    const { data: newUser, error: createError } = await admin.auth.admin.createUser({
-      email: demoEmail,
-      password: demoPassword,
-      email_confirm: true,
-      user_metadata: { full_name: "Aling Nena" },
-    });
+    const userId = currentUser.id;
 
-    if (createError || !newUser?.user) {
-      return NextResponse.json(
-        { error: createError?.message || "Failed to create demo user" },
-        { status: 500 }
-      );
-    }
-
-    const userId = newUser.user.id;
-
-    // 3. Seed demo store and customers
-    const { data: store } = await admin
+    // 3. Ensure store exists under the visitor's isolated tenant
+    const { data: existingStore } = await supabase
       .from("stores")
-      .insert({ owner_id: userId, name: "Aling Nena's Sari-Sari Store" })
-      .select()
-      .single();
+      .select("id, name")
+      .eq("owner_id", userId)
+      .maybeSingle();
 
-    if (store) {
-      await admin.from("customers").insert([
-        { store_id: store.id, name: "Mang Jose", normalized_name: "mang jose", phone_optional: "09171234567" },
-        { store_id: store.id, name: "Kuya Jun", normalized_name: "kuya jun", phone_optional: "09187654321" },
-        { store_id: store.id, name: "Nanay Cora", normalized_name: "nanay cora", phone_optional: null },
+    if (!existingStore) {
+      const { data: newStore, error: storeError } = await supabase
+        .from("stores")
+        .insert({ owner_id: userId, name: "Aling Nena's Sari-Sari Store" })
+        .select("id, name")
+        .single();
+
+      if (storeError || !newStore) {
+        return NextResponse.json(
+          { error: storeError?.message || "Failed to seed demo store" },
+          { status: 500 }
+        );
+      }
+
+      // Seed standard demo customers (including Ate Baby for landing proof parity)
+      const { error: customerError } = await supabase.from("customers").insert([
+        { store_id: newStore.id, name: "Mang Jose", normalized_name: "mang jose", phone_optional: "09171234567" },
+        { store_id: newStore.id, name: "Kuya Jun", normalized_name: "kuya jun", phone_optional: "09187654321" },
+        { store_id: newStore.id, name: "Nanay Cora", normalized_name: "nanay cora", phone_optional: null },
+        { store_id: newStore.id, name: "Ate Baby", normalized_name: "ate baby", phone_optional: "09223334444" },
       ]);
+
+      if (customerError) {
+        return NextResponse.json(
+          { error: customerError.message || "Failed to seed demo customers" },
+          { status: 500 }
+        );
+      }
     }
 
-    // 4. Authenticate session with newly created user
-    const finalAuth = await supabase.auth.signInWithPassword({
-      email: demoEmail,
-      password: demoPassword,
-    });
-
-    return NextResponse.json({ success: true, user: finalAuth.data.user });
+    return NextResponse.json({ success: true, user: currentUser });
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : "Failed to sign into demo store";
     return NextResponse.json({ error: msg }, { status: 500 });
