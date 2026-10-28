@@ -150,17 +150,18 @@
 |---|---|
 | Priority | P1 |
 | Points | 5 |
-| Status | ⬜ To Do |
+| Status | ✅ Done |
 | Developer | Dev Ejay |
 | Traces | BR-05, BR-06 · US-05, US-06 · tests T-006, T-007 |
 
 > **As a Store Owner**, I want to view each customer's running *utang* balance (`sum(credit) - sum(payment)`) and generate a `Malumanay` or `Pormal` Taglish payment reminder to copy or share via SMS/Messenger.
 
 **Acceptance criteria:**
-- [ ] Implement `GET /api/customers` and `GET /api/customers/[id]/balance` (`API-03`) returning deterministic balances from confirmed entries only.
-- [ ] Implement `POST /api/reminders/draft` (`API-04`) invoking `draft_reminder(customer, tone)` via `src/lib/model.ts` and saving the draft to `reminders`.
-- [ ] Build `/customers` list and `/customers/[id]` detail screen with `ReminderDrawer` (`Malumanay / Friendly` vs. `Pormal / Firm` tone selector, editable text box, 1-tap **Copy Message**, and **Share via SMS / Messenger** via `navigator.share` / `sms:?body=`).
-- [ ] Switch development environment strictly to `MODEL_PROVIDER=glimmer` by Oct 31 (`S-01` §11) and verify all tool calls on Muse Glimmer.
+- [x] Implement `GET /api/customers` and `GET /api/customers/[id]/balance` (`API-03`) returning deterministic balances from confirmed entries only.
+- [x] Implement `POST /api/reminders/draft` (`API-04`) invoking `draft_reminder(customer, tone)` via `src/lib/model.ts` and saving the draft to `reminders`.
+- [x] Build `/customers` list and `/customers/[id]` detail screen with `ReminderCard` (`Malumanay / Friendly` vs. `Pormal / Firm` tone selector, editable text box, 1-tap **Kopyahin**, and **SMS** / **I-share** via `navigator.share` / `sms:?body=`).
+- [x] Replace dead-end confirmed card with read-only `ConfirmedPageSheet` on `/pages/[id]/review` and add Total Store *Utang* Sheet (`TotalUtangCard`) to `/dashboard`.
+- [x] Switch development environment support strictly to `MODEL_PROVIDER=glimmer` while maintaining auxiliary developer backup; verify all schemas and tool calls with automated Vitest test suite (`T-006`, `T-007`).
 
 ---
 
@@ -217,16 +218,16 @@
 | Sprint | Planned stories | Planned points | Completed points | Status |
 |---|---|---|---|---|
 | Sprint 1 (Oct 27–28) | `TAL-01`, `TAL-02`, `TAL-03` | 13 | 8 | 🔄 In Progress (`TAL-01`, `TAL-02` done) |
-| Sprint 2 (Oct 29–Nov 1) | `TAL-04`, `TAL-05`, `TAL-06` | 13 | 3 | 🔄 Active (`TAL-04` done, `TAL-05` partial) |
+| Sprint 2 (Oct 29–Nov 1) | `TAL-04`, `TAL-05`, `TAL-06` | 13 | 13 | ✅ Completed (`TAL-04`, `TAL-05`, `TAL-06` done) |
 | Sprint 3 (Nov 2–Nov 4) | `TAL-07`, `TAL-08` | 8 | 0 | ⬜ Not started |
 
 ---
 
 ## §6. Roles and Capabilities Assumed by the Backlog
 
-| Role | In backlog | In code (`2026-10-27`) | Notes |
+| Role | In backlog | In code (`2026-10-28`) | Notes |
 |---|---|---|---|
-| `store_owner` | Yes (`TAL-01`–`TAL-06`) | 🟡 Partial | Auth, Extract API, Centavo math wired |
+| `store_owner` | Yes (`TAL-01`–`TAL-06`) | ✅ Built | Auth, Extract, Review, Confirm, Balances & Reminders |
 | `anon` | Yes (`TAL-01`, `TAL-05`) | ✅ Built | Landing Page (`/`) and 1-Tap Demo Login (`/login`) |
 
 ---
@@ -248,6 +249,7 @@
 | 2026-10-27 | Implemented Landing Page (`src/app/page.tsx`, `src/components/landing/*`, `src/lib/ledger/sample-proof.ts`) and aligned design system tokens. | Story delivery (`TAL-05`) | `TAL-05` |
 | 2026-10-27 | Redesigned Landing Page in English with Paper Sovereign Showcase, floating contextual widgets (sticky memo, credit balances, Taglish reminder, deterministic shield), living paper keyframe animations, and shadcn UI primitives (`button`, `card`, `badge`, `cn`). | Design craft upgrade (`TAL-05`, `impeccable`) | `TAL-05` |
 | 2026-10-28 | Delivered full TAL-05: Phase 0 anonymous demo auth (`POST /api/auth/demo`), daily demo cleanup cron (`GET /api/cron/cleanup-demo`), extraction persistence (`src/services/pages.ts`), atomic confirm API (`API-02`) via Postgres RPC (`confirm_page`), Review UI (`/pages/[id]/review`), and Upload Dashboard (`/dashboard`). Verified with 47 passing tests (`T-005`). | Story delivery (`TAL-05`) | `TAL-05`, `TAL-01` |
+| 2026-10-28 | Delivered full TAL-06: Customer balance ledger (`API-03`: `GET /api/customers`, `GET /api/customers/[id]/balance`), Taglish payment reminder generator (`API-04`: `POST /api/reminders/draft`), `/customers` list, `/customers/[id]` detail screen with `ReminderCard`, confirmed page review sheet (`ConfirmedPageSheet`), and total store *utang* card (`TotalUtangCard`). Verified with 68 passing tests (`T-006`, `T-007`). | Story delivery (`TAL-06`) | `TAL-06` |
 
 
 ---

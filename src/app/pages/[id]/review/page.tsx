@@ -1,10 +1,11 @@
 import { connection } from "next/server";
 import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, CheckCircle2 } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { getReviewPage } from "@/services/pages";
 import { ReviewSheet } from "@/components/review/ReviewSheet";
+import { ConfirmedPageSheet } from "@/components/review/ConfirmedPageSheet";
 
 interface ReviewPageProps {
   params: Promise<{ id: string }>;
@@ -62,26 +63,18 @@ export default async function ReviewPage({ params }: ReviewPageProps) {
       {/* Main Container */}
       <main className="max-w-2xl mx-auto px-4 pt-4">
         {isAlreadyConfirmed ? (
-          <div className="p-6 rounded-sheet border border-paid/40 bg-sheet shadow-paper text-center space-y-3">
-            <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-paid/10 text-paid mx-auto">
-              <CheckCircle2 className="w-6 h-6" />
-            </div>
-            <h2 className="font-display font-bold text-lg text-pencil">
-              Kumpirmado na ang Pahinang Ito
-            </h2>
-            <p className="text-xs text-muted max-w-sm mx-auto leading-relaxed">
-              Naitala na ang mga entry sa ledger na may kabuuang halaga na{" "}
-              <strong className="text-pencil font-bold">₱{Number(page.computed_total).toFixed(2)}</strong>.
-            </p>
-            <div className="pt-2">
-              <Link
-                href="/dashboard"
-                className="inline-flex items-center justify-center px-4 py-2 text-xs font-bold rounded-row bg-ink text-sheet hover:bg-ink/90"
-              >
-                Bumalik sa Dashboard
-              </Link>
-            </div>
-          </div>
+          <ConfirmedPageSheet
+            page={{
+              id: page.id,
+              page_date: page.page_date,
+              written_total: page.written_total !== null ? Number(page.written_total) : null,
+              computed_total: Number(page.computed_total),
+              has_page_discrepancy: page.has_page_discrepancy,
+              model: page.model,
+            }}
+            entries={entries}
+            imageUrl={imageUrl}
+          />
         ) : (
           <ReviewSheet
             page={{

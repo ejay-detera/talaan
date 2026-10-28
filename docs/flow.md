@@ -33,8 +33,8 @@ flowchart TB
   S1 --> B1["✅ English Landing Page: Paper Sovereign Showcase & Direct CTA (src/app/page.tsx)"]
   S1b --> B2["✅ /dashboard: Photo Upload & Recent Pages List (TAL-05)"]
   S2 --> C1["✅ Review Screen: Red Margin Gutter + Two-Ply Proof Bar + Confirm API (TAL-05)"]
-  S3 --> D1["⬜ Customer Utang Balances & History (TAL-06)"]
-  S3 --> D2["⬜ Taglish Reminder Drawer: Friendly/Firm + Copy/Share (TAL-06)"]
+  S3 --> D1["✅ Customer Utang Balances & History (TAL-06)"]
+  S3 --> D2["✅ Taglish Reminder Card: Friendly/Firm + Copy/Share (TAL-06)"]
 ```
 
 ---
@@ -47,17 +47,17 @@ flowchart LR
     A1["✅ 1-Tap Demo Login (/login)"]
   end
   subgraph B ["B — Prepare (Extract & Check)"]
-    B1["⬜ Upload Photo + sharp prep"]
-    B2["⬜ Glimmer extract_rows / flag_unreadable"]
-    B3["⬜ src/lib/ledger centavo discrepancy check"]
+    B1["✅ Upload Photo + sharp prep"]
+    B2["🟡 Glimmer / Gemini extract_rows / flag_unreadable"]
+    B3["✅ src/lib/ledger centavo discrepancy check"]
   end
   subgraph C ["C — Confirm (Human Review)"]
-    C1["⬜ Review Red Margin Gutter & Proof Bar"]
-    C2["⬜ Match/Create Customers & Confirm Page"]
+    C1["✅ Review Red Margin Gutter & Proof Bar"]
+    C2["✅ Match/Create Customers & Confirm Page"]
   end
   subgraph D ["D — Act (Balances & Reminders)"]
-    D1["⬜ View Customer Utang Balances"]
-    D2["⬜ Draft & Share Taglish Reminder"]
+    D1["✅ View Customer Utang Balances"]
+    D2["✅ Draft & Share Taglish Reminder"]
   end
   A1 --> B1 --> B2 --> B3 --> C1 --> C2 --> D1 --> D2
 ```
@@ -104,8 +104,8 @@ Kept in lockstep with [`prd.md`](prd.md) §3:
 | 6. Review Screen (Red Margin Gutter, Two-Ply Proof Bar, Confirm API) | Must | ✅ | `src/app/pages/[id]/review/page.tsx`, `src/app/api/pages/[id]/confirm/route.ts` (`TAL-05`) | `npm test` (`T-005`), `npx tsc --noEmit` |
 | 6b. Upload Dashboard & Pill Scan Button (`/dashboard`) | Must | ✅ | `src/app/dashboard/page.tsx`, `src/components/dashboard/` (`TAL-05`) | `npm run lint`, `npx tsc --noEmit` |
 | 6c. Daily Demo Data & Storage Cleanup (`/api/cron/cleanup-demo`) | Should | ✅ | `src/app/api/cron/cleanup-demo/route.ts`, `vercel.json` | `npm test` |
-| 7. Customer Balances Ledger (`sum(credit) - sum(payment)`) | Must | 🟡 partial | `src/lib/ledger/match.ts` (`TAL-04`, `TAL-06`) | `npm test` (`T-006`) |
-| 8. Taglish Reminder Drafts (Tone Selector + Copy & Web Share / `sms:`) | Must | ⬜ planned | `src/app/customers/[id]/page.tsx`, `src/app/api/reminders/draft/route.ts` (`TAL-06`) | `T-007` |
+| 7. Customer Balances Ledger (`sum(credit) - sum(payment)`) | Must | ✅ | `src/services/customers.ts`, `src/app/customers/`, `src/app/api/customers/` (`TAL-06`) | `npm test` (`T-006`) |
+| 8. Taglish Reminder Drafts (Tone Selector + Copy & Web Share / `sms:`) | Must | ✅ | `src/app/customers/[id]/page.tsx`, `src/components/customers/ReminderCard.tsx`, `src/app/api/reminders/draft/route.ts` (`TAL-06`) | `npm test` (`T-007`) |
 | 9. 30+ Page Muse Glimmer Evaluation Harness | Must | ⬜ planned | `scripts/eval-glimmer.ts`, `eval/` (`TAL-03`, `TAL-07`) | `T-008` |
 | 10–13. Stretch Features (Restock, Weekly Summary, Multi-Page, Shelf Count, CSV) | Could | ⬜ roadmap | Deferred until MVP + Day 3 Gate pass | — |
 | 14–17. Voice input, Auto-SMS sending, Payments/POS, Credit scoring, Native app | Won't | ❌ out of scope | Excluded by `S-01` §3, §8 | — |

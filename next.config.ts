@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  /* config options here - reloaded */
   cacheComponents: true,
   partialPrefetching: true,
   turbopack: {

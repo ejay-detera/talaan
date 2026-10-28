@@ -88,8 +88,20 @@ export const ConfirmPageSchema = z.object({
   entries: z.array(ConfirmEntryInputSchema).min(1, "At least one entry is required"),
 });
 
+export const DraftReminderRequestSchema = z.object({
+  customer_id: z.string().trim().min(1, "Customer ID is required"),
+  tone: z.enum(["friendly", "firm"]).default("friendly"),
+});
+
+export const ReminderDraftSchema = z.object({
+  message: z.string().trim().min(1, "Message cannot be empty"),
+  tone: z.enum(["friendly", "firm"]).default("friendly"),
+});
+
 export type ExtractedRowRaw = z.infer<typeof ExtractedRowRawSchema>;
 export type PageExtractionParsed = z.infer<typeof PageExtractionSchema>;
 export type RetakeRequestParsed = z.infer<typeof RetakeRequestSchema>;
 export type ConfirmEntryInputParsed = z.infer<typeof ConfirmEntryInputSchema>;
 export type ConfirmPageParsed = z.infer<typeof ConfirmPageSchema>;
+export type DraftReminderRequestParsed = z.infer<typeof DraftReminderRequestSchema>;
+export type ReminderDraftParsed = z.infer<typeof ReminderDraftSchema>;

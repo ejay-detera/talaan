@@ -4,6 +4,7 @@ import {
   toPesos,
   checkRowDiscrepancy,
   computePageTotals,
+  computeCustomerBalance,
 } from "../math";
 
 describe("T-003: Integer-Centavo Math & Row Discrepancy", () => {
@@ -96,5 +97,70 @@ describe("T-004: Page Totals and Discrepancy Detection", () => {
     expect(result.computedTotal).toBe(71.0);
     expect(result.hasPageDiscrepancy).toBe(false);
     expect(result.discrepancyDiff).toBe(0);
+  });
+});
+
+describe("T-006: Customer Balance Computation", () => {
+  it("computes sum(credit) - sum(payment) for confirmed entries", () => {
+    const entries = [
+      { amount: 100.0, entry_type: "credit", confirmed_by_user: true },
+      { amount: 50.0, entry_type: "credit", confirmed_by_user: true },
+      { amount: 30.0, entry_type: "payment", confirmed_by_user: true },
+    ];
+
+    const result = computeCustomerBalance(entries);
+    expect(result.balance).toBe(120.0);
+    expect(result.totalCredit).toBe(150.0);
+    expect(result.totalPayment).toBe(30.0);
+  });
+
+  it("ignores unconfirmed entries (confirmed_by_user = false)", () => {
+    const entries = [
+      { amount: 200.0, entry_type: "credit", confirmed_by_user: true },
+      { amount: 500.0, entry_type: "credit", confirmed_by_user: false }, // staged, must be ignored
+      { amount: 50.0, entry_type: "payment", confirmed_by_user: false },  // staged, must be ignored
+    ];
+
+    const result = computeCustomerBalance(entries);
+    expect(result.balance).toBe(200.0);
+    expect(result.totalCredit).toBe(200.0);
+    expect(result.totalPayment).toBe(0);
+  });
+
+  it("ignores cash_sale entries completely", () => {
+    const entries = [
+      { amount: 80.0, entry_type: "credit", confirmed_by_user: true },
+      { amount: 150.0, entry_type: "cash_sale", confirmed_by_user: true },
+    ];
+
+    const result = computeCustomerBalance(entries);
+    expect(result.balance).toBe(80.0);
+    expect(result.totalCredit).toBe(80.0);
+    expect(result.totalPayment).toBe(0);
+  });
+
+  it("handles float drift and negative/zero balances correctly", () => {
+    const entries = [
+      { amount: 0.1, entry_type: "credit", confirmed_by_user: true },
+      { amount: 0.2, entry_type: "credit", confirmed_by_user: true },
+      { amount: 0.3, entry_type: "payment", confirmed_by_user: true },
+    ];
+
+    const result = computeCustomerBalance(entries);
+    expect(result.balance).toBe(0);
+
+    const overpaid = [
+      { amount: 50.0, entry_type: "credit", confirmed_by_user: true },
+      { amount: 70.0, entry_type: "payment", confirmed_by_user: true },
+    ];
+    const overpaidResult = computeCustomerBalance(overpaid);
+    expect(overpaidResult.balance).toBe(-20.0);
+  });
+
+  it("returns zero balance for empty entries array", () => {
+    const result = computeCustomerBalance([]);
+    expect(result.balance).toBe(0);
+    expect(result.totalCredit).toBe(0);
+    expect(result.totalPayment).toBe(0);
   });
 });

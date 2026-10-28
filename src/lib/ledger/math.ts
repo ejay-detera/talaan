@@ -72,3 +72,39 @@ export function computePageTotals(
     discrepancyDiff: toPesos(diffCentavos),
   };
 }
+
+export interface CustomerBalanceComputation {
+  balance: number;
+  totalCredit: number;
+  totalPayment: number;
+}
+
+/**
+ * Computes deterministic customer balance in integer centavos from confirmed entries only:
+ * sum(credit) - sum(payment). Ignores cash_sale and unconfirmed rows.
+ */
+export function computeCustomerBalance(
+  entries: Array<{ amount: number; entry_type: string; confirmed_by_user?: boolean }>
+): CustomerBalanceComputation {
+  let creditCentavos = 0;
+  let paymentCentavos = 0;
+
+  for (const entry of entries) {
+    if (entry.confirmed_by_user !== true) {
+      continue;
+    }
+    if (entry.entry_type === "credit") {
+      creditCentavos += toCentavos(entry.amount);
+    } else if (entry.entry_type === "payment") {
+      paymentCentavos += toCentavos(entry.amount);
+    }
+  }
+
+  const balanceCentavos = creditCentavos - paymentCentavos;
+
+  return {
+    balance: toPesos(balanceCentavos),
+    totalCredit: toPesos(creditCentavos),
+    totalPayment: toPesos(paymentCentavos),
+  };
+}

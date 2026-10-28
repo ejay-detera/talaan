@@ -9,16 +9,27 @@ import OpenAI from "openai";
 
 export type ModelProvider = "glimmer" | "gemini";
 
-export const activeProvider: ModelProvider =
-  (process.env.MODEL_PROVIDER as ModelProvider) ?? "glimmer";
+export function getActiveProvider(): ModelProvider {
+  return (process.env.MODEL_PROVIDER as ModelProvider) ?? "glimmer";
+}
 
+export function getActiveModelName(): string {
+  const provider = getActiveProvider();
+  return provider === "gemini"
+    ? process.env.GEMINI_MODEL || "gemini-2.0-flash"
+    : "muse-glimmer";
+}
+
+export const activeProvider: ModelProvider = (process.env.MODEL_PROVIDER as ModelProvider) ?? "glimmer";
 export const activeModelName: string =
   activeProvider === "gemini"
     ? process.env.GEMINI_MODEL || "gemini-2.0-flash"
     : "muse-glimmer";
 
 export function getModelClient(): { client: OpenAI; model: string; provider: ModelProvider } {
-  const isGemini = activeProvider === "gemini";
+  const provider = getActiveProvider();
+  const model = getActiveModelName();
+  const isGemini = provider === "gemini";
 
   const baseURL = isGemini
     ? process.env.GEMINI_BASE_URL || "https://generativelanguage.googleapis.com/v1beta/openai"
@@ -45,5 +56,5 @@ export function getModelClient(): { client: OpenAI; model: string; provider: Mod
     apiKey: apiKey || "dummy-key",
   });
 
-  return { client, model: activeModelName, provider: activeProvider };
+  return { client, model, provider };
 }

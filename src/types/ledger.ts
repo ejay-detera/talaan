@@ -74,3 +74,50 @@ export interface ConfirmEntryInput {
   entry_type: EntryType;
   accept_written?: boolean;
 }
+
+export type ReminderTone = "friendly" | "firm";
+
+export interface CustomerSummary {
+  id: string;
+  store_id: string;
+  name: string;
+  phone_optional: string | null;
+  balance: number;
+  total_credit: number;
+  total_payment: number;
+  last_activity_at: string | null;
+}
+
+export interface CustomerLedgerEntry {
+  id: string;
+  page_id: string;
+  page_date: string | null;
+  item: string;
+  quantity: number | null;
+  unit_price: number | null;
+  amount: number;
+  entry_type: EntryType;
+  created_at: string;
+}
+
+export interface ReminderDraft {
+  id: string;
+  customer_id: string;
+  tone: ReminderTone;
+  message: string;
+  model: string;
+  created_at: string;
+}
+
+export interface CustomerBalanceDetail {
+  customer: {
+    id: string;
+    name: string;
+    phone_optional: string | null;
+  };
+  balance: number;
+  total_credit: number;
+  total_payment: number;
+  entries: CustomerLedgerEntry[];
+  latest_reminder: ReminderDraft | null;
+}
