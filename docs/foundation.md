@@ -29,7 +29,7 @@
 |---|:---:|---|---|
 | Payments and ledger | **Y** | Talaan maintains a financial *utang* (credit), *bayad* (payment), and cash-sale bookkeeping ledger requiring two-phase prepare/confirm, fail-closed centavo arithmetic, and append-only confirmed records (no external payment rail). | [`modules/payments-ledger.md`](modules/payments-ledger.md) |
 | Mobile client | **N** | Native mobile apps are out of scope (`S-01` §8). Talaan ships as a mobile-first Next.js web app; 44×44px touch targets and mobile viewport rules live in [`dsd.md`](dsd.md). | Deleted (`N/A`) |
-| AI component | **Y** | Core extraction and Taglish reminder drafting call Meta's open-weights **Muse Glimmer 30B** model (and Gemini API for local dev testing only) behind a strict Zod schema and human-in-the-loop gate. | [`modules/ai-component.md`](modules/ai-component.md) |
+| AI component | **Y** | Core extraction and Taglish reminder drafting call Meta's open-weights **Muse Glimmer 30B** model behind a strict Zod schema and human-in-the-loop gate. | [`modules/ai-component.md`](modules/ai-component.md) |
 
 ---
 
@@ -41,7 +41,7 @@
 
 **Talaan** is a mobile-first web application and AI bookkeeping agent that turns a phone photo of a handwritten sari-sari store *utang* (credit) notebook page, supplier receipt, or typed list into a clean, arithmetic-checked digital ledger. The platform manages the complete notebook-to-ledger lifecycle: **1. Capture & Pre-process**, **2. Structured Extraction & Deterministic Discrepancy Check (Prepare Phase)**, **3. Human-in-the-Loop Review & Ledger Commit (Confirm Phase)**, and **4. Customer Balance Tracking & Taglish Reminder Drafting (Act Phase)**.
 
-The brief specifies a **Next.js (App Router) + React + Tailwind CSS** client and API route layer; **TypeScript**; **Supabase (Postgres, Private Storage, Auth + RLS)**; **Meta Muse Glimmer 30B** (Q4_K_M GGUF served by `llama.cpp` `llama-server` on Kaggle 2x T4 GPU via tunnel, with **Gemini API** via OpenAI-compatible client for local dev/testing only); **Zod** for schema validation; **sharp** for image pre-processing; **Vitest** for unit and evaluation testing; and deterministic TypeScript ledger math in `src/lib/ledger`. Currently, only the Next.js 16.4.3 / React 19.3.0 scaffold is installed (`S-10`); all domain features are `⬜` Planned.
+The brief specifies a **Next.js (App Router) + React + Tailwind CSS** client and API route layer; **TypeScript**; **Supabase (Postgres, Private Storage, Auth + RLS)**; **Meta Muse Glimmer 30B** (`meta/muse-glimmer-30b` served via OpenAI-compatible endpoint on Kaggle/NVIDIA NIM); **Zod** for schema validation; **sharp** for image pre-processing; **Vitest** for unit and evaluation testing; and deterministic TypeScript ledger math in `src/lib/ledger`. Currently, only the Next.js 16.4.3 / React 19.3.0 scaffold is installed (`S-10`); all domain features are `⬜` Planned.
 
 ### Brief-defined and user-locked product decisions
 
@@ -55,13 +55,13 @@ The brief specifies a **Next.js (App Router) + React + Tailwind CSS** client and
 | Agent execution pattern | **Two-Phase Split:** Single-turn vision extraction (`extract_rows` / `flag_unreadable`) + deterministic TS math (`find_discrepancies`) on upload; human review gate before DB save (`add_entries`); on-demand tool calls for `draft_reminder` / `restock_list` | Locked user decision (`Q1`) |
 | Entry classification | Every row is typed as `'credit'` (*utang* owed), `'payment'` (*bayad* reducing debt), or `'cash_sale'` (paid immediately), with auto-matched or 1-tap created customer records | Locked user decision (`Q2`) |
 | Discrepancy checking | **Two-Level Deterministic Math (`src/lib/ledger`):** Row-level (`quantity * unit_price === amount` when unit price is written) + Page-level (`computed_total === written_total`). Zero LLM arithmetic. | Locked user decision (`Q3`) |
-| Model policy | **Meta Muse Glimmer 30B** is the canonical primary engine and mandatory for Day 3 handwriting gate, 30+ page evaluation, and final demo. **Gemini API** (`MODEL_PROVIDER=gemini`) is an auxiliary developer backup used for offline building/debugging only. Active model shown in UI badge and logged per page. | Directly stated (`S-01` §4) |
+| Model policy | **Meta Muse Glimmer 30B** is the exclusive canonical engine suite-wide (`ADR-0003`). Zero secondary or fallback model. Active model logged per page in `pages.model`. Fails closed if model unavailable. | Directly stated (`S-01` §4, `ADR-0003`) |
 | Design system | **"The Notebook, Kept"** (`impeccable`, [`docs/design.md`](design.md)): High-contrast daylight mode (`#F2F5EC` paper, `#FFFFFF` sheet, `#1E3FAE` ink, `#C8302F` red margin, `#FFE14D` highlighter, `Bricolage Grotesque` + `Atkinson Hyperlegible Next` + `Caveat`) | Locked user decision (`Q7`) |
 | Implementation status | Next.js 16.4.3 / Tailwind v4 scaffold with `/` Landing Page, `/login` 1-tap demo auth (`TAL-01`), `POST /api/pages/extract` (`TAL-02`), and `src/lib/ledger` math (`TAL-04`) | Verified in repository (`S-10`) |
 
 ### Proposed architecture in one paragraph
 
-Talaan runs as a unified **Next.js App Router** application in TypeScript. On the client, a mobile-first React + Tailwind CSS interface captures or uploads a notebook photo. On the server, Next.js Route Handlers (`src/app/api/`) pre-process the image with `sharp`, store the private image in **Supabase Storage**, and call a unified OpenAI-compatible model client (`src/lib/model.ts`) pointed at **Meta Muse Glimmer 30B** (`llama-server --jinja` on Kaggle 2x T4 exposed via an authenticated tunnel) as its primary engine, with the **Gemini API** available as an auxiliary developer backup for offline UI work. Model outputs are strictly parsed with **Zod** (`src/lib/schemas.ts`), then passed to deterministic ledger functions (`src/lib/ledger/`) that compute row-level and page-level totals in integer centavos. Staged extractions are reviewed and confirmed by the store owner before being committed to **Supabase Postgres** tables protected by **Supabase Auth** and **Row-Level Security (RLS)**.
+Talaan runs as a unified **Next.js App Router** application in TypeScript. On the client, a mobile-first React + Tailwind CSS interface captures or uploads a notebook photo. On the server, Next.js Route Handlers (`src/app/api/`) pre-process the image with `sharp`, store the private image in **Supabase Storage**, and call a single OpenAI-compatible model client (`src/lib/model.ts`) pointed exclusively at **Meta Muse Glimmer 30B** (`meta/muse-glimmer-30b`). Model outputs are strictly parsed with **Zod** (`src/lib/schemas.ts`), then passed to deterministic ledger functions (`src/lib/ledger/`) that compute row-level and page-level totals in integer centavos. Staged extractions are reviewed and confirmed by the store owner before being committed to **Supabase Postgres** tables protected by **Supabase Auth** and **Row-Level Security (RLS)**.
 
 ### Core workflow at a glance
 
@@ -109,7 +109,7 @@ Talaan runs as a unified **Next.js App Router** application in TypeScript. On th
 
 > **Talaan: Notebook-to-Ledger Agent for Sari-Sari Stores**
 
-The brief establishes the one-line pitch, 5 Whys problem analysis, Muse Glimmer 30B rationale, web application tech stack, dual-provider model switch (`glimmer` vs. `gemini`), Supabase data model, MVP and stretch feature set, business model hypotheses, illustrative TAM/SAM/SOM sizing, scope boundaries, risk mitigations, 30+ page evaluation plan, judging criteria mapping, 9-day execution calendar, and cited secondary sources.
+The brief establishes the one-line pitch, 5 Whys problem analysis, Muse Glimmer 30B rationale, web application tech stack, pure open-weights model architecture (Meta Muse Glimmer 30B), Supabase data model, MVP and stretch feature set, business model hypotheses, illustrative TAM/SAM/SOM sizing, scope boundaries, risk mitigations, 30+ page evaluation plan, judging criteria mapping, 9-day execution calendar, and cited secondary sources.
 
 The source explicitly marks as **unverified** or **open** (`S-01` §12):
 
@@ -157,7 +157,7 @@ Talaan is architected as four linked control planes operating across a **Two-Pha
 
 ### 3.1 Control Plane 1: Image Prep & Vision Extraction (`Prepare`)
 
-When an owner uploads a photo of a notebook page, supplier receipt, or list, the server normalizes the image with `sharp` (resize, auto-rotate, contrast enhancement, crop) to reduce vision token overhead and improve legibility. The server then makes a single structured call through `src/lib/model.ts` to **Muse Glimmer 30B** (or Gemini in local dev). The model either invokes `flag_unreadable(region, reason)` if lighting/blur prevents reading, or extracts structured rows with per-row confidence scores (`0.00`–`1.00`) and any `written_total` found on the page.
+When an owner uploads a photo of a notebook page, supplier receipt, or list, the server normalizes the image with `sharp` (resize, auto-rotate, contrast enhancement, crop) to reduce vision token overhead and improve legibility. The server then makes a single structured call through `src/lib/model.ts` to **Muse Glimmer 30B**. The model either invokes `flag_unreadable(region, reason)` if lighting/blur prevents reading, or extracts structured rows with per-row confidence scores (`0.00`–`1.00`) and any `written_total` found on the page.
 
 ### 3.2 Control Plane 2: Deterministic Discrepancy Engine & Human Review Gate (`Verify`)
 
@@ -355,9 +355,8 @@ Naming these groups in the brief establishes product positioning only—no endor
 | Framework | **Next.js 16.4.3 (App Router) + TypeScript 5** | Unified mobile-first web UI and API Route Handlers | ✅ Installed (`package.json`) |
 | UI & Styling | **React 19.3.0 + Tailwind CSS v4** | Component rendering and responsive styling tokens (`src/app/globals.css`) | ✅ Installed (`package.json`) |
 | Database & Auth | **Supabase (Postgres + Auth + RLS + Private Storage)** | Store/customer/page/entry/reminder persistence, tenant isolation, and private notebook photo storage | ✅ Installed (`@supabase/supabase-js`, `supabase/migrations/`) |
-| Main AI Model | **Meta Muse Glimmer 30B** (Q4_K_M GGUF ~16.8 GB + ~1.4 GB vision projector) | Multimodal handwriting extraction & Taglish tool calling via `llama.cpp` `llama-server --jinja` on Kaggle 2x T4 GPU | ⬜ Planned (`TAL-03`) |
-| Auxiliary Backup AI Model | **Gemini API** (OpenAI-compatible endpoint) | Auxiliary developer backup during offline development only (`MODEL_PROVIDER=gemini`); 100% excluded from evals, gates, and final demo | ✅ Supported (`src/lib/model.ts`) |
-| Model Client | **`openai` npm package (`src/lib/model.ts`)** | Single client abstraction switching between `glimmer` (canonical default) and `gemini` (dev backup) via env vars | ✅ Installed (`package.json`) |
+| Main AI Model | **Meta Muse Glimmer 30B** (`meta/muse-glimmer-30b` via NVIDIA NIM / Kaggle 2x T4 GPU) | Multimodal handwriting extraction & Taglish tool calling via OpenAI-compatible endpoint | ✅ Implemented (`src/lib/model.ts`) |
+| Model Client | **`openai` npm package (`src/lib/model.ts`)** | Single client abstraction pointed exclusively at Meta Muse Glimmer 30B via `GLIMMER_BASE_URL` and `GLIMMER_API_KEY` (`ADR-0003`) | ✅ Installed (`package.json`) |
 | Schema Validation | **Zod (`src/lib/schemas.ts`)** | Fail-closed validation of all LLM outputs and API payloads before DB writes | ✅ Installed (`package.json`) |
 | Image Prep | **`sharp` (`src/lib/image.ts`)** | Server-side resize, auto-rotate, contrast enhancement, and cropping | ✅ Installed (`package.json`) |
 | Ledger Math | **TypeScript (`src/lib/ledger/`)** | Deterministic centavo-exact row and page arithmetic & discrepancy detection | ✅ Implemented & Tested (`TAL-04`) |
@@ -429,8 +428,8 @@ Talaan aligns with:
 | **Q2** | Ledger entry types & customer matching | Resolved via user decision: `credit \| payment \| cash_sale` + fuzzy customer match | Required so debt payments (*bayad*) subtract from *utang* balances accurately |
 | **Q3** | Discrepancy check depth | Resolved via user decision: **Two-level check** (row `qty * unit_price` + page `computed_total vs written_total`) | Catches both line-item multiplication errors and page addition mistakes |
 | **Q4** | Muse Glimmer Filipino/Taglish handwriting accuracy | **Open (`A-05`)** — Day 3 Gate on 10 real pages (target ≥80% row accuracy) | Determines whether MVP processes messy cursive/handwriting or narrows to printed receipts/typed lists |
-| **Q5** | Kaggle 2x T4 inference latency & tunnel stability | **Open (`A-06`)** — Must benchmark `llama-server` via Cloudflare/ngrok tunnel | Determines whether deployed Vercel app can call Kaggle or if demo runs `next dev` locally against the tunnel |
-| **Q6** | Hackathon rules on Gemini dev testing & $150 credits | **Open** — Verify in Official Rules (`S-01` §4, §11, §12) | Ensures strict compliance with Meta hackathon eligibility rules |
+| **Q5** | Kaggle 2x T4 / NVIDIA NIM inference latency & tunnel stability | **Open (`A-06`)** — Benchmark endpoint latency across single-page extractions | Determines whether deployed Vercel app can call Kaggle or if demo runs `next dev` locally |
+| **Q6** | Single-model architecture vs. dual provider | Resolved via user decision: **100% Pure Meta Muse Glimmer 30B (`ADR-0003`)** | Eliminates dual-provider divergence and guarantees full Meta model compliance |
 | **Q7** | Visual design system & token authority | Resolved via user decision (`impeccable`): **The Notebook, Kept** | Establishes token authority in `src/app/globals.css` and [`design.md`](design.md) |
 | **Q8** | Commercial pricing & store owner willingness to pay | **Open (`A-02`, `A-03`, `A-04`)** — Pending 3–5 store owner interviews | Required before any post-hackathon commercial or SAM/SOM claim can be validated |
 
@@ -442,7 +441,7 @@ Talaan aligns with:
 | Q2 | **Decided** | `ADR-0001` / [`data-model.md`](data-model.md) §3 | 2026-10-27 |
 | Q3 | **Decided** | `ADR-0001` / [`modules/payments-ledger.md`](modules/payments-ledger.md) | 2026-10-27 |
 | Q4 | **Open** | Pending Day 3 Gate (`TAL-03`) | — |
-| Q5 | **Open** | `ADR-0002` (Dual Model Provider Switch) / Pending benchmark (`TAL-03`) | — |
-| Q6 | **Open** | Pending organizer verification (`S-01` §11) | — |
+| Q5 | **Open** | Pending benchmark (`TAL-03`) | — |
+| Q6 | **Decided** | `ADR-0003` (Retire Gemini; Pure Meta Muse Glimmer 30B) | 2026-11-02 |
 | Q7 | **Decided** | [`design.md`](design.md) ("The Notebook, Kept") | 2026-10-27 |
 | Q8 | **Open** | [`bpd.md`](bpd.md) §4 / Pending interviews | — |

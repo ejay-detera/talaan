@@ -38,7 +38,7 @@ Today (`2026-10-27`), the repository contains the **Next.js 16.4.3 / React 19.3.
 |---|---|
 | Lifecycle stage | **Build** (Hackathon prototype for Meta Global AI Developer Hackathon, Oct 26 – Nov 4, 2026) |
 | Data posture | **Consented / synthetic pages only** (`S-01` §4, §8). Customer names redacted in demo and repo. |
-| Model posture | **Meta Muse Glimmer 30B** (`llama-server` on Kaggle 2x T4) is the canonical primary engine and mandatory for Day 3 gate, 30+ page evaluation, and final demo. **Gemini API** is strictly an auxiliary developer backup for offline UI work (`S-01` §4). |
+| Model posture | **Meta Muse Glimmer 30B** (`meta/muse-glimmer-30b`) is the exclusive canonical engine suite-wide (`ADR-0003`). Fails closed if model unavailable. |
 | Pilots & Customers | ❌ Zero. No sari-sari store, cooperative, lender, or distributor has deployed, piloted, procured, or endorsed Talaan. |
 | Revenue & Value Movement | ❌ Zero revenue earned. Talaan is a bookkeeping record system only and moves zero real money (`S-01` §8). |
 
@@ -123,7 +123,7 @@ The system must accept phone photos of handwritten notebook pages, supplier rece
 **Traces:** US-01 · TAL-01, TAL-02 · tests T-001
 
 ### BR-02 Multimodal Structured Extraction & Unreadable Recovery ⬜
-The system must extract structured candidate rows (`customer`, `item`, optional `quantity` and `unit_price`, `amount`, `entry_type`: `'credit' | 'payment' | 'cash_sale'`, `confidence`) and `written_total` using `src/lib/model.ts` (Meta Muse Glimmer 30B canonical primary; Gemini auxiliary developer backup only), or trigger a specific retake request (`flag_unreadable`) when a page cannot be read. Every extraction must log the active `model` and `latency_ms`.
+The system must extract structured candidate rows (`customer`, `item`, optional `quantity` and `unit_price`, `amount`, `entry_type`: `'credit' | 'payment' | 'cash_sale'`, `confidence`) and `written_total` using `src/lib/model.ts` (Meta Muse Glimmer 30B canonical exclusive engine), or trigger a specific retake request (`flag_unreadable`) when a page cannot be read. Every extraction must log the active `model` and `latency_ms`.
 **Traces:** US-02, US-07 · TAL-02, TAL-03 · tests T-002, T-008
 
 ### BR-03 Deterministic Two-Level Discrepancy Verification ⬜
@@ -194,7 +194,7 @@ From `S-01` §8:
 | **Muse Glimmer handwriting accuracy on Filipino/Taglish is unknown (`A-05`)** | High | ⬜ **Day 3 Gate (`TAL-03`):** Test 10 real pages on Glimmer. If row accuracy < 80%, narrow to printed receipts/typed lists or pivot. |
 | **Kaggle 2x T4 inference speed is slow** | High | ⬜ Use `sharp` image crop/resize, low reasoning level, 32K context, single-turn extraction (`Two-Phase Split`), and clear progress UI (`TAL-02`, `TAL-03`). |
 | **Kaggle sessions are temporary & tunnel URL changes per session (`A-06`)** | High | ⬜ Script Kaggle setup, cache `llama-server` + GGUF in a private Kaggle Dataset, keep `GLIMMER_BASE_URL` in env vars, and record the demo early (`TAL-03`, `TAL-08`). |
-| **Prompts tuned on Gemini may break on Muse Glimmer** | Medium | ⬜ Switch completely to Glimmer by Oct 31 (`S-01` §11) and run all gate/eval tests strictly on Glimmer (`TAL-03`, `TAL-07`). |
+| **Prompts tuned on Gemini may break on Muse Glimmer** | Low | ✅ Resolved: Gemini retired completely; all prompts authoring and verification dedicated 100% to Meta Muse Glimmer 30B (`ADR-0003`). |
 | **Serverless function timeouts vs. slow T4 inference** | Medium | ⬜ Keep model calls single-turn and run `next dev` locally against the Kaggle tunnel for the demo recording (`S-01` §4, §8). |
 | **Model errors affect real money records** | High | ⬜ Deterministic arithmetic in `src/lib/ledger`, confidence flags (`< 0.80`), and mandatory human confirmation gate (`TAL-04`, `TAL-05`). |
 | **Privacy exposure of real neighborhood debts** | High | ✅ Policy locked: use only consented/redacted or synthetic pages in repo, evals, and demo (`S-01` §4, §8). |
@@ -228,7 +228,7 @@ Canonical text: [`foundation.md`](foundation.md) §12.
 | # | Decision | Owner | Blocks |
 |---:|---|---|---|
 | 1 | Day 3 Handwriting Gate outcome (keep handwritten notebook focus vs. narrow to printed receipts/lists) | Dev Ejay | Final demo scope (`TAL-03`) |
-| 2 | Official Hackathon Rules confirmation on Gemini dev testing & $150 partner credits | Dev Ejay | Dev workflow compliance (`S-01` §11) |
+| 2 | Model architecture standardization | Dev Ejay | Resolved: 100% pure Meta Muse Glimmer 30B (`ADR-0003`) |
 | 3 | Post-hackathon commercial model selection (Owner Freemium vs. Cooperative Hub vs. Lender/Distributor B2B) | Dev Ejay | Any post-hackathon pilot (`foundation.md` `Q8`) |
 | 4 | Data Privacy Act (NPC) & legal review | Counsel (not engaged) | Any real-customer deployment outside hackathon demo |
 

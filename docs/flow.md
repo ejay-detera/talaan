@@ -48,7 +48,7 @@ flowchart LR
   end
   subgraph B ["B — Prepare (Extract & Check)"]
     B1["✅ Upload Photo + sharp prep"]
-    B2["🟡 Glimmer / Gemini extract_rows / flag_unreadable"]
+    B2["✅ Meta Muse Glimmer 30B extract_rows / flag_unreadable"]
     B3["✅ src/lib/ledger centavo discrepancy check"]
   end
   subgraph C ["C — Confirm (Human Review)"]
@@ -124,7 +124,7 @@ Kept in lockstep with [`prd.md`](prd.md) §3:
 
 | Behavior | Mark | What exists | What does not | Switch / Gate | Rules |
 |---|---|---|---|---|---|
-| **Dual Model Provider (`glimmer` primary vs. `gemini` backup)** | ✅ | `src/lib/model.ts` switching via `MODEL_PROVIDER` | Live Kaggle tunnel endpoint (`TAL-03`) | `MODEL_PROVIDER` env var (`glimmer` canonical primary \| `gemini` auxiliary dev backup) | Gemini is strictly an offline backup in `.env.local` while prototyping. Day 3 gate, 30+ page evaluation, and final demo must run on `glimmer`. |
+| **Pure Model Provider (`meta/muse-glimmer-30b`)** | ✅ | `src/lib/model.ts` pointing exclusively to Meta Muse Glimmer 30B via NVIDIA NIM / Kaggle | None (live verified) | `GLIMMER_BASE_URL` and `GLIMMER_API_KEY` env vars | Pure open-weights execution. Gemini completely retired (`ADR-0003`). Fails closed with `"The Model is currently unavailable, please try again later."` if endpoint unavailable. |
 
 ---
 
@@ -141,12 +141,12 @@ flowchart LR
   subgraph s1 ["Sprint 1 (Oct 27–28)"]
     P1["✅ TAL-01: Supabase Schema, RLS & 1-Tap Auth"]
     P2["✅ TAL-02: lib/model.ts, sharp & Extract API"]
-    P3["⬜ TAL-03: Kaggle Glimmer Tunnel & Day 3 Gate (10 pages)"]
+    P3["✅ TAL-03: Live Meta Muse Glimmer 30B & Handwriting Pipeline"]
   end
   subgraph s2 ["Sprint 2 (Oct 29–Nov 1)"]
     P4["✅ TAL-04: lib/ledger Two-Level Discrepancy Math"]
-    P5["⬜ TAL-05: Review UI (Red Margin + Proof Bar) & Confirm API"]
-    P6["⬜ TAL-06: Customer Balances & Taglish Reminders"]
+    P5["✅ TAL-05: Review UI (Red Margin + Proof Bar) & Confirm API"]
+    P6["✅ TAL-06: Customer Balances & Taglish Reminders"]
   end
   subgraph s3 ["Sprint 3 (Nov 2–Nov 4)"]
     P7["⬜ TAL-07: 30+ Page Muse Glimmer Evaluation"]
@@ -161,11 +161,10 @@ flowchart LR
 
 ```mermaid
 flowchart TB
-  U1["Store Owner (store_owner)"] -.->|"⬜ Upload, Review, Confirm, Balances, Reminders"| APP["Talaan Web App"]
-  U2["Anonymous Visitor (anon)"] -.->|"⬜ 1-Tap Demo Login (/login)"| APP
-  APP -.->|"⬜ RLS Postgres + Private Storage"| DB["Supabase"]
-  APP -.->|"⬜ Canonical Primary Vision & Tool Inference"| GLIM["Meta Muse Glimmer 30B (Kaggle 2x T4)"]
-  APP -.->|"⬜ Auxiliary Dev Backup Only"| GEM["Gemini API (Offline Dev Backup)"]
+  U1["Store Owner (store_owner)"] -.->|"✅ Upload, Review, Confirm, Balances, Reminders"| APP["Talaan Web App"]
+  U2["Anonymous Visitor (anon)"] -.->|"✅ 1-Tap Demo Login (/login)"| APP
+  APP -.->|"✅ RLS Postgres + Private Storage"| DB["Supabase"]
+  APP -.->|"✅ Exclusive Vision & Tool Inference"| GLIM["Meta Muse Glimmer 30B (NVIDIA NIM / Kaggle)"]
 ```
 
 ---

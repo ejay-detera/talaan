@@ -344,7 +344,7 @@ Governed entirely by **The Paper System** above. Summary:
 - **Secondary:** `sheet` fill, `1.5px solid ink`, `ink` text, `48px` minimum.
 
 ### Model Provenance Policy
-No raw model badges, pills, or LLM chips (`Meta Muse Glimmer 30B` / `Gemini`) in the client UI. The active model name is logged directly to the `pages.model` column server-side for auditability and compliance.
+No raw model badges, pills, or LLM chips (e.g. raw model strings) in the client UI. The active model name is logged directly to the `pages.model` column server-side for auditability and compliance.
 
 ### Reminder Draft Card
 `sheet` (flat, bordered, `rounded.paper`), tone switch (`Friendly` / `Firm`), editable Taglish textarea (`17px`), actions **Copy** and **Send via SMS** / **Share**. Mandatory footer: `"Draft only. You review and choose when to send."`

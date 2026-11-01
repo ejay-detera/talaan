@@ -56,12 +56,9 @@ Names and purpose only. **Never commit or paste a real secret value.**
 
 | Variable | Purpose | Notes |
 |---|---|---|
-| `MODEL_PROVIDER` | Selects `"glimmer"` (CANONICAL PRIMARY) or `"gemini"` (auxiliary developer backup only) | Must be `"glimmer"` for Day 3 gate, 30+ page evaluation, and final demo (`S-01` §4). Gemini is strictly an offline dev backup. |
-| `GLIMMER_BASE_URL` | Tunnel URL to Kaggle `llama-server` (e.g., `https://<tunnel>/v1`) | Canonical primary endpoint; changes per Kaggle session; keep in `.env.local` |
-| `GLIMMER_API_KEY` | `--api-key` secret configured on Kaggle `llama-server` | Protects public tunnel endpoint (`T-04`) |
-| `GEMINI_BASE_URL` | Google Gemini OpenAI-compatible endpoint URL | Auxiliary developer backup only when `MODEL_PROVIDER=gemini` |
-| `GEMINI_API_KEY` | Google AI Studio key | Auxiliary developer backup only when `MODEL_PROVIDER=gemini` |
-| `GEMINI_MODEL` | Gemini model name for local dev testing | Auxiliary developer backup only when `MODEL_PROVIDER=gemini` |
+| `GLIMMER_BASE_URL` | Endpoint URL (NVIDIA NIM or Kaggle `llama-server` tunnel, e.g., `https://<tunnel>/v1`) | Canonical exclusive endpoint; keep in `.env.local` |
+| `GLIMMER_API_KEY` | API key / bearer token for endpoint | Required for inference authentication (`T-04`) |
+| `GLIMMER_MODEL` | Optional model name override | Defaults to `meta/muse-glimmer-30b` |
 | `SUPABASE_SERVICE_ROLE_KEY` | Server-only Supabase privileged key | Used only for local seed scripts or server-side signed storage URLs; never expose to client |
 
 ---
@@ -192,7 +189,7 @@ For the hackathon demo recording, running `npm run dev` locally against the acti
 ## 12. Safety Rules
 
 Detail in [`security.md`](security.md) and [`modules/payments-ledger.md`](modules/payments-ledger.md):
-- **Never present Gemini output as Muse Glimmer output** (`S-01` §4).
+- **Pure Meta Muse Glimmer 30B execution** (`meta/muse-glimmer-30b`); Gemini is completely retired suite-wide (`ADR-0003`).
 - **Never compute arithmetic in the LLM**; all math runs in `src/lib/ledger/` in integer centavos.
 - **Never update customer balances without human confirmation** (`confirmed_by_user = true`).
 - **Never commit real unredacted customer names, notebook photos, or `.env.local` secrets.**

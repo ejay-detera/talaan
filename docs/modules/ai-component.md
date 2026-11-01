@@ -8,20 +8,19 @@ This module governs AI **inside the product** (`src/lib/model.ts` and `src/lib/p
 
 ---
 
-> **Important Note for Hackathon Judges:** **Meta Muse Glimmer 30B is the primary and canonical engine of Talaan.** The product is designed natively for open-weights execution on local/cooperative compute via `llama-server`. The Gemini API is strictly an auxiliary developer backup used for offline frontend prototyping when GPU compute is spun down, and is completely excluded from all benchmark metrics, gates, and demonstrations.
+> **Important Note for Hackathon Judges:** **Meta Muse Glimmer 30B is the exclusive and canonical engine of Talaan.** The product runs 100% on Meta's open-weights model (`meta/muse-glimmer-30b`) served via OpenAI-compatible endpoints on local/cooperative compute or NVIDIA NIM. Gemini has been completely retired suite-wide (`ADR-0003`).
 
 ## 1. Inventory
 
 | Component | Model / provider | Pinned version | Purpose | Input data | Output used for | Status |
 |---|---|---|---|---|---|---|
-| **Primary Vision & Tool Agent** | **Meta Muse Glimmer 30B** via `llama.cpp` `llama-server` (`--jinja`, CUDA T4 arch 75) on Kaggle 2x T4 GPU | `Q4_K_M` GGUF (`~16.8 GB` + `~1.4 GB` vision projector; [`evidence.md`](../evidence.md) §5) | `extract_rows`, `flag_unreadable`, `draft_reminder`, `restock_list` | Pre-processed notebook/receipt image (`sharp`) or confirmed customer debt items | Staged ledger rows (`needs_review`) and Taglish reminder drafts | ⬜ Planned (`TAL-02`, `TAL-03`) |
-| **Auxiliary Dev Backup Only** | **Gemini API** (OpenAI-compatible endpoint via `MODEL_PROVIDER=gemini`) | Configured via `GEMINI_MODEL` in `.env.local` ([`evidence.md`](../evidence.md) §5) | Developer backup fallback for rapid offline UI iteration (**never used for Day 3 gate, evaluation, or final demo**) | Synthetic / consented test images and test prompts | Development debugging only (100% excluded from eval metrics via `pages.model` column) | ⬜ Planned (`TAL-02`) |
+| **Primary Vision & Tool Agent** | **Meta Muse Glimmer 30B** (`meta/muse-glimmer-30b` via OpenAI-compatible endpoint) | `meta/muse-glimmer-30b` ([`evidence.md`](../evidence.md) §5) | `extract_rows`, `flag_unreadable`, `draft_reminder`, `restock_list` | Pre-processed notebook/receipt image (`sharp`) or confirmed customer debt items | Staged ledger rows (`needs_review`) and Taglish reminder drafts | ✅ Implemented (`src/lib/model.ts`) |
 
 ### Unified Client Rule (`src/lib/model.ts`)
-- Every model call goes through `src/lib/model.ts` using the `openai` npm package.
-- Default `MODEL_PROVIDER` is `"glimmer"` (Meta Muse Glimmer 30B).
-- Every extraction writes the active `modelName` (`"muse-glimmer"` or `process.env.GEMINI_MODEL`) and `latency_ms` into the `pages` table.
-- The UI renders a visible **Model Provenance Badge** showing which model produced the current page extraction.
+- Every model call goes through `src/lib/model.ts` using the `openai` npm package pointing to `GLIMMER_BASE_URL` and `GLIMMER_API_KEY`.
+- Model provider is permanently hardcoded to Meta Muse Glimmer 30B (`meta/muse-glimmer-30b`).
+- Every extraction writes the active model identifier (`process.env.GLIMMER_MODEL || "meta/muse-glimmer-30b"`) and `latency_ms` into the `pages` table.
+- If credentials or model endpoints are missing, the client fails closed immediately with `"The Model is currently unavailable, please try again later."`
 
 ---
 
@@ -33,15 +32,15 @@ This module governs AI **inside the product** (`src/lib/model.ts` and `src/lib/p
 4. **Flag uncertainty instead of guessing.** Rows with `confidence < 0.80` or row-level math errors (`quantity * unit_price !== amount`) automatically set `needs_review = true`. When a page or region cannot be read, the agent invokes `flag_unreadable(region, reason)` rather than hallucinating entries.
 5. **No unnecessary personal data to third-party clouds.** Demo, repo, and evaluation datasets use only consented, redacted, or synthetic notebook pages (`S-01` §4, §8). In production/cooperative deployments, Muse Glimmer runs locally on open weights.
 6. **Treat handwritten and user text as untrusted.** Handwritten text inside notebook photos could contain prompt-injection strings. Because Talaan uses the **Two-Phase Split** (single extraction call returning a strict Zod-validated JSON schema, with no autonomous database-mutating tool execution), handwritten text cannot trigger unauthorized DB writes ([`security.md`](../security.md) §4 `T-03`).
-7. **Version prompts.** System prompts and tool definitions live in `src/lib/prompts/`, reviewed and versioned like code. Always re-test prompts and tool schemas on Muse Glimmer after iterating on Gemini (`S-01` §4).
-8. **Disclose AI generation and active model.** Display the active model badge (`Muse Glimmer 30B` vs. `Gemini Dev`) on the Review and Reminder screens, and clearly label drafted Taglish reminders as AI drafts for owner review.
+7. **Version prompts.** System prompts and tool definitions live in `src/lib/prompts/`, reviewed and versioned like code. All prompts and tool schemas target Meta Muse Glimmer 30B.
+8. **Disclose AI generation and active model.** Clearly label drafted Taglish reminders as AI drafts for owner review and record `meta/muse-glimmer-30b` in database records.
 9. **No invented performance.** Accuracy and latency figures remain `Not measured` until the Day 3 Gate (`TAL-03`) and the 30+ page Muse Glimmer evaluation (`TAL-07`) are executed and recorded in [`evidence.md`](../evidence.md) §3.
 
 ---
 
 ## 3. Evaluation Plan (Muse Glimmer Only)
 
-Per `S-01` §8 and §9, evaluation runs exclusively on **Muse Glimmer 30B** (`pages.model = 'muse-glimmer'`), excluding any Gemini test runs:
+Per `S-01` §8 and §9, evaluation runs exclusively on **Muse Glimmer 30B** (`pages.model = 'meta/muse-glimmer-30b'`):
 
 | Metric | Method | Dataset | Target | Baseline | Status |
 |---|---|---|---|---|---|
@@ -61,7 +60,7 @@ Per `S-01` §8 and §9, evaluation runs exclusively on **Muse Glimmer 30B** (`pa
 |---|---|---|---|
 | **Illegible handwriting / blurry photo** | `flag_unreadable` tool call or low row confidence (`< 0.80`) | Set `pages.status = 'retake_requested'` and prompt owner with specific retake instructions; highlight `needs_review` rows in Red Margin Gutter | Dev Ejay |
 | **Handwriting Gate < 80% on Day 3** | Evaluation script on 10 real pages (`TAL-03`) | Narrow input scope to printed supplier receipts and typed lists, or pivot per `S-01` §8 | Dev Ejay |
-| **Malformed JSON / tool-call drift between Gemini and Glimmer** | Zod schema validation (`src/lib/schemas.ts`) fails | Return structured `VALIDATION_ERROR`, log raw response in dev, and tune Glimmer `--jinja` prompt template | Dev Ejay |
+| **Malformed JSON / schema validation error** | Zod schema validation (`src/lib/schemas.ts`) fails | Return structured `VALIDATION_ERROR`, log raw response in dev, and tune Glimmer tool prompt template | Dev Ejay |
 | **Kaggle 2x T4 timeout or tunnel drop** | Request timeout (`MODEL_TIMEOUT`) or health-check failure on `GLIMMER_BASE_URL` | Keep calls single-turn (low reasoning, 32K context, `sharp`-cropped image); run `next dev` locally against tunnel for demo (`RB-01`, `RB-02`) | Dev Ejay |
 | **Prompt injection in notebook image** | Zod schema enforcement + Two-Phase Split | Ignore non-schema instructions; require explicit owner confirmation (`POST /api/pages/[id]/confirm`) | Dev Ejay |
 

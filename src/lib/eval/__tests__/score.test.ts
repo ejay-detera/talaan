@@ -266,16 +266,16 @@ describe("aggregateEvalReport (T-008)", () => {
     expect(report.latency.p95Ms).toBe(3000);
   });
 
-  it("watermarks non-Glimmer runs as DRY RUN — AUXILIARY DEV BACKUP", () => {
+  it("watermarks non-Glimmer runs as DRY RUN — UNOFFICIAL RUN", () => {
     const report = aggregateEvalReport([], {
-      model: "gemini-2.5-flash",
-      provider: "gemini",
+      model: "mock-unsupported-model",
+      provider: "glimmer",
       isOfficialMuseGlimmer: false,
       datasetDir: "eval/pages-30",
     });
 
     expect(report.isOfficialMuseGlimmer).toBe(false);
-    expect(report.watermark).toContain("DRY RUN — AUXILIARY DEV BACKUP (NOT MUSE GLIMMER)");
+    expect(report.watermark).toContain("DRY RUN — UNOFFICIAL RUN (NOT MUSE GLIMMER)");
   });
 });
 

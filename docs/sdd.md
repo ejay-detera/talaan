@@ -37,7 +37,7 @@ Each screen or component exceeding ~150 lines is split into a modular folder per
 
 | Service / module | Location | Responsibility | Auth | Status |
 |---|---|---|---|---|
-| Model provider switch | `src/lib/model.ts` | Single `OpenAI` client switching between `glimmer` (canonical primary) and `gemini` (auxiliary dev backup only) via `MODEL_PROVIDER` (`S-01` §4) | Server-only | ✅ Built (`TAL-02`) |
+| Model client | `src/lib/model.ts` | Single `OpenAI` client pointed exclusively at Meta Muse Glimmer 30B (`meta/muse-glimmer-30b`; `ADR-0003`) | Server-only | ✅ Built (`TAL-02`) |
 | Agent prompts & tool schemas | `src/lib/prompts/` | Versioned system prompts and tool definitions (`extract_rows`, `flag_unreadable`, `draft_reminder`, `restock_list`) | Server-only | ⬜ Planned (`TAL-02`, `TAL-06`) |
 | Image pre-processor | `src/lib/image.ts` | `sharp` pipeline: auto-orient via EXIF, resize to max dimension, normalize contrast, encode compressed image | Server-only | ✅ Built (`TAL-02`) |
 | Deterministic ledger math | `src/lib/ledger/math.ts`, `src/lib/ledger/match.ts` | Integer-centavo row check (`qty * unit_price === amount`), page check (`computed_total === written_total`), customer balance math, and fuzzy customer name matching | Pure TS | ✅ Built & Tested (`TAL-04`) |
@@ -55,9 +55,8 @@ Each screen or component exceeding ~150 lines is split into a modular folder per
 
 | Service | Used for | Integration status | Pinned version |
 |---|---|---|---|
-| **Meta Muse Glimmer 30B** (`llama-server` on Kaggle 2x T4) | Canonical primary vision extraction & Taglish reminder tool calls | ⬜ Planned (`TAL-02`, `TAL-03`) | `Q4_K_M` GGUF ([`evidence.md`](evidence.md) §5) |
-| **Gemini API** (OpenAI-compatible endpoint) | Auxiliary developer backup fallback for offline prototyping (`MODEL_PROVIDER=gemini`) | ✅ Supported (`TAL-02`) | [`evidence.md`](evidence.md) §5 |
-| **Supabase** (Postgres, Auth, Private Storage) | Database persistence, RLS auth, private notebook photo storage | ⬜ Planned (`TAL-01`) | [`evidence.md`](evidence.md) §5 |
+| **Meta Muse Glimmer 30B** (`meta/muse-glimmer-30b` via OpenAI-compatible endpoint) | Canonical exclusive vision extraction & Taglish reminder tool calls | ✅ Built (`TAL-02`, `TAL-03`) | `meta/muse-glimmer-30b` ([`evidence.md`](evidence.md) §5) |
+| **Supabase** (Postgres, Auth, Private Storage) | Database persistence, RLS auth, private notebook photo storage | ✅ Built (`TAL-01`) | [`evidence.md`](evidence.md) §5 |
 
 ---
 
@@ -69,7 +68,7 @@ Endpoint index, request/response schemas, and error catalog live in [`api.md`](a
 1. Authenticate Supabase session first; reject unauthenticated requests with `401 UNAUTHORIZED`.
 2. Validate all request bodies and model outputs with **Zod** (`src/lib/schemas.ts`); reject invalid payloads with `400 VALIDATION_ERROR`.
 3. Convert all monetary values to integer centavos before any calculation in `src/lib/ledger/`.
-4. Log `model` (`"muse-glimmer"` or Gemini model name) and `latency_ms` on every page extraction.
+4. Log `model` (`process.env.GLIMMER_MODEL || "meta/muse-glimmer-30b"`) and `latency_ms` on every page extraction.
 5. Enforce idempotency on `POST /api/pages/[id]/confirm` so a page in `status = 'confirmed'` cannot be confirmed twice.
 
 ---
@@ -84,7 +83,7 @@ sequenceDiagram
   participant C as Next.js Client
   participant A as Next.js API Routes
   participant L as src/lib/ledger (TS)
-  participant M as src/lib/model (Glimmer/Gemini)
+  participant M as src/lib/model (Meta Muse Glimmer 30B)
   participant D as Supabase (Postgres + Storage)
 
   U->>C: Upload notebook photo
@@ -107,7 +106,7 @@ sequenceDiagram
 
 | Behavior | Status | Why | Switch (file / env var) | Rules |
 |---|---|---|---|---|
-| **Model Provider Switch (`glimmer` vs. `gemini`)** | ✅ Built (`TAL-02`) | Offline local building vs. mandatory Muse Glimmer gate/eval/demo (`S-01` §4) | `MODEL_PROVIDER` in `.env.local` read by `src/lib/model.ts` | Default is `"glimmer"` (Meta Muse Glimmer 30B canonical primary). Active model badge shown in UI and logged in `pages.model`. Gemini runs are strictly 100% excluded from evaluation metrics. |
+| **Pure Model Provider (`meta/muse-glimmer-30b`)** | ✅ Built (`TAL-02`) | Exclusive canonical engine for all extractions and tool calls | `GLIMMER_BASE_URL` and `GLIMMER_API_KEY` | Dedicated exclusively to Meta Muse Glimmer 30B (`ADR-0003`). Fails closed with `"The Model is currently unavailable, please try again later."` if credentials or endpoint are missing. |
 
 ---
 
@@ -132,12 +131,9 @@ Entities, fields, states, and migrations: [`data-model.md`](data-model.md). Poli
 
 **Backend server-only environment variables** (git-ignored `.env.local`):
 - `SUPABASE_SERVICE_ROLE_KEY` (if needed for signed storage helpers; otherwise use user-scoped server client)
-- `MODEL_PROVIDER` (`"glimmer"` CANONICAL PRIMARY | `"gemini"` auxiliary dev backup only)
-- `GLIMMER_BASE_URL` (Cloudflare / ngrok tunnel URL to Kaggle `llama-server`)
-- `GLIMMER_API_KEY` (`--api-key` secret configured on `llama-server`)
-- `GEMINI_BASE_URL` (Google Gemini OpenAI-compatible base URL — auxiliary backup only)
-- `GEMINI_API_KEY` (Google AI Studio key — auxiliary backup only)
-- `GEMINI_MODEL` (Gemini model identifier — auxiliary backup only)
+- `GLIMMER_BASE_URL` (NVIDIA NIM or Cloudflare / ngrok tunnel URL to Kaggle `llama-server`)
+- `GLIMMER_API_KEY` (API key / bearer token for endpoint)
+- `GLIMMER_MODEL` (Optional model name override; defaults to `meta/muse-glimmer-30b`)
 
 Environments: [`ops.md`](ops.md) §1.
 
@@ -146,7 +142,7 @@ Environments: [`ops.md`](ops.md) §1.
 ## 6. Error Handling and Observability
 
 - **Unreadable image recovery:** When `flag_unreadable` is returned by the model, the API returns HTTP `200` with `status: "retake_requested"` and a plain-language instruction banner so the user is guided to retake the photo rather than seeing a crash.
-- **Schema / model failures:** If the model returns invalid JSON or times out, the API catches the error, updates `pages.status` or returns a structured error envelope (`VALIDATION_ERROR` / `MODEL_TIMEOUT`), and prompts the user to retry.
+- **Schema / model failures:** If the model returns invalid JSON, times out, or fails closed, the API catches the error, updates `pages.status` or returns a structured error envelope (`VALIDATION_ERROR` / `MODEL_TIMEOUT`), and prompts the user to retry with `"The Model is currently unavailable, please try again later."`.
 - **Observability:** Every extraction records `model` and `latency_ms` in the `pages` table to support the 30+ page evaluation harness (`S-01` §4, §9).
 
 ---
@@ -164,8 +160,8 @@ Tracked in [`foundation.md`](foundation.md) §14 and [`adr/README.md`](adr/READM
 | Area | Question | Reference |
 |---|---|---|
 | Two-Phase Split & Deterministic Math | Separating single-turn extraction from deterministic math and human confirmation | `ADR-0001` (Decided) |
-| Dual Model Provider Switch | Routing `glimmer` (default) and `gemini` (dev test) through `src/lib/model.ts` | `ADR-0002` (Decided) |
-| Kaggle Tunnel & 2x T4 Latency | Measuring real inference speed and tunnel stability on 10-page gate | `foundation.md` `Q4`, `Q5` (`TAL-03`) |
+| Pure Meta Muse Glimmer 30B Execution | Retiring Gemini and unifying exclusively on Meta Muse Glimmer 30B | `ADR-0003` (Decided; supersedes `ADR-0002`) |
+| Glimmer Endpoint Latency | Measuring real inference speed and stability on 10-page gate | `foundation.md` `Q4`, `Q5` (`TAL-03`) |
 
 ---
 

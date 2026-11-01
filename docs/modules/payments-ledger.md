@@ -33,7 +33,7 @@ Where a rule is not yet implemented in code, it is marked ⬜ (`TAL-01`, `TAL-04
 sequenceDiagram
   actor U as Store Owner (Phone Browser)
   participant P as Prepare Route (POST /api/pages/extract)
-  participant M as Vision Model (Glimmer / Gemini)
+  participant M as Vision Model (Meta Muse Glimmer 30B)
   participant L as Deterministic Ledger (src/lib/ledger)
   participant D as Supabase (Postgres + Storage)
   participant C as Confirm Route (POST /api/pages/[id]/confirm)
