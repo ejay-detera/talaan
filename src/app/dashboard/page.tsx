@@ -55,6 +55,7 @@ export default async function DashboardPage() {
     month: "long",
     day: "numeric",
     year: "numeric",
+    timeZone: "Asia/Manila",
   }).format(new Date());
 
   // Count confirmed pages
@@ -122,7 +123,7 @@ export default async function DashboardPage() {
 
         {/* 2-Column Responsive Dashboard Grid matching the wireframe */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
-          {/* Left Column: Total Store Credit & Notebook Pages */}
+          {/* Left Column: Total Store Credit & Liquidity Health */}
           <div className="space-y-6 paper-stagger">
             <section aria-label="Total Customer Credit">
               <TotalUtangCard
@@ -135,18 +136,9 @@ export default async function DashboardPage() {
             <section aria-label="Liquidity Health">
               <LiquidityHealthCard entries={liquidityEntries} />
             </section>
-
-            <section aria-label="Notebook Pages">
-              <RecentPagesList
-                pages={recentPages}
-                previewRows={previewRows}
-                previewRowsByPageId={previewRowsByPageId}
-                pageEntryCounts={pageEntryCounts}
-              />
-            </section>
           </div>
 
-          {/* Right Column: Who Owes Credit & Trust Stamp Card */}
+          {/* Right Column: Who Owes Credit, Trust Stamp Card, and Notebook Pages */}
           <div className="space-y-6 paper-stagger">
             <section aria-label="Who Owes Credit">
               <WhoOwesCreditCard
@@ -157,6 +149,16 @@ export default async function DashboardPage() {
 
             <section aria-label="Deterministic Engine Verification">
               <DeterministicTrustCard />
+            </section>
+
+            {/* Notebook Pages placed below Deterministic Code Engine per user request */}
+            <section aria-label="Notebook Pages">
+              <RecentPagesList
+                pages={recentPages}
+                previewRows={previewRows}
+                previewRowsByPageId={previewRowsByPageId}
+                pageEntryCounts={pageEntryCounts}
+              />
             </section>
           </div>
         </div>

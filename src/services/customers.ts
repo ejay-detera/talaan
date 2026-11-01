@@ -24,13 +24,12 @@ export async function listCustomersWithBalances(
   const [customersRes, entriesRes] = await Promise.all([
     supabase
       .from("customers")
-      .select("id, store_id, name, phone_optional, credit_limit, created_at")
+      .select("id, store_id, name, phone_optional, created_at")
       .order("name", { ascending: true }),
     supabase
       .from("entries")
-      .select("id, customer_id, amount, entry_type, created_at, confirmed_by_user")
-      .eq("confirmed_by_user", true)
-      .not("customer_id", "is", null),
+      .select("id, customer_id, extracted_customer_name, amount, entry_type, created_at, confirmed_by_user")
+      .eq("confirmed_by_user", true),
   ]);
 
   if (customersRes.error || !customersRes.data) {
@@ -40,13 +39,34 @@ export async function listCustomersWithBalances(
   const rawCustomers = customersRes.data;
   const rawEntries = entriesRes.data || [];
 
-  // 2. Group confirmed entries by customer_id
-  const entriesByCustomer = new Map<string, typeof rawEntries>();
+  // 2. Map existing customers by ID and normalized name for robust matching
+  const customerIdByNormName = new Map<string, string>();
+  for (const c of rawCustomers) {
+    const norm = c.name.trim().toLowerCase();
+    customerIdByNormName.set(norm, c.id);
+  }
+
+  // Group confirmed entries by customer_id (fallback to extracted_customer_name match)
+  const entriesByCustomerId = new Map<string, typeof rawEntries>();
+  const unlinkedByExtractedName = new Map<string, typeof rawEntries>();
+
   for (const entry of rawEntries) {
-    if (!entry.customer_id) continue;
-    const list = entriesByCustomer.get(entry.customer_id) || [];
-    list.push(entry);
-    entriesByCustomer.set(entry.customer_id, list);
+    let targetCustId = entry.customer_id;
+    if (!targetCustId && entry.extracted_customer_name) {
+      const norm = entry.extracted_customer_name.trim().toLowerCase();
+      targetCustId = customerIdByNormName.get(norm) || null;
+    }
+
+    if (targetCustId) {
+      const list = entriesByCustomerId.get(targetCustId) || [];
+      list.push(entry);
+      entriesByCustomerId.set(targetCustId, list);
+    } else if (entry.extracted_customer_name) {
+      const name = entry.extracted_customer_name.trim();
+      const list = unlinkedByExtractedName.get(name) || [];
+      list.push(entry);
+      unlinkedByExtractedName.set(name, list);
+    }
   }
 
   // 3. Compute deterministic balances
@@ -54,7 +74,7 @@ export async function listCustomersWithBalances(
   let activeDebtorCount = 0;
 
   const customers: CustomerSummary[] = rawCustomers.map((cust) => {
-    const custEntries = entriesByCustomer.get(cust.id) || [];
+    const custEntries = entriesByCustomerId.get(cust.id) || [];
     const balanceInfo = computeCustomerBalance(
       custEntries.map((e) => ({
         amount: Number(e.amount),
@@ -82,13 +102,41 @@ export async function listCustomersWithBalances(
       store_id: cust.store_id,
       name: cust.name,
       phone_optional: cust.phone_optional,
-      credit_limit: cust.credit_limit,
+      credit_limit: (cust as unknown as { credit_limit?: number | null }).credit_limit ?? 500,
       balance: balanceInfo.balance,
       total_credit: balanceInfo.totalCredit,
       total_payment: balanceInfo.totalPayment,
       last_activity_at: lastActivityAt,
     };
   });
+
+  // Synthesize any confirmed ledger entries that have an extracted customer name not yet in customers table
+  for (const [name, unlinkedEntries] of unlinkedByExtractedName.entries()) {
+    const balanceInfo = computeCustomerBalance(
+      unlinkedEntries.map((e) => ({
+        amount: Number(e.amount),
+        entry_type: e.entry_type,
+        confirmed_by_user: true,
+      }))
+    );
+
+    if (balanceInfo.balance > 0) {
+      totalUtangCentavos += toCentavos(balanceInfo.balance);
+      activeDebtorCount += 1;
+    }
+
+    customers.push({
+      id: `synthetic-${name.toLowerCase().replace(/\s+/g, "-")}`,
+      store_id: rawCustomers[0]?.store_id || "",
+      name,
+      phone_optional: null,
+      credit_limit: 500,
+      balance: balanceInfo.balance,
+      total_credit: balanceInfo.totalCredit,
+      total_payment: balanceInfo.totalPayment,
+      last_activity_at: unlinkedEntries[0]?.created_at || null,
+    });
+  }
 
   // Sort: active debtors with positive balance first (highest debt first), then zero/negative balance alphabetically
   customers.sort((a, b) => {
@@ -115,7 +163,7 @@ export async function getCustomerBalanceDetail(
   const [customerRes, entriesRes, reminderRes] = await Promise.all([
     supabase
       .from("customers")
-      .select("id, name, phone_optional, credit_limit")
+      .select("id, name, phone_optional")
       .eq("id", customerId)
       .maybeSingle(),
     supabase
@@ -252,12 +300,46 @@ export async function recordDirectPayment(
     throw new Error("Customer not found");
   }
 
+  // Resolve a valid page_id to satisfy foreign key and not-null schema constraints
+  let pageId: string | null = null;
+  const { data: existingPage } = await supabase
+    .from("pages")
+    .select("id")
+    .eq("store_id", customer.store_id)
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (existingPage) {
+    pageId = existingPage.id;
+  } else {
+    const today = new Date().toISOString().split("T")[0];
+    const { data: newPage } = await supabase
+      .from("pages")
+      .insert({
+        store_id: customer.store_id,
+        status: "confirmed",
+        page_date: today,
+        image_path: "counter/direct-payments",
+        written_total: params.amount,
+        computed_total: params.amount,
+        has_page_discrepancy: false,
+        model: "counter-terminal",
+      })
+      .select("id")
+      .single();
+
+    if (newPage) {
+      pageId = newPage.id;
+    }
+  }
+
   const { data: newEntry, error: insertErr } = await supabase
     .from("entries")
     .insert({
       store_id: customer.store_id,
       customer_id: customer.id,
-      page_id: null,
+      page_id: pageId,
       item: params.item || "Counter cash payment",
       amount: params.amount,
       entry_type: "payment",

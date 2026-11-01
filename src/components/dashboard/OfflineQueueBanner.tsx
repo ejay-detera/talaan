@@ -10,7 +10,13 @@ interface OfflineQueueBannerProps {
   className?: string;
 }
 
+const emptySubscribe = () => () => {};
+const getClientSnapshot = () => true;
+const getServerSnapshot = () => false;
+
 export function OfflineQueueBanner({ className = "" }: OfflineQueueBannerProps) {
+  const mounted = React.useSyncExternalStore(emptySubscribe, getClientSnapshot, getServerSnapshot);
+
   const {
     queueCount,
     isOnline,
@@ -20,6 +26,10 @@ export function OfflineQueueBanner({ className = "" }: OfflineQueueBannerProps) 
     lastSyncedPageId,
     syncQueue,
   } = useOfflineScanQueue();
+
+  if (!mounted) {
+    return null;
+  }
 
   // If online, no queued scans, and no errors or sync messages, hide banner
   const isVisible = !(isOnline && queueCount === 0 && !isSyncing && !syncError && !lastSyncedPageId);

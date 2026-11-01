@@ -41,6 +41,13 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
       (window as unknown as { __lenis?: Lenis | null }).__lenis = lenis;
     }
 
+    const resizeObserver = new ResizeObserver(() => {
+      lenis.resize();
+    });
+    if (document.body) {
+      resizeObserver.observe(document.body);
+    }
+
     let rafId: number;
     function raf(time: number) {
       lenis.raf(time);
@@ -50,6 +57,7 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
     rafId = requestAnimationFrame(raf);
 
     return () => {
+      resizeObserver.disconnect();
       cancelAnimationFrame(rafId);
       lenis.destroy();
       lenisRef.current = null;

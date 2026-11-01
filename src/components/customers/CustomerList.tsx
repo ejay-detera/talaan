@@ -214,6 +214,7 @@ export function CustomerList({ customers }: CustomerListProps) {
                 formattedDate = new Intl.DateTimeFormat("en-US", {
                   month: "short",
                   day: "numeric",
+                  timeZone: "Asia/Manila",
                 }).format(new Date(c.last_activity_at));
               } catch {
                 formattedDate = "Recent";

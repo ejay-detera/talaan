@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, useSyncExternalStore } from "react";
 import {
   getOfflineScans,
   deleteOfflineScan,
@@ -9,11 +9,21 @@ import {
   type OfflineScan,
 } from "@/lib/offline-db";
 
+const subscribeOnline = (callback: () => void) => {
+  window.addEventListener("online", callback);
+  window.addEventListener("offline", callback);
+  return () => {
+    window.removeEventListener("online", callback);
+    window.removeEventListener("offline", callback);
+  };
+};
+
+const getOnlineSnapshot = () => (typeof navigator !== "undefined" ? navigator.onLine : true);
+const getOnlineServerSnapshot = () => true;
+
 export function useOfflineScanQueue() {
+  const isOnline = useSyncExternalStore(subscribeOnline, getOnlineSnapshot, getOnlineServerSnapshot);
   const [scans, setScans] = useState<OfflineScan[]>([]);
-  const [isOnline, setIsOnline] = useState<boolean>(
-    () => (typeof navigator !== "undefined" ? navigator.onLine : true)
-  );
   const [isSyncing, setIsSyncing] = useState<boolean>(false);
   const [syncError, setSyncError] = useState<string | null>(null);
   const [lastSyncedPageId, setLastSyncedPageId] = useState<string | null>(null);
@@ -34,7 +44,7 @@ export function useOfflineScanQueue() {
     }
   }, []);
 
-  // 2. Track online/offline status and load initial queue
+  // 2. Track IndexedDB offline scans queue
   useEffect(() => {
     let mounted = true;
 
@@ -50,21 +60,8 @@ export function useOfflineScanQueue() {
         });
     }
 
-    const handleOnline = () => {
-      setIsOnline(true);
-    };
-
-    const handleOffline = () => {
-      setIsOnline(false);
-    };
-
-    window.addEventListener("online", handleOnline);
-    window.addEventListener("offline", handleOffline);
-
     return () => {
       mounted = false;
-      window.removeEventListener("online", handleOnline);
-      window.removeEventListener("offline", handleOffline);
     };
   }, []);
 
