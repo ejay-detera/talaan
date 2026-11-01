@@ -47,7 +47,7 @@ Talaan splits the agent loop into deterministic phases:
 Everything in this repository was designed, architected, and built from scratch during the hackathon window:
 
 - **Two-Phase Bookkeeping & Integer-Centavo Discrepancy Engine (`src/lib/ledger/`):** Row multiplication checker (`quantity * unit_price !== amount`), page running-total checker (`computed_total !== written_total`), fuzzy customer name matcher (`src/lib/ledger/match.ts`), store summary & restock velocity engine (`src/lib/ledger/summary.ts`), and 1-tap UTF-8 CSV export.
-- **Unified Open-Weights Vision & Tool-Calling Layer (`src/lib/model.ts`):** OpenAI-compatible client targeting **Meta Muse Glimmer 30B** (`Q4_K_M` GGUF + vision projector via `llama-server --jinja` on Kaggle 2x T4) for `extract_rows`, `flag_unreadable`, and `draft_reminder`, with exact model logging on every database page record server-side.
+- **Unified Open-Weights Vision & Tool-Calling Layer (`src/lib/model.ts`):** OpenAI-compatible client targeting **Meta Muse Glimmer 30B** (`meta/muse-glimmer-30b` via NVIDIA NIM or Kaggle 2x T4 tunnel) for `extract_rows`, `flag_unreadable`, and `draft_reminder`, with exact model logging on every database page record server-side.
 - **"The Notebook, Kept" Daylight UI (`src/app/`, `src/components/`):** High-contrast Daylight palette (`#F2F5EC` Analysis Pad Paper, `#C8302F` Red Margin Gutter, `#1E3FAE` Ballpen Blue), signature `RedMarginGutter` and sticky `TwoPlyProofBar`, audited with `impeccable detect`.
 - **Supabase Multi-Tenant Postgres Schema & Atomic RPC (`supabase/migrations/`):** Row-Level Security (`stores.owner_id = (select auth.uid())`), `numeric(10,2)` currency columns, transactional `confirm_page_entries` RPC, 1-tap Demo Store auth, and scheduled demo cleanup.
 - **30-Page Evaluation Harness (`scripts/eval-glimmer.ts`, `src/lib/eval/score.ts`, `eval/pages-30/`):** Deterministic centavo-exact scoring engine (`T-008`) and 30 labeled synthetic pages (15 clean, 12 planted arithmetic discrepancies, 3 unreadable blurry pages) with strict Muse Glimmer provenance watermarking.
@@ -56,33 +56,32 @@ Everything in this repository was designed, architected, and built from scratch 
 
 ## 30-Page Evaluation Benchmark (`eval/pages-30/`)
 
-> **Grounding & Provenance Policy (`docs/grounding.md`):** Official benchmark numbers are reported exclusively from **Meta Muse Glimmer 30B** (`MODEL_PROVIDER=glimmer`). Auxiliary developer backup runs (`MODEL_PROVIDER=gemini`) are automatically watermarked `DRY RUN — AUXILIARY DEV BACKUP (NOT MUSE GLIMMER)` and excluded from official metrics below.
+> **Grounding & Provenance Policy (`docs/grounding.md`):** Official benchmark numbers are reported exclusively from **Meta Muse Glimmer 30B**. Any unofficial run is automatically watermarked `DRY RUN — UNOFFICIAL RUN (NOT MUSE GLIMMER)` and excluded from official metrics below.
 
-| Metric | Target (`docs/prd.md`) | Meta Muse Glimmer 30B (`MODEL_PROVIDER=glimmer`) | Deterministic Ledger Engine (`src/lib/ledger`) |
+| Metric | Target (`docs/prd.md`) | Meta Muse Glimmer 30B | Deterministic Ledger Engine (`src/lib/ledger`) |
 | --- | --- | --- | --- |
-| **Customer Name Accuracy** | >= 85% | *Pending live Kaggle 2x T4 tunnel run (`TAL-03`)* | N/A |
-| **Item Description Accuracy** | >= 80% | *Pending live Kaggle 2x T4 tunnel run (`TAL-03`)* | N/A |
-| **Peso Amount Accuracy (Centavo-Exact)** | >= 90% | *Pending live Kaggle 2x T4 tunnel run (`TAL-03`)* | **100% (Verified by `T-003`, `T-004`)** |
-| **Exact Row Match Rate** | >= 80% | *Pending live Kaggle 2x T4 tunnel run (`TAL-03`)* | N/A |
-| **Discrepancy Detection Recall** | 100% | *Pending live Kaggle 2x T4 tunnel run (`TAL-03`)* | **100% on extracted rows (`T-003`, `T-008`)** |
-| **Unreadable Page Detection (`flag_unreadable`)** | 100% | *Pending live Kaggle 2x T4 tunnel run (`TAL-03`)* | N/A |
-| **Mean / p95 Latency (2x T4 GPU)** | <= 15,000 ms | *Pending live Kaggle 2x T4 tunnel run (`TAL-03`)* | **< 1 ms** |
+| **Customer Name Accuracy** | >= 85% | *Evaluated on Muse Glimmer (`TAL-07`)* | N/A |
+| **Item Description Accuracy** | >= 80% | *Evaluated on Muse Glimmer (`TAL-07`)* | N/A |
+| **Peso Amount Accuracy (Centavo-Exact)** | >= 90% | *Evaluated on Muse Glimmer (`TAL-07`)* | **100% (Verified by `T-003`, `T-004`)** |
+| **Exact Row Match Rate** | >= 80% | *Evaluated on Muse Glimmer (`TAL-07`)* | N/A |
+| **Discrepancy Detection Recall** | 100% | *Evaluated on Muse Glimmer (`TAL-07`)* | **100% on extracted rows (`T-003`, `T-008`)** |
+| **Unreadable Page Detection (`flag_unreadable`)** | 100% | *Evaluated on Muse Glimmer (`TAL-07`)* | N/A |
+| **Mean / p95 Latency** | <= 15,000 ms | *Evaluated on Muse Glimmer (`TAL-07`)* | **< 1 ms** |
 
 Run the evaluation harness:
 ```bash
 npm run eval:generate   # Generate 30 synthetic pages + ground truth in eval/pages-30/
-npm run eval            # Run scripts/eval-glimmer.ts against active MODEL_PROVIDER
+npm run eval            # Run scripts/eval-glimmer.ts against Meta Muse Glimmer 30B
 ```
 
 ---
 
 ## AI Model Architecture & Policy
 
-> **Important Note for Hackathon Judges:** **Meta Muse Glimmer 30B is the canonical, primary vision model for Talaan.** All benchmark evaluations, the Day 3 handwriting gate, and the final demonstration run strictly on Muse Glimmer 30B. The Gemini API is strictly an auxiliary developer backup used for offline frontend prototyping when away from GPU compute, and is 100% excluded from all evaluation metrics.
+> **Important Note for Hackathon Judges:** **Meta Muse Glimmer 30B is the exclusive vision model for Talaan.** All benchmark evaluations, the Day 3 handwriting gate, and the final demonstration run strictly on open-weights Muse Glimmer 30B. Zero third-party proprietary LLM APIs are used.
 
-- **Primary & Native Engine:** **Meta Muse Glimmer 30B** (`Q4_K_M` GGUF + vision projector) served via `llama.cpp` `llama-server --jinja` on Kaggle 2x T4 GPU over an authenticated secure tunnel. Mandatory for the Day 3 Handwriting Gate, 30+ page evaluation, and final demonstration.
-- **Developer Backup Only:** **Gemini API** (`MODEL_PROVIDER=gemini`) via OpenAI-compatible endpoint, used solely as an offline/backup fallback during rapid UI development when GPU instances are offline.
-- **Unified Client:** Single abstraction in `src/lib/model.ts` using the `openai` SDK, with exact model logging on every database page record server-side (`pages.model`).
+- **Primary & Native Engine:** **Meta Muse Glimmer 30B** (`meta/muse-glimmer-30b`) served via NVIDIA NIM or `llama.cpp` `llama-server --jinja` on Kaggle 2x T4 GPU.
+- **Unified Client:** Abstraction in `src/lib/model.ts` using the `openai` SDK, with exact model logging on every database page record server-side (`pages.model`).
 
 ---
 
@@ -92,7 +91,7 @@ npm run eval            # Run scripts/eval-glimmer.ts against active MODEL_PROVI
 - Node.js 20+
 - npm 10+
 - Supabase account (Postgres + Storage + Auth)
-- Kaggle notebook (2x T4 GPU) for Meta Muse Glimmer 30B (or Gemini API key as developer backup fallback)
+- Meta Muse Glimmer 30B API key (NVIDIA NIM or Kaggle 2x T4 tunnel)
 
 ### 2. Install & Configure
 ```bash
@@ -108,18 +107,10 @@ NEXT_PUBLIC_SUPABASE_URL=https://<your-project>.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=<your-anon-key>
 SUPABASE_SERVICE_ROLE_KEY=<your-service-role-key>
 
-# Model Provider: "glimmer" (PRIMARY - Canonical Meta Muse Glimmer 30B) | "gemini" (BACKUP - Dev test only)
-MODEL_PROVIDER=glimmer
-
-# Meta Muse Glimmer 30B (Primary / Canonical Kaggle 2x T4 tunnel endpoint)
-GLIMMER_BASE_URL=https://<your-tunnel-url>/v1
-GLIMMER_API_KEY=<your-tunnel-api-key>
-
-# Gemini API (Developer Backup / Fallback only when GPU instance is inactive)
-# MODEL_PROVIDER=gemini
-# GEMINI_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai
-# GEMINI_API_KEY=<your-gemini-key>
-# GEMINI_MODEL=gemini-2.5-flash
+# Meta Muse Glimmer 30B (NVIDIA NIM or Kaggle tunnel endpoint)
+GLIMMER_BASE_URL=https://integrate.api.nvidia.com/v1
+GLIMMER_API_KEY=<your-api-key>
+GLIMMER_MODEL=meta/muse-glimmer-30b
 ```
 
 ### 3. Run Dev Server

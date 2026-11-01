@@ -89,12 +89,11 @@ Pinned versions come from `package.json` / `package-lock.json` (`S-10`). Planned
 | `typescript` | `^5` | `package-lock.json` | `https://www.typescriptlang.org/docs/` | 2026-10-27 | Strict mode enabled in `tsconfig.json` |
 | `eslint` / `eslint-config-next` | `^9` / `16.4.3` | `package-lock.json` | `https://eslint.org/docs/latest/` | 2026-10-27 | Flat config in `eslint.config.mjs` |
 | `@supabase/supabase-js` / `@supabase/ssr` | `2.118.0` / `0.12.7` | `package-lock.json` | `https://supabase.com/docs/reference/javascript` | 2026-10-27 | Postgres, Storage, Auth + RLS client & Next.js cookie session handler |
-| `openai` | `7.45.0` | `package-lock.json` | `https://github.com/openai/openai-node` | 2026-10-27 | Used in `src/lib/model.ts` for both `llama-server` (Muse Glimmer) and Gemini OpenAI-compatible endpoint |
+| `openai` | `7.45.0` | `package-lock.json` | `https://github.com/openai/openai-node` | 2026-10-27 | Used in `src/lib/model.ts` exclusively for Meta Muse Glimmer 30B OpenAI-compatible endpoint |
 | `zod` | `4.6.7` | `package-lock.json` | `https://zod.dev` | 2026-10-27 | Schema validation of model tool calls and API inputs |
 | `sharp` | `0.35.5` | `package-lock.json` | `https://sharp.pixelplumbing.com` | 2026-10-27 | Server-side image resize, auto-rotate, contrast, crop |
 | `vitest` | `5.0.5` | `package-lock.json` | `https://vitest.dev` | 2026-10-27 | Unit test runner for `src/lib/ledger` and evaluation harness |
-| Meta Muse Glimmer 30B (`llama.cpp` `llama-server`) | `Q4_K_M` GGUF (`~16.8 GB` + `~1.4 GB` projector) | External (Kaggle 2x T4) | `S-08` | 2026-10-27 | Serve with CUDA arch 75 and `--jinja --api-key` |
-| Gemini API (OpenAI-compatible endpoint) | Auxiliary Dev Backup Only (`MODEL_PROVIDER=gemini`) | External API | `https://ai.google.dev/gemini-api/docs/openai` | 2026-10-27 | Auxiliary developer backup fallback only for offline UI prototyping; 100% excluded from evals, gates, and final demo |
+| Meta Muse Glimmer 30B (`meta/muse-glimmer-30b`) | `30B` (NVIDIA NIM / Kaggle 2x T4) | External API / Server | `S-08` | 2026-10-27 | Canonical exclusive multimodal handwriting & tool-calling model (`ADR-0003`) |
 
 ---
 
@@ -110,7 +109,7 @@ Organizations, agencies, vendors, and competitors named anywhere in the suite.
 | **Philippine Sari-Sari Store Owners** | End User Segment | **Prospective target** | `S-01` §2, §11 | 2026-10-27 | 3–5 discovery interviews planned; zero live commercial customers |
 | **Cooperatives / Barangay Hubs / LGUs** | Prospective B2B Customer | **Prospective target** | `S-01` §3, §6 | 2026-10-27 | Hypothesis for self-hosted local Glimmer GPU boxes; no agreements |
 | **Micro-Lenders / Fintechs / FMCG Distributors** | Prospective Ecosystem Target | **Prospective target** | `S-01` §6 | 2026-10-27 | Hypothesis for consented ledger sharing and restock ordering; no agreements |
-| **Supabase / Vercel / Kaggle / Google** | Infrastructure Vendors | **Prospective target** (Standard Developer Tier) | `S-01` §4 | 2026-10-27 | Standard cloud/compute tooling used to build and test the hackathon project |
+| **Supabase / Vercel / Kaggle / NVIDIA** | Infrastructure Vendors | **Prospective target** (Standard Developer Tier) | `S-01` §4 | 2026-10-27 | Standard cloud/compute tooling used to host, build, and run Muse Glimmer inference |
 
 ---
 
@@ -122,6 +121,7 @@ Claims removed or prohibited so they are not re-introduced.
 |---|---|---|---|---|
 | R-01 | Treating illustrative TAM/SAM/SOM (`₱1.54B / ₱594M / ₱5.9M`) as validated market forecasts | 2026-10-27 | Explicitly labeled illustrative in `S-01` §7 based on unvalidated assumptions `A-02..A-04` | Kept only as labeled illustrative assumptions in `C-08` / `bpd.md` §3.1 |
 | R-02 | Presenting Gemini API outputs or benchmarks as Muse Glimmer results | 2026-10-27 | Explicitly prohibited by `S-01` §4 and §9 model policy | Prohibited suite-wide |
+| R-03 | Operating a dual model switch (`glimmer` vs. `gemini`); Gemini is completely retired suite-wide | 2026-11-02 | Unifying 100% on Meta Muse Glimmer 30B open weights (`ADR-0003`) | Supersedes `ADR-0002` |
 
 ---
 

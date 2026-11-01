@@ -1,60 +1,37 @@
 /**
- * Unified Model Client
+ * Talaan Model Client
  *
- * CANONICAL PRIMARY: Meta Muse Glimmer 30B (served via llama.cpp llama-server on Kaggle 2x T4).
- * AUXILIARY DEV BACKUP ONLY: Gemini API (used solely when offline or without active GPU compute).
- * All evaluations, Day 3 handwriting gates, and demo submissions run strictly on Muse Glimmer.
+ * Exclusively powered by Meta Muse Glimmer 30B (Open Weights via NVIDIA NIM or Kaggle 2x T4).
+ * Zero proprietary cloud dependencies. Zero LLM arithmetic.
  */
 import OpenAI from "openai";
 
-export type ModelProvider = "glimmer" | "gemini";
+export type ModelProvider = "glimmer";
 
 export function getActiveProvider(): ModelProvider {
-  return (process.env.MODEL_PROVIDER as ModelProvider) ?? "glimmer";
+  return "glimmer";
 }
 
 export function getActiveModelName(): string {
-  const provider = getActiveProvider();
-  return provider === "gemini"
-    ? process.env.GEMINI_MODEL || "gemini-2.0-flash"
-    : process.env.GLIMMER_MODEL || "meta/muse-glimmer-30b";
+  return process.env.GLIMMER_MODEL || "meta/muse-glimmer-30b";
 }
 
-export const activeProvider: ModelProvider = (process.env.MODEL_PROVIDER as ModelProvider) ?? "glimmer";
-export const activeModelName: string =
-  activeProvider === "gemini"
-    ? process.env.GEMINI_MODEL || "gemini-2.0-flash"
-    : process.env.GLIMMER_MODEL || "meta/muse-glimmer-30b";
+export const activeProvider: ModelProvider = "glimmer";
+export const activeModelName: string = process.env.GLIMMER_MODEL || "meta/muse-glimmer-30b";
 
 export function getModelClient(): { client: OpenAI; model: string; provider: ModelProvider } {
-  const provider = getActiveProvider();
   const model = getActiveModelName();
-  const isGemini = provider === "gemini";
+  const baseURL = process.env.GLIMMER_BASE_URL;
+  const apiKey = process.env.GLIMMER_API_KEY;
 
-  const baseURL = isGemini
-    ? process.env.GEMINI_BASE_URL || "https://generativelanguage.googleapis.com/v1beta/openai"
-    : process.env.GLIMMER_BASE_URL;
-
-  const apiKey = isGemini
-    ? process.env.GEMINI_API_KEY
-    : process.env.GLIMMER_API_KEY ?? "none";
-
-  if (!baseURL) {
-    throw new Error(
-      isGemini
-        ? "GEMINI_BASE_URL is not configured"
-        : "GLIMMER_BASE_URL is not configured. Set the Kaggle tunnel URL in .env.local"
-    );
-  }
-
-  if (isGemini && !apiKey) {
-    throw new Error("GEMINI_API_KEY is not configured in .env.local");
+  if (!baseURL || !apiKey) {
+    throw new Error("The Model is currently unavailable, please try again later.");
   }
 
   const client = new OpenAI({
     baseURL,
-    apiKey: apiKey || "dummy-key",
+    apiKey,
   });
 
-  return { client, model, provider };
+  return { client, model, provider: "glimmer" };
 }

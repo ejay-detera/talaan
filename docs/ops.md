@@ -77,8 +77,8 @@ Never call the Kaggle tunnel, Supabase demo project, or Vercel preview "live" or
 
 ## 6. Configuration and Secrets Operations
 
-- All secrets (`GLIMMER_API_KEY`, `GLIMMER_BASE_URL`, `GEMINI_API_KEY`, `SUPABASE_SERVICE_ROLE_KEY`) live in git-ignored `.env.local` ([`security.md`](security.md) §6).
-- Because Kaggle generates a new tunnel URL every session (`S-01` §4), `GLIMMER_BASE_URL` is updated in `.env.local` at the start of each Kaggle GPU session.
+- All secrets (`GLIMMER_API_KEY`, `GLIMMER_BASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`) live in git-ignored `.env.local` ([`security.md`](security.md) §6).
+- If using an ephemeral Kaggle GPU tunnel (`S-01` §4), `GLIMMER_BASE_URL` is updated in `.env.local` at the start of each session.
 
 ---
 
@@ -87,8 +87,8 @@ Never call the Kaggle tunnel, Supabase demo project, or Vercel preview "live" or
 | Severity | Definition | Response target | Owner |
 |---|---|---|---|
 | **SEV-1** | Accidental commit of secret key or unredacted real customer PII; or Day 3 Glimmer handwriting gate < 80% (`A-05`) | Immediate | Dev Ejay |
-| **SEV-2** | Kaggle GPU session expires or tunnel disconnects during evaluation or demo recording (`A-06`) | < 15 minutes | Dev Ejay |
-| **SEV-3** | T4 inference latency exceeds serverless timeout on hosted preview | Switch to local `next dev` against tunnel (`S-01` §4) | Dev Ejay |
+| **SEV-2** | Inference endpoint disconnects during evaluation or demo recording (`A-06`) | < 15 minutes | Dev Ejay |
+| **SEV-3** | Inference latency exceeds serverless timeout on hosted preview | Switch to local `next dev` against endpoint (`S-01` §4) | Dev Ejay |
 
 ---
 
@@ -96,9 +96,9 @@ Never call the Kaggle tunnel, Supabase demo project, or Vercel preview "live" or
 
 | ID | Symptom | Verified cause | Diagnosis | Fix | Escalate to |
 |---|---|---|---|---|---|
-| **RB-01** | `POST /api/pages/extract` returns `504 MODEL_TIMEOUT` or connection refused when `MODEL_PROVIDER=glimmer` | Kaggle notebook session idled out or Cloudflare/ngrok tunnel URL changed (`S-01` §4, §8) | `curl ${GLIMMER_BASE_URL}/health` | 1. Restart Kaggle notebook using cached private Dataset (`llama-server` + GGUF) 2. Restart tunnel 3. Update `GLIMMER_BASE_URL` in `.env.local` | Dev Ejay |
-| **RB-02** | Hosted Vercel route times out waiting for 2x T4 response | Serverless function execution limit is shorter than 30B vision inference on T4 (`S-01` §4, §8) | Check `pages.latency_ms` | 1. Ensure `sharp` pre-crops/resizes image (`src/lib/image.ts`), reasoning is set to low, and `--ctx-size 32768` is set 2. Run `npm run dev` locally against the Kaggle tunnel for evaluation and demo recording | Dev Ejay |
-| **RB-03** | Tool-call JSON parsing fails after switching from auxiliary `MODEL_PROVIDER=gemini` backup to canonical `glimmer` | Prompt or tool-call format difference between Gemini and `llama-server --jinja` (`S-01` §4, §8) | Inspect Zod `VALIDATION_ERROR` details | Ensure `llama-server` is started with `--jinja`, test tool call directly against Glimmer, and adjust `src/lib/prompts/` for Glimmer | Dev Ejay |
+| **RB-01** | `POST /api/pages/extract` returns `504 MODEL_TIMEOUT` or connection refused | Endpoint idled out or tunnel URL changed (`S-01` §4, §8) | `curl ${GLIMMER_BASE_URL}/health` | 1. Restart Kaggle notebook / check NVIDIA NIM quota 2. Update `GLIMMER_BASE_URL` in `.env.local` | Dev Ejay |
+| **RB-02** | Hosted Vercel route times out waiting for model response | Serverless function execution limit is shorter than 30B vision inference (`S-01` §4, §8) | Check `pages.latency_ms` | 1. Ensure `sharp` pre-crops/resizes image (`src/lib/image.ts`) 2. Run `npm run dev` locally against the endpoint for evaluation and demo recording | Dev Ejay |
+| **RB-03** | Tool-call JSON parsing fails on Meta Muse Glimmer extraction | Format drift or prompt mismatch | Inspect Zod `VALIDATION_ERROR` details | Ensure tool call format aligns with `extract_rows` schema and adjust `src/lib/prompts/` | Dev Ejay |
 
 | Date | Incident | Severity | Root cause | Actions | Status |
 |---|---|---|---|---|---|

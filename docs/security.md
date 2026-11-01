@@ -31,7 +31,7 @@
 
 | Asset | Classification | Stored in | Owner | Retention |
 |---|---|---|---|---|
-| **Model & Database Server Secrets** (`GLIMMER_API_KEY`, `GEMINI_API_KEY`, `SUPABASE_SERVICE_ROLE_KEY`) | **Secret** | `.env.local` (git-ignored) / Hosting env store | Dev Ejay | Rotated per session (`GLIMMER_BASE_URL` / `GLIMMER_API_KEY`) |
+| **Model & Database Server Secrets** (`GLIMMER_API_KEY`, `SUPABASE_SERVICE_ROLE_KEY`) | **Secret** | `.env.local` (git-ignored) / Hosting env store | Dev Ejay | Rotated per session (`GLIMMER_BASE_URL` / `GLIMMER_API_KEY`) |
 | **Handwritten Notebook Photos** (`notebook-pages` bucket) | **Restricted (PII)** | Private Supabase Storage bucket | Store Owner (`store_id`) | [`data-model.md`](data-model.md) §7 (`TBD`) |
 | **Customer Names & *Utang* Balances** (`customers`, `entries`, `reminders`) | **Restricted (PII / Financial)** | Supabase Postgres (RLS-protected) | Store Owner (`store_id`) | [`data-model.md`](data-model.md) §7 (`TBD`) |
 | **Supabase Auth Session Tokens (JWT)** | **Restricted** | HTTP-only / Supabase auth cookies | Store Owner | Supabase default session lifetime (`TBD`) |
@@ -95,9 +95,8 @@ Likelihood (`L`) and Impact (`I`) reflect engineering judgment (`L` / `M` / `H`)
 
 | Secret (name only) | Purpose | Stored in | Last rotated | Owner |
 |---|---|---|---|---|
-| `GLIMMER_API_KEY` | Protects Kaggle `llama-server` tunnel (`--api-key`) | `.env.local` (server-only) | Per Kaggle session | Dev Ejay |
-| `GLIMMER_BASE_URL` | Ephemeral Cloudflare/ngrok tunnel URL to Kaggle `llama-server` | `.env.local` (server-only) | Per Kaggle session | Dev Ejay |
-| `GEMINI_API_KEY` | Google Gemini API key for local dev testing only | `.env.local` (server-only) | Never (not yet created) | Dev Ejay |
+| `GLIMMER_API_KEY` | Protects inference endpoint / tunnel (`--api-key`) | `.env.local` (server-only) | Per session / deployment | Dev Ejay |
+| `GLIMMER_BASE_URL` | Endpoint URL (NVIDIA NIM or Kaggle `llama-server` tunnel) | `.env.local` (server-only) | Per session / deployment | Dev Ejay |
 | `SUPABASE_SERVICE_ROLE_KEY` | Privileged server-only Supabase key (if used for seed/storage) | `.env.local` (server-only) | Never (not yet created) | Dev Ejay |
 
 ---

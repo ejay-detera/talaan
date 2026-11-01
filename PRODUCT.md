@@ -28,7 +28,7 @@ Unlike POS or inventory apps that require store owners to abandon paper and type
 ## Capabilities and Constraints
 
 - **Confirmed Capabilities (MVP Scope — Planned):** Photo upload, structured extraction with row confidence, review screen with low-confidence highlights and customer auto-matching, two-level deterministic discrepancy finder, customer balance ledger, Taglish reminder drafts (copy/share only), and unreadable page retake request.
-- **Model Policy:** **Meta Muse Glimmer 30B** (Q4_K_M GGUF via `llama-server` on Kaggle 2x T4) is the canonical primary engine and mandatory for the Day 3 handwriting gate, 30+ page evaluation, and final demo. Gemini API (`MODEL_PROVIDER=gemini`) is strictly an auxiliary developer backup used for rapid local offline iteration. Active model is logged per page in the database (`pages.model`) with zero raw LLM pills exposed in the UI.
+- **Model Policy:** **Meta Muse Glimmer 30B** (open weights served via NVIDIA NIM or `llama-server` on Kaggle 2x T4) is the exclusive canonical engine for all extraction, evaluation, and demonstration. Active model is logged per page in the database (`pages.model`) with zero raw LLM pills exposed in the UI.
 - **Hard Boundaries:** No automated message sending (owner sends manually), no payment processing or e-wallet movement, no voice/audio input, and zero LLM-computed arithmetic (all math happens in deterministic code using integer centavos / `numeric(10,2)`).
 
 ## Brand Commitments
@@ -47,7 +47,7 @@ Unlike POS or inventory apps that require store owners to abandon paper and type
 1. **Adapt to the notebook, never replace it.** The physical notebook remains the primary capture instrument.
 2. **Code does the math, humans approve the ledger.** Never trust an LLM with addition; flag every discrepancy and low-confidence row for explicit owner confirmation.
 3. **Radical legibility in storefront light.** High contrast, tabular numerals for peso amounts, status badges that always pair an icon/shape with a label, and 44x44px minimum touch targets.
-4. **Honest provenance.** Always show which model (`muse-glimmer` vs. `gemini`) extracted a page and distinguish unconfirmed staging rows from confirmed ledger history.
+4. **Honest provenance.** Always log the exact Meta Muse Glimmer model version that extracted a page and distinguish unconfirmed staging rows from confirmed ledger history.
 
 ## Accessibility & Inclusion
 

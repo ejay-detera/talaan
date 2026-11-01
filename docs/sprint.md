@@ -78,7 +78,7 @@
 
 **Acceptance criteria:**
 - [x] Install `openai`, `zod`, and `sharp`; record pinned versions in [`evidence.md`](evidence.md) §5.
-- [x] Implement `src/lib/model.ts` switching between `glimmer` (default) and `gemini` (local dev testing only) via `MODEL_PROVIDER` (`S-01` §4).
+- [x] Implement `src/lib/model.ts` for Meta Muse Glimmer 30B (`meta/muse-glimmer-30b`; `ADR-0003`) with fail-closed error handling.
 - [x] Implement `src/lib/schemas.ts` (`PageExtractionSchema`, `RetakeRequestSchema`) and `src/lib/image.ts` (`sharp` auto-orient, resize, contrast).
 - [x] Implement `POST /api/pages/extract` (`API-01`): handles image upload, `sharp` prep, calls `extract_rows` / `flag_unreadable`, logs `model` and `latency_ms`, and returns candidate rows with deterministic math (`confirmed_by_user = false`, `status = 'needs_review'` / `'retake_requested'`). Storage/DB commit hooks into `TAL-01`.
 
@@ -137,7 +137,7 @@
 
 **Acceptance criteria:**
 - [x] Apply [`docs/design.md`](design.md) High-Contrast Daylight tokens (`#F2F5EC`, `#FFFFFF`, `#1E3FAE`, `#C8302F`, `#FFE14D`, `tabular-nums`) in `src/app/globals.css`.
-- [x] Build Landing Page (`src/app/page.tsx`, `src/components/landing/*`) showing active **Model Provenance Badge** (`Muse Glimmer 30B` vs. `Gemini Dev`), `.notebook`-to-ledger visual proof, and single direct CTA to `/login` or `/dashboard`.
+- [x] Build Landing Page (`src/app/page.tsx`, `src/components/landing/*`) showing `.notebook`-to-ledger visual proof, and single direct CTA to `/login` or `/dashboard`.
 - [x] Build Upload Dashboard showing recent notebook pages list and image capture trigger (`src/app/dashboard/page.tsx`, `src/components/dashboard/*`).
 - [x] Build `/pages/[id]/review` with collapsible notebook strip, `RedMarginGutter` (`✓`, `▲ Needs Review`, `✕ Math Mismatch`), inline row editor, 1-tap customer match/create dropdown, and sticky `TwoPlyProofBar` (`Written Total` vs. `Computed Total`).
 - [x] Implement `POST /api/pages/[id]/confirm` (`API-02`) with idempotency guard (`409 ALREADY_CONFIRMED`), centavo re-verification, and atomic commit (`confirmed_by_user = true`, `pages.status = 'confirmed'`).

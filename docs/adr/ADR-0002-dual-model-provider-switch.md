@@ -1,10 +1,13 @@
 # ADR-0002: Meta Muse Glimmer 30B Primary Architecture with Auxiliary Gemini Dev Backup
 
 **Date:** 2026-10-27
-**Status:** Accepted
+**Status:** Superseded by [ADR-0003](ADR-0003-retire-gemini-pure-muse-glimmer.md)
 **Deciders:** Dev Ejay
 **Answers:** [`foundation.md`](../foundation.md) §14 `Q5`
 **Affects:** [`foundation.md`](../foundation.md), [`sad.md`](../sad.md), [`sdd.md`](../sdd.md), [`modules/ai-component.md`](../modules/ai-component.md), [`test-plan.md`](../test-plan.md)
+
+> [!NOTE]
+> **Superseded on 2026-11-02 by [ADR-0003](ADR-0003-retire-gemini-pure-muse-glimmer.md):** The dual-provider switch and auxiliary Gemini backup were retired in favor of 100% pure open-weights execution with Meta Muse Glimmer 30B.
 
 ---
 

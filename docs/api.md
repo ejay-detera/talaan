@@ -192,8 +192,7 @@ None. Talaan uses synchronous HTTP Route Handlers.
 
 | Service | Version | Used for | Auth | Docs and pinned version |
 |---|---|---|---|---|
-| **Meta Muse Glimmer 30B (Kaggle `llama-server`)** | OpenAI-compatible `/v1/chat/completions` | Canonical primary vision extraction & Taglish reminder tool calls | `Bearer ${GLIMMER_API_KEY}` | [`evidence.md`](evidence.md) §5 |
-| **Gemini API** (Auxiliary dev backup only) | OpenAI-compatible `/v1beta/openai/chat/completions` | Offline local dev iteration when `MODEL_PROVIDER=gemini` | `Bearer ${GEMINI_API_KEY}` | [`evidence.md`](evidence.md) §5 |
+| **Meta Muse Glimmer 30B (`meta/muse-glimmer-30b`)** | OpenAI-compatible `/v1/chat/completions` | Canonical exclusive vision extraction & Taglish reminder tool calls | `Bearer ${GLIMMER_API_KEY}` | [`evidence.md`](evidence.md) §5 |
 | **Supabase API** | REST / Storage / Auth v2 | Database persistence, RLS auth, private Storage bucket | Supabase JWT / Service key | [`evidence.md`](evidence.md) §5 |
 
 ---

@@ -269,7 +269,7 @@ export function aggregateEvalReport(
 
   const watermark = isOfficial
     ? "OFFICIAL META MUSE GLIMMER 30B EVALUATION"
-    : `DRY RUN — AUXILIARY DEV BACKUP (NOT MUSE GLIMMER) [provider=${metadata.provider}, model=${metadata.model}]`;
+    : `DRY RUN — UNOFFICIAL RUN (NOT MUSE GLIMMER) [provider=${metadata.provider}, model=${metadata.model}]`;
 
   const totalPages = pages.length;
   let totalExpectedEntries = 0;

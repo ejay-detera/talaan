@@ -36,7 +36,8 @@ Do **not** write one for reversible implementation detail.
 | ADR | Title | Status | Date | Answers | Supersedes | Affects |
 |---|---|---|---|---|---|---|
 | `ADR-0001` | Two-Phase Split (`Prepare` vs. `Confirm`) and Deterministic Centavo Ledger Math (`src/lib/ledger`) | Accepted | 2026-10-27 | Foundation `Q1`, `Q2`, `Q3` | — | `foundation.md`, `sad.md`, `sdd.md`, `data-model.md`, `api.md`, `modules/payments-ledger.md` |
-| `ADR-0002` | Dual Model Provider Switch (`MODEL_PROVIDER=glimmer\|gemini`) with Mandatory Glimmer Gate/Eval/Demo Policy | Accepted | 2026-10-27 | Foundation `Q5` | — | `foundation.md`, `sad.md`, `sdd.md`, `modules/ai-component.md`, `test-plan.md` |
+| `ADR-0002` | Dual Model Provider Switch (`MODEL_PROVIDER=glimmer\|gemini`) with Mandatory Glimmer Gate/Eval/Demo Policy | Superseded by `ADR-0003` | 2026-10-27 | Foundation `Q5` | — | `foundation.md`, `sad.md`, `sdd.md`, `modules/ai-component.md`, `test-plan.md` |
+| `ADR-0003` | Pure Meta Muse Glimmer 30B Open-Weights Execution (Retiring Gemini) | Accepted | 2026-11-02 | Foundation `Q6` | `ADR-0002` | `foundation.md`, `sad.md`, `sdd.md`, `modules/ai-component.md`, `build.md`, `ops.md`, `evidence.md` |
 
 ## 4. Decision Ownership
 

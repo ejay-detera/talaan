@@ -5,9 +5,7 @@
  *   npx tsx --env-file=.env scripts/eval-glimmer.ts [--limit N] [--dir eval/pages-30]
  *
  * Provenance Rule (docs/modules/ai-component.md & AGENTS.md §7):
- *   Official evaluation results MUST run on Meta Muse Glimmer 30B (MODEL_PROVIDER=glimmer).
- *   Any run on MODEL_PROVIDER=gemini is strictly watermarked as a DRY RUN and written to
- *   eval/results/dry-run-latest.{json,md} so it can never be mistaken for Muse Glimmer metrics.
+ *   Official evaluation results MUST run on Meta Muse Glimmer 30B.
  */
 
 import fs from "fs/promises";
@@ -180,13 +178,13 @@ async function runSinglePage(
 async function main() {
   const { limit, dir } = parseArgs(process.argv.slice(2));
   const { model, provider } = getModelClient();
-  const isOfficialMuseGlimmer = provider === "glimmer" && model === "muse-glimmer";
+  const isOfficialMuseGlimmer = provider === "glimmer" && (model === "muse-glimmer" || model === "meta/muse-glimmer-30b");
 
   console.log("==============================================================");
   if (isOfficialMuseGlimmer) {
     console.log("  OFFICIAL META MUSE GLIMMER 30B EVALUATION HARNESS");
   } else {
-    console.log("  [WARNING] DRY RUN — AUXILIARY DEV BACKUP (NOT MUSE GLIMMER)");
+    console.log("  [WARNING] DRY RUN — UNOFFICIAL MODEL (NOT MUSE GLIMMER)");
     console.log(`  Active provider=${provider}, model=${model}`);
     console.log("  Results will be watermarked as DRY RUN per docs/grounding.md");
   }
