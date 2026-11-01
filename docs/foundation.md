@@ -29,7 +29,7 @@
 |---|:---:|---|---|
 | Payments and ledger | **Y** | Talaan maintains a financial *utang* (credit), *bayad* (payment), and cash-sale bookkeeping ledger requiring two-phase prepare/confirm, fail-closed centavo arithmetic, and append-only confirmed records (no external payment rail). | [`modules/payments-ledger.md`](modules/payments-ledger.md) |
 | Mobile client | **N** | Native mobile apps are out of scope (`S-01` §8). Talaan ships as a mobile-first Next.js web app; 44×44px touch targets and mobile viewport rules live in [`dsd.md`](dsd.md). | Deleted (`N/A`) |
-| AI component | **Y** | Core extraction and Taglish reminder drafting call Meta's open-weights **Muse Glimmer 30B** model behind a strict Zod schema and human-in-the-loop gate. | [`modules/ai-component.md`](modules/ai-component.md) |
+| AI component | **Y** | Core extraction, Taglish reminder drafting, and "Tanungin si Talaan" conversational ledger querying call Meta's open-weights **Muse Glimmer 30B** model behind a strict Zod schema, Number Guard, and human-in-the-loop gate. | [`modules/ai-component.md`](modules/ai-component.md) |
 
 ---
 

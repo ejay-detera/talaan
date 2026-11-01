@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { listConfirmedStoreLedgerRows } from "@/services/customers";
 import { AppHeaderNav } from "@/components/shared/AppHeaderNav";
 import { StoreSummarySheet } from "@/components/summary/StoreSummarySheet";
+import { AskDrawer } from "@/components/dashboard/AskDrawer";
 
 export default async function StoreSummaryPage() {
   await connection();
@@ -26,11 +27,14 @@ export default async function StoreSummaryPage() {
   const storeName = storeRes.data?.name || "My Store";
 
   return (
-    <div className="flex-1 flex flex-col bg-transparent text-pencil font-sans selection:bg-marker selection:text-pencil pb-16">
+    <div className="flex-1 flex flex-col bg-transparent text-pencil font-sans selection:bg-marker selection:text-pencil pb-28">
       <AppHeaderNav storeName={storeName} activeTab="summary" />
       <main className="paper-enter max-w-6xl mx-auto w-full px-4 sm:px-6 pt-2 sm:pt-4">
         <StoreSummarySheet storeName={storeName} rows={rows} />
       </main>
+
+      {/* Tanungin si Talaan Floating Action Button (FAB) & Side Panel */}
+      <AskDrawer />
     </div>
   );
 }

@@ -105,7 +105,7 @@ export function ScanButton({ className = "" }: ScanButtonProps) {
       {errorMessage && (
         <div
           role="alert"
-          className="fixed bottom-24 right-4 sm:right-6 max-w-sm p-3.5 rounded-row bg-[#FDF2F2] border border-margin text-margin text-xs font-semibold shadow-paper-lg flex items-start gap-2.5 z-40 animate-in fade-in slide-in-from-bottom-2 duration-200"
+          className="fixed bottom-[148px] sm:bottom-[156px] right-4 sm:right-6 max-w-sm p-3.5 rounded-row bg-[#FDF2F2] border border-margin text-margin text-xs font-semibold shadow-paper-lg flex items-start gap-2.5 z-40 animate-in fade-in slide-in-from-bottom-2 duration-200"
         >
           <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
           <span className="flex-1 leading-relaxed">{errorMessage}</span>
@@ -124,7 +124,7 @@ export function ScanButton({ className = "" }: ScanButtonProps) {
       {noticeMessage && (
         <div
           role="status"
-          className="fixed bottom-24 right-4 sm:right-6 max-w-sm p-3.5 rounded-row bg-[#F2F7EE] border border-paid/40 text-paid text-xs font-semibold shadow-paper-lg flex items-start gap-2.5 z-40 animate-in fade-in slide-in-from-bottom-2 duration-200"
+          className="fixed bottom-[148px] sm:bottom-[156px] right-4 sm:right-6 max-w-sm p-3.5 rounded-row bg-[#F2F7EE] border border-paid/40 text-paid text-xs font-semibold shadow-paper-lg flex items-start gap-2.5 z-40 animate-in fade-in slide-in-from-bottom-2 duration-200"
         >
           <CheckCircle2 className="w-4 h-4 flex-shrink-0 mt-0.5 text-paid" />
           <span className="flex-1 leading-relaxed">{noticeMessage}</span>

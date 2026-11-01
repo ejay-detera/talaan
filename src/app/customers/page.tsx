@@ -5,6 +5,7 @@ import { listCustomersWithBalances } from "@/services/customers";
 import { AppHeaderNav } from "@/components/shared/AppHeaderNav";
 import { TotalUtangCard } from "@/components/dashboard/TotalUtangCard";
 import { CustomerList } from "@/components/customers/CustomerList";
+import { AskDrawer } from "@/components/dashboard/AskDrawer";
 
 export default async function CustomersPage() {
   await connection();
@@ -35,7 +36,7 @@ export default async function CustomersPage() {
   }).format(new Date());
 
   return (
-    <div className="min-h-screen bg-transparent text-pencil font-sans selection:bg-marker selection:text-pencil pb-24">
+    <div className="min-h-screen bg-transparent text-pencil font-sans selection:bg-marker selection:text-pencil pb-28">
       {/* Floating Center Dock Navigation */}
       <AppHeaderNav storeName={storeName} activeTab="customers" />
 
@@ -89,6 +90,9 @@ export default async function CustomersPage() {
           </div>
         </div>
       </main>
+
+      {/* Tanungin si Talaan Floating Action Button (FAB) & Side Panel */}
+      <AskDrawer />
     </div>
   );
 }

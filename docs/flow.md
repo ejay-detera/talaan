@@ -32,6 +32,7 @@ flowchart TB
   S0 --> A1["✅ 1-Tap Demo Store Login & Email/Password Auth (TAL-01)"]
   S1 --> B1["✅ English Landing Page: Paper Sovereign Showcase & Direct CTA (src/app/page.tsx)"]
   S1b --> B2["✅ /dashboard: Floating Dock, Counter Ledger Sheet, Notepad Slips & Scan FAB (TAL-05)"]
+  S1b --> B3["✅ Tanungin si Talaan: Ask Ledger Counter Query Slip & SSE Stream (POST /api/ask)"]
   S2 --> C1["✅ Review Screen: Red Margin Gutter + Two-Ply Proof Bar + Confirm API (TAL-05)"]
   S3 --> D1["✅ Customer Utang Balances & History (TAL-06)"]
   S3 --> D2["✅ Taglish Reminder Card: Friendly/Firm + Copy/Share (TAL-06)"]
@@ -55,11 +56,12 @@ flowchart LR
     C1["✅ Review Red Margin Gutter & Proof Bar"]
     C2["✅ Match/Create Customers & Confirm Page"]
   end
-  subgraph D ["D — Act (Balances & Reminders)"]
+  subgraph D ["D — Act (Balances, Reminders & Ask Agent)"]
     D1["✅ View Customer Utang Balances"]
     D2["✅ Draft & Share Taglish Reminder"]
+    D3["✅ Tanungin si Talaan (Conversational Ledger Agent)"]
   end
-  A1 --> B1 --> B2 --> B3 --> C1 --> C2 --> D1 --> D2
+  A1 --> B1 --> B2 --> B3 --> C1 --> C2 --> D1 --> D2 --> D3
 ```
 
 ---
