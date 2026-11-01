@@ -39,18 +39,18 @@ export function WhoOwesCreditCard({
       className={`relative rounded-row border border-[#D5DEC6] bg-[#FFFEF8] border-l-4 border-l-margin shadow-paper overflow-hidden select-none transform rotate-[0.5deg] hover:rotate-0 transition-transform duration-300 ${className}`}
     >
       {/* Header Strip with Customer Count and Notebook Binder Punches */}
-      <div className="px-5 py-3.5 border-b border-rule flex items-center justify-between bg-[#FBFDF6]/80">
-        <div className="flex items-center gap-2.5">
-          <div className="flex items-center gap-1" aria-hidden="true">
+      <div className="px-3.5 sm:px-5 py-3 sm:py-3.5 border-b border-rule flex items-center justify-between gap-2 bg-[#FBFDF6]/80">
+        <div className="flex items-center gap-2 min-w-0">
+          <div className="flex items-center gap-1 flex-shrink-0" aria-hidden="true">
             <span className="w-2 h-2 rounded-full bg-paper border border-[#C5D0B4]" />
             <span className="w-2 h-2 rounded-full bg-paper border border-[#C5D0B4]" />
             <span className="w-2 h-2 rounded-full bg-paper border border-[#C5D0B4]" />
           </div>
-          <h2 className="font-display font-bold text-base sm:text-lg text-pencil tracking-tight">
+          <h2 className="font-display font-bold text-sm sm:text-lg text-pencil tracking-tight whitespace-nowrap">
             Who owes credit
           </h2>
         </div>
-        <span className="text-xs font-semibold text-muted font-sans">
+        <span className="text-xs font-semibold text-muted font-sans whitespace-nowrap flex-shrink-0">
           {debtors.length === 1 ? "1 customer" : `${debtors.length} customers`}
         </span>
       </div>

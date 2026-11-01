@@ -12,11 +12,11 @@
 }
 
 .gooey-nav--sm {
-  --gn-pad: 4px;
+  --gn-pad: 3px;
   --gn-gap: 2px;
   --gn-font: 12px;
-  --gn-x: 12px;
-  --gn-y: 6px;
+  --gn-x: 10px;
+  --gn-y: 5px;
 }
 
 .gooey-nav--lg {
@@ -61,7 +61,7 @@
 .gooey-nav__list {
   position: relative;
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: var(--gn-gap);
   margin: 0;
   padding: 0;

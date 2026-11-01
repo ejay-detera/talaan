@@ -114,19 +114,19 @@ export function CustomerList({ customers }: CustomerListProps) {
       {/* Header Pad Strip with Binder Holes & Controls */}
       <div className="px-4 sm:px-5 py-3.5 border-b border-rule bg-[#FBFDF6]/80 space-y-3">
         {/* Top Row: Title, Binder Holes, and Total Count */}
-        <div className="flex items-center justify-between gap-3">
-          <div className="flex items-center gap-2.5">
-            <div className="flex items-center gap-1" aria-hidden="true">
+        <div className="flex items-center justify-between gap-2 sm:gap-3">
+          <div className="flex items-center gap-2 min-w-0">
+            <div className="flex items-center gap-1 flex-shrink-0" aria-hidden="true">
               <span className="w-2 h-2 rounded-full bg-paper border border-[#C5D0B4]" />
               <span className="w-2 h-2 rounded-full bg-paper border border-[#C5D0B4]" />
               <span className="w-2 h-2 rounded-full bg-paper border border-[#C5D0B4]" />
             </div>
-            <h2 className="font-display font-bold text-base sm:text-lg text-pencil tracking-tight">
+            <h2 className="font-display font-bold text-sm sm:text-lg text-pencil tracking-tight whitespace-nowrap">
               Customer Directory
             </h2>
           </div>
 
-          <span className="text-xs font-semibold text-muted font-sans">
+          <span className="text-xs font-semibold text-muted font-sans whitespace-nowrap flex-shrink-0">
             {customers.length} total suki
           </span>
         </div>
@@ -243,36 +243,36 @@ export function CustomerList({ customers }: CustomerListProps) {
                   </div>
 
                   {/* Status Indicator & Last Active Date */}
-                  <div className="flex items-center gap-2 text-xs font-sans">
+                  <div className="flex items-center gap-1.5 sm:gap-2 text-xs font-sans flex-wrap sm:flex-nowrap">
                     {hasDebt && (
-                      <span className="inline-flex items-center gap-1 text-margin font-bold">
-                        <AlertCircle className="w-3 h-3" />
+                      <span className="inline-flex items-center gap-1 text-margin font-bold whitespace-nowrap">
+                        <AlertCircle className="w-3 h-3 flex-shrink-0" />
                         <span>Payment Due</span>
                       </span>
                     )}
                     {isPaid && (
-                      <span className="inline-flex items-center gap-1 text-paid font-bold">
-                        <CheckCircle2 className="w-3 h-3" />
+                      <span className="inline-flex items-center gap-1 text-paid font-bold whitespace-nowrap">
+                        <CheckCircle2 className="w-3 h-3 flex-shrink-0" />
                         <span>Settled</span>
                       </span>
                     )}
                     {isOverpaid && (
-                      <span className="inline-flex items-center gap-1 text-ink font-bold">
-                        <CheckCircle2 className="w-3 h-3" />
+                      <span className="inline-flex items-center gap-1 text-ink font-bold whitespace-nowrap">
+                        <CheckCircle2 className="w-3 h-3 flex-shrink-0" />
                         <span>Advance Credit</span>
                       </span>
                     )}
 
-                    <span className="text-muted inline-flex items-center gap-1">
+                    <span className="text-muted inline-flex items-center gap-1 whitespace-nowrap">
                       &bull;
-                      <Clock className="w-2.5 h-2.5" />
+                      <Clock className="w-2.5 h-2.5 flex-shrink-0" />
                       <span>{formattedDate}</span>
                     </span>
                   </div>
                 </div>
 
-                {/* Right: Tabular Balance Due & Direct Action with Generous Spacing */}
-                <div className="flex items-center gap-3 sm:gap-6 flex-shrink-0 text-right">
+                {/* Right: Tabular Balance Due & Direct Action (stacked vertically on mobile for thumb friendliness) */}
+                <div className="flex flex-col sm:flex-row items-end sm:items-center gap-0.5 sm:gap-6 flex-shrink-0 text-right">
                   <Amount
                     amount={Math.abs(c.balance)}
                     size="base"
@@ -286,12 +286,12 @@ export function CustomerList({ customers }: CustomerListProps) {
                   />
 
                   <span
-                    className={`text-xs font-bold inline-flex items-center gap-1 group-hover:underline min-w-[90px] justify-end ${
+                    className={`text-xs font-bold inline-flex items-center gap-1 group-hover:underline justify-end whitespace-nowrap ${
                       hasDebt ? "text-ink" : "text-muted group-hover:text-ink"
                     }`}
                   >
                     <span>{hasDebt ? "Draft reminder" : "Open ledger"}</span>
-                    <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
+                    <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5" />
                   </span>
                 </div>
               </Link>

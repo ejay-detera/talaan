@@ -73,42 +73,48 @@ export async function listCustomersWithBalances(
   let totalUtangCentavos = 0;
   let activeDebtorCount = 0;
 
-  const customers: CustomerSummary[] = rawCustomers.map((cust) => {
-    const custEntries = entriesByCustomerId.get(cust.id) || [];
-    const balanceInfo = computeCustomerBalance(
-      custEntries.map((e) => ({
-        amount: Number(e.amount),
-        entry_type: e.entry_type,
-        confirmed_by_user: true,
-      }))
-    );
-
-    // Latest activity from entries or customer creation
-    let lastActivityAt: string | null = cust.created_at;
-    if (custEntries.length > 0) {
-      const sorted = [...custEntries].sort(
-        (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+  const customers: CustomerSummary[] = rawCustomers
+    .filter((cust) => {
+      // Only include customers who have at least one confirmed transaction in the store
+      const custEntries = entriesByCustomerId.get(cust.id) || [];
+      return custEntries.length > 0;
+    })
+    .map((cust) => {
+      const custEntries = entriesByCustomerId.get(cust.id) || [];
+      const balanceInfo = computeCustomerBalance(
+        custEntries.map((e) => ({
+          amount: Number(e.amount),
+          entry_type: e.entry_type,
+          confirmed_by_user: true,
+        }))
       );
-      lastActivityAt = sorted[0].created_at;
-    }
 
-    if (balanceInfo.balance > 0) {
-      totalUtangCentavos += toCentavos(balanceInfo.balance);
-      activeDebtorCount += 1;
-    }
+      // Latest activity from confirmed entries
+      let lastActivityAt: string | null = null;
+      if (custEntries.length > 0) {
+        const sorted = [...custEntries].sort(
+          (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        );
+        lastActivityAt = sorted[0].created_at;
+      }
 
-    return {
-      id: cust.id,
-      store_id: cust.store_id,
-      name: cust.name,
-      phone_optional: cust.phone_optional,
-      credit_limit: (cust as unknown as { credit_limit?: number | null }).credit_limit ?? 500,
-      balance: balanceInfo.balance,
-      total_credit: balanceInfo.totalCredit,
-      total_payment: balanceInfo.totalPayment,
-      last_activity_at: lastActivityAt,
-    };
-  });
+      if (balanceInfo.balance > 0) {
+        totalUtangCentavos += toCentavos(balanceInfo.balance);
+        activeDebtorCount += 1;
+      }
+
+      return {
+        id: cust.id,
+        store_id: cust.store_id,
+        name: cust.name,
+        phone_optional: cust.phone_optional,
+        credit_limit: (cust as unknown as { credit_limit?: number | null }).credit_limit ?? 500,
+        balance: balanceInfo.balance,
+        total_credit: balanceInfo.totalCredit,
+        total_payment: balanceInfo.totalPayment,
+        last_activity_at: lastActivityAt,
+      };
+    });
 
   // Synthesize any confirmed ledger entries that have an extracted customer name not yet in customers table
   for (const [name, unlinkedEntries] of unlinkedByExtractedName.entries()) {

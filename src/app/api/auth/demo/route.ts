@@ -65,21 +65,6 @@ export async function POST() {
           { status: 500 }
         );
       }
-
-      // Seed standard demo customers (including Ate Baby for landing proof parity)
-      const { error: customerError } = await supabase.from("customers").insert([
-        { store_id: newStore.id, name: "Mang Jose", normalized_name: "mang jose", phone_optional: "09171234567" },
-        { store_id: newStore.id, name: "Kuya Jun", normalized_name: "kuya jun", phone_optional: "09187654321" },
-        { store_id: newStore.id, name: "Nanay Cora", normalized_name: "nanay cora", phone_optional: null },
-        { store_id: newStore.id, name: "Ate Baby", normalized_name: "ate baby", phone_optional: "09223334444" },
-      ]);
-
-      if (customerError) {
-        return NextResponse.json(
-          { error: customerError.message || "Failed to seed demo customers" },
-          { status: 500 }
-        );
-      }
     }
 
     return NextResponse.json({ success: true, user: currentUser });

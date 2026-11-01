@@ -52,10 +52,10 @@ export default function RootLayout({
       data-scroll-behavior="smooth"
       className={`${bricolageGrotesque.variable} ${atkinsonHyperlegible.variable} ${caveat.variable} min-h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-paper text-pencil font-sans relative">
+      <body className="min-h-full flex flex-col bg-paper text-pencil font-sans relative w-full max-w-full">
         <SmoothScrollProvider>
           <SystemBackground />
-          <div className="relative z-10 flex-1 flex flex-col">
+          <div className="relative z-10 flex-1 flex flex-col w-full max-w-full min-w-0">
             {children}
           </div>
         </SmoothScrollProvider>

@@ -129,9 +129,9 @@ export function Navbar({}: NavbarProps) {
   };
 
   return (
-    <div className="fixed top-3.5 sm:top-5 inset-x-0 z-40 flex justify-center items-center px-3 sm:px-4 pointer-events-none">
+    <div className="fixed top-2.5 sm:top-4 inset-x-0 z-40 flex justify-center items-center px-2 sm:px-4 pointer-events-none">
       {/* Floating Center Dock with GooeyNav */}
-      <header className="pointer-events-auto flex items-center gap-2 sm:gap-3.5 p-2 sm:p-2.5 pl-2.5 sm:pl-3.5 rounded-sheet bg-sheet border border-rule shadow-paper-lg transition-all duration-300">
+      <header className="pointer-events-auto flex items-center gap-1.5 sm:gap-2.5 p-1.5 sm:p-2 pl-2 sm:pl-3 rounded-sheet bg-sheet border border-rule shadow-paper-lg transition-all duration-300 max-w-[calc(100vw-16px)]">
         {/* Placement Icon & Brand */}
         <Link
           href="#hero"
@@ -166,26 +166,26 @@ export function Navbar({}: NavbarProps) {
               window.history.pushState(null, "", "#hero");
             }, 850);
           }}
-          className="flex items-center gap-2.5 p-1 pr-2.5 sm:pr-3.5 rounded-full hover:bg-paper transition-all select-none group active:scale-[0.98]"
+          className="flex items-center gap-1.5 sm:gap-2 p-1 pr-1.5 sm:pr-2.5 rounded-full hover:bg-paper transition-all select-none group active:scale-[0.98] flex-shrink-0"
           title="Talaan - Back to top"
         >
           <Image
             src="/assets/talaan-icon.png"
             alt="Talaan logo"
-            width={34}
-            height={34}
+            width={28}
+            height={28}
             className="flex-shrink-0 object-contain transition-transform duration-200 group-hover:scale-105"
           />
-          <span className="font-display font-black text-base tracking-tight text-pencil hidden sm:inline">
+          <span className="font-display font-black text-sm tracking-tight text-pencil hidden md:inline">
             Talaan
           </span>
         </Link>
 
         {/* Divider */}
-        <div className="h-5 sm:h-6 w-[1px] bg-rule" />
+        <div className="h-5 sm:h-6 w-[1px] bg-rule flex-shrink-0" />
 
         {/* Centered Gooey Nav Component */}
-        <div className="flex items-center">
+        <div className="flex items-center min-w-0">
           <GooeyNav
             items={NAV_ITEMS}
             activeIndex={activeIndex}
@@ -194,25 +194,25 @@ export function Navbar({}: NavbarProps) {
             color="#1E3FAE"
             activeTextColor="#FFFFFF"
             colors={["#1E3FAE", "#2550D8", "#1A3694"]}
-            size="md"
+            size="sm"
             frame={false}
-            particleCount={15}
-            animationTime={520}
-            spread={52}
-            gooeyness={0.55}
-            wobble={0.4}
+            particleCount={12}
+            animationTime={420}
+            spread={45}
+            gooeyness={0.5}
+            wobble={0.35}
             hoverEffect={true}
           />
         </div>
 
         {/* Divider */}
-        <div className="h-5 sm:h-6 w-[1px] bg-rule" />
+        <div className="h-5 sm:h-6 w-[1px] bg-rule flex-shrink-0" />
 
         {/* Direct Action Link */}
-        <div className="flex items-center pr-1 sm:pr-2">
+        <div className="flex items-center pr-1 sm:pr-1.5 flex-shrink-0">
           <Link
             href="/login"
-            className="px-4 py-2 rounded-full text-sm font-semibold text-pencil hover:text-ink hover:bg-paper transition-all active:scale-[0.98] select-none"
+            className="px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full text-xs sm:text-sm font-semibold text-pencil hover:text-ink hover:bg-paper transition-all active:scale-[0.98] select-none whitespace-nowrap"
           >
             Sign In
           </Link>

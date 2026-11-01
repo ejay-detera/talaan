@@ -50,26 +50,26 @@ export default async function ReviewPage({ params }: ReviewPageProps) {
   }
 
   return (
-    <div className="flex-1 flex flex-col bg-transparent text-pencil font-sans selection:bg-marker selection:text-pencil pb-6">
-      {/* Top Header matching Image 1 */}
-      <header className="bg-sheet border-b border-rule px-4 sm:px-6 py-4">
-        <div className="max-w-5xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div className="flex items-center gap-4">
+    <div className="flex-1 flex flex-col bg-transparent text-pencil font-sans selection:bg-marker selection:text-pencil pb-6 w-full max-w-full min-w-0 overflow-x-hidden">
+      {/* Top Header */}
+      <header className="bg-sheet border-b border-rule px-3 sm:px-6 py-3.5 sm:py-4 w-full">
+        <div className="max-w-5xl mx-auto flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2.5 sm:gap-4 min-w-0">
             <Link
               href="/dashboard"
-              className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-pencil hover:text-ink transition-colors p-1"
+              className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-pencil hover:text-ink transition-colors p-1 flex-shrink-0"
             >
               <ArrowLeft className="w-4 h-4" />
-              <span>Dashboard</span>
+              <span className="hidden sm:inline">Dashboard</span>
             </Link>
 
-            <div className="h-4 w-px bg-rule" aria-hidden="true" />
+            <div className="h-4 w-px bg-rule flex-shrink-0" aria-hidden="true" />
 
-            <div>
-              <h1 className="font-display font-bold text-lg sm:text-2xl text-pencil tracking-tight">
+            <div className="min-w-0">
+              <h1 className="font-display font-bold text-base sm:text-2xl text-pencil tracking-tight truncate">
                 Page Review
               </h1>
-              <p className="text-xs sm:text-sm text-muted font-sans font-medium">
+              <p className="text-xs sm:text-sm text-muted font-sans font-medium truncate">
                 Notebook of {formattedDate}
               </p>
             </div>
@@ -78,7 +78,7 @@ export default async function ReviewPage({ params }: ReviewPageProps) {
       </header>
 
       {/* Main Container */}
-      <main className="paper-enter max-w-5xl mx-auto px-4 sm:px-6 pt-5">
+      <main className="paper-enter max-w-5xl mx-auto px-3 sm:px-6 pt-4 sm:pt-5 w-full max-w-full min-w-0">
         {isAlreadyConfirmed ? (
           <ConfirmedPageSheet
             page={{
