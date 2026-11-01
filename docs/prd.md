@@ -68,9 +68,10 @@ MoSCoW priority reflects `S-01` §5 and locked user refinements (`Q1`–`Q11`). 
 | 7 | **Customer Balances Ledger (`sum(credit) - sum(payment)`)** | Must | ✅ Built | `src/app/customers/page.tsx`, `src/app/api/customers/route.ts` (`TAL-06`, `T-006`) |
 | 8 | **Taglish Reminder Drafts (Tone Selector + Copy & Web Share / `sms:`)** | Must | ✅ Built | `src/app/customers/[id]/page.tsx`, `src/app/api/reminders/draft/route.ts` (`TAL-06`, `T-007`) |
 | 9 | **30+ Page Muse Glimmer Evaluation Harness** | Must | 🟡 Partial (Harness + 30 synthetic pages built; live Glimmer tunnel run in `TAL-03`/`TAL-07`) | `scripts/eval-glimmer.ts`, `src/lib/eval/score.ts`, `eval/pages-30/` (`TAL-07`, `T-008`) |
-| 10 | **Supplier Receipt to Restock List (`restock_list`)** | Could (Stretch) | 🟡 Partial (Sales-velocity restock list built on `/summary`) | `src/lib/ledger/summary.ts`, `src/app/summary/page.tsx` (`US-08`) |
+| 10 | **Supplier Receipt to Restock List & Pamalengke Checklist** | Could (Stretch) | ✅ Built (Pamalengke interactive checklist on `/summary`) | `src/components/summary/PamalengkeChecklistModal.tsx`, `src/lib/ledger/formatters.ts` (`US-10`, `TAL-09`) |
 | 11 | **Weekly Summary (Top items, total *utang*, estimated profit)** | Could (Stretch) | ✅ Built | `src/lib/ledger/summary.ts`, `src/app/summary/page.tsx` (`US-08`, `summary.test.ts`) |
 | 12 | **Multi-Page Month View (131K context) & CSV/Print Export** | Could (Stretch) | ✅ Built (30d/All filter + CSV/Print export) | `src/app/api/ledger/export/route.ts`, `src/app/summary/page.tsx` (`US-08`, `route.test.ts`) |
+| 13 | **Customer E-Resibo Itemized Statement Slip & Text Export** | Could (Extension) | ✅ Built | `src/components/customers/CustomerReceiptModal.tsx`, `src/components/customers/CustomerBalanceCard.tsx` (`US-09`, `TAL-09`) |
 | 13 | **Shelf Photo Stock Count (Experimental)** | Could (Stretch) | ⬜ Roadmap | `S-01` §5 (`US-08`) |
 | 14 | **Voice / Audio Input** | Won't | ❌ Out of scope | Muse Glimmer has no audio support (`S-01` §3, §8) |
 | 15 | **Automated SMS / Messenger Sending** | Won't | ❌ Out of scope | Drafts only; owner sends manually (`S-01` §5, §8) |
@@ -148,6 +149,24 @@ Delivery stories in [`sprint.md`](sprint.md) cite these `US-` IDs.
 - Given confirmed store ledger entries, when the owner opens `/summary`, then `computeStoreSummary` (`src/lib/ledger/summary.ts`) computes centavo-exact totals for credit (*utang*), payments (*bayad*), cash sales, net uncollected *utang*, estimated ~10% store margin earnings, and top fast-moving items ranked by quantity sold.
 - Given an authenticated `store_owner`, when they tap **I-download ang CSV (Excel)** (`GET /api/ledger/export`) or **I-print / PDF**, then a UTF-8 BOM CSV file of all confirmed ledger entries is downloaded or printed.
 - **Traces:** BR-08 · Stretch Backlog · tests `summary.test.ts`, `export/route.test.ts`
+
+### US-09 — Customer E-Resibo Itemized Statement Slip & Text Export ✅
+
+> As a **Store Owner**, I want to generate a clean, itemized digital receipt slip (*E-Resibo*) for any customer so they can see exactly which items they bought on credit when I request payment.
+
+- Given an open customer detail page on `/customers/[id]`, when the owner taps **View E-Resibo Slip**, then `CustomerReceiptModal` renders a printable statement showing the store name, customer name, date, itemized list of credit transactions, payments received, net balance, and Paid/Payment Due status stamp.
+- Given the open E-Resibo modal, when the owner taps **Copy Text**, then `formatResiboText` (`src/lib/ledger/formatters.ts`) writes an itemized text breakdown formatted for SMS/Messenger into clipboard.
+- Given a supported mobile browser, when the owner taps **Share**, then the Web Share API (`navigator.share`) opens the native share sheet with the formatted receipt text.
+- **Traces:** BR-06, BR-09 · TAL-09 · tests `formatters.test.ts`
+
+### US-10 — "Pamalengke" Restock Checklist for Wholesale Market Trips ✅
+
+> As a **Store Owner**, I want an interactive restock checklist based on my fast-moving goods so I can easily check off items at the wholesale market without forgetting what sold out.
+
+- Given confirmed store transactions on `/summary`, when the owner taps **Pamalengke Checklist**, then `PamalengkeChecklistModal` displays the ranked list of fast-moving items, total pieces sold, and estimated capital required.
+- Given the Pamalengke checklist, when the owner taps an item, its checked state toggles and persists in browser `localStorage` so items remain checked across reloads during shopping.
+- Given the modal, when the owner taps **Copy List** or **Share**, then `formatPamalengkeListText` generates a clean checkbox text list (`[ ] <qty> pcs - <item>`) for SMS or Messenger.
+- **Traces:** BR-08, BR-10 · TAL-09 · tests `formatters.test.ts`
 
 ---
 

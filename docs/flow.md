@@ -108,8 +108,10 @@ Kept in lockstep with [`prd.md`](prd.md) §3:
 | 8. Taglish Reminder Drafts (Tone Selector + Copy & Web Share / `sms:`) | Must | ✅ | `src/app/customers/[id]/page.tsx`, `src/components/customers/ReminderCard.tsx`, `src/app/api/reminders/draft/route.ts` (`TAL-06`) | `npm test` (`T-007`) |
 | 9. 30+ Page Muse Glimmer Evaluation Harness | Must | 🟡 partial | `scripts/eval-glimmer.ts`, `src/lib/eval/score.ts`, `eval/pages-30/` (`TAL-07`) | `npm test` (`T-008`) — live Glimmer run pending `TAL-03` tunnel |
 | 10–12. Weekly Store Summary, Restock Velocity & 1-Tap CSV/Print Export (`US-08`) | Could | ✅ | `src/lib/ledger/summary.ts`, `src/app/summary/page.tsx`, `src/app/api/ledger/export/route.ts` | `npm test` (`summary.test.ts`, `export/route.test.ts`) |
-| 13. Shelf Photo Stock Count (Experimental) | Could | ⬜ roadmap | Deferred (`US-08`) | — |
-| 14–17. Voice input, Auto-SMS sending, Payments/POS, Credit scoring, Native app | Won't | ❌ out of scope | Excluded by `S-01` §3, §8 | — |
+| 13. Customer E-Resibo Itemized Statement Slip & Text Export (`US-09`, `TAL-09`) | Could | ✅ | `src/components/customers/CustomerReceiptModal.tsx`, `src/components/customers/CustomerBalanceCard.tsx`, `src/lib/ledger/formatters.ts` | `npm test` (`formatters.test.ts`) |
+| 14. Pamalengke Restock Checklist for Wholesale Trips (`US-10`, `TAL-09`) | Could | ✅ | `src/components/summary/PamalengkeChecklistModal.tsx`, `src/lib/ledger/formatters.ts` | `npm test` (`formatters.test.ts`) |
+| 15. Shelf Photo Stock Count (Experimental) | Could | ⬜ roadmap | Deferred (`US-08`) | — |
+| 16–19. Voice input, Auto-SMS sending, Payments/POS, Credit scoring, Native app | Won't | ❌ out of scope | Excluded by `S-01` §3, §8 | — |
 
 ---
 

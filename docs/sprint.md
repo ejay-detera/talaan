@@ -203,6 +203,26 @@
 
 ---
 
+### TAL-09 — Customer E-Resibo Digital Slip & "Pamalengke" Restock Checklist
+
+| Field | Value |
+|---|---|
+| Priority | P2 |
+| Points | 3 |
+| Status | ✅ Done |
+| Developer | Dev Ejay |
+| Traces | BR-06, BR-08 · US-09, US-10 · tests `formatters.test.ts` |
+
+> **As a Store Owner**, I want an itemized digital receipt slip (*E-Resibo*) with copy/share/print options for my customers, and an interactive "Pamalengke" restock checklist with persistent checkboxes for my wholesale market shopping trips.
+
+**Acceptance criteria:**
+- [x] Implement deterministic text generators in `src/lib/ledger/formatters.ts` for E-Resibo statement slip and Pamalengke restock list; verify with passing tests in `src/lib/ledger/__tests__/formatters.test.ts`.
+- [x] Build `CustomerReceiptModal.tsx` and `CustomerBalanceCard.tsx` in `src/components/customers/` rendering printable paper statement slip with Copy Text, Web Share (`navigator.share`), and Print Slip (`window.print()`).
+- [x] Build `PamalengkeChecklistModal.tsx` and mount on `/summary` (`StoreSummarySheet.tsx`) with localStorage check persistence, Copy List, Web Share, and Print.
+- [x] Zero DB migrations, zero new external npm packages, and zero RLS data leaks.
+
+---
+
 ## §4. Hackathon Sprint Schedule (`S-01` §11)
 
 | Sprint | Dates | Goal | Status |
@@ -250,6 +270,7 @@
 | 2026-10-27 | Redesigned Landing Page in English with Paper Sovereign Showcase, floating contextual widgets (sticky memo, credit balances, Taglish reminder, deterministic shield), living paper keyframe animations, and shadcn UI primitives (`button`, `card`, `badge`, `cn`). | Design craft upgrade (`TAL-05`, `impeccable`) | `TAL-05` |
 | 2026-10-28 | Delivered full TAL-05: Phase 0 anonymous demo auth (`POST /api/auth/demo`), daily demo cleanup cron (`GET /api/cron/cleanup-demo`), extraction persistence (`src/services/pages.ts`), atomic confirm API (`API-02`) via Postgres RPC (`confirm_page`), Review UI (`/pages/[id]/review`), and Upload Dashboard (`/dashboard`). Verified with 47 passing tests (`T-005`). | Story delivery (`TAL-05`) | `TAL-05`, `TAL-01` |
 | 2026-10-28 | Delivered full TAL-06: Customer balance ledger (`API-03`: `GET /api/customers`, `GET /api/customers/[id]/balance`), Taglish payment reminder generator (`API-04`: `POST /api/reminders/draft`), `/customers` list, `/customers/[id]` detail screen with `ReminderCard`, confirmed page review sheet (`ConfirmedPageSheet`), and total store *utang* card (`TotalUtangCard`). Verified with 68 passing tests (`T-006`, `T-007`). | Story delivery (`TAL-06`) | `TAL-06` |
+| 2026-11-01 | Delivered TAL-09: Customer E-Resibo itemized statement slip modal (`CustomerReceiptModal`), CustomerBalanceCard integration, Pamalengke restock checklist modal (`PamalengkeChecklistModal`) with localStorage check persistence, and deterministic text formatters (`formatResiboText`, `formatPamalengkeListText`). | Story delivery (`TAL-09`) | `TAL-09` |
 
 
 ---
