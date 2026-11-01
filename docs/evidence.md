@@ -94,6 +94,8 @@ Pinned versions come from `package.json` / `package-lock.json` (`S-10`). Planned
 | `sharp` | `0.35.5` | `package-lock.json` | `https://sharp.pixelplumbing.com` | 2026-10-27 | Server-side image resize, auto-rotate, contrast, crop |
 | `vitest` | `5.0.5` | `package-lock.json` | `https://vitest.dev` | 2026-10-27 | Unit test runner for `src/lib/ledger` and evaluation harness |
 | Meta Muse Glimmer 30B (`meta/muse-glimmer-30b`) | `30B` (NVIDIA NIM / Kaggle 2x T4) | External API / Server | `S-08` | 2026-10-27 | Canonical exclusive multimodal handwriting & tool-calling model (`ADR-0003`) |
+| **Brevo Custom SMTP Relay** | `smtp-relay.brevo.com:587` | External SMTP | `https://developers.brevo.com` | 2026-11-02 | Transactional SMTP relay for 6-digit OTP codes and password reset emails |
+| **SMS API PH** | `v1` REST API | External Gateway | `https://smsapiph.netlify.app` | 2026-11-02 | Automated SMS gateway for customer payment reminders (`src/lib/sms.ts`) |
 
 ---
 
@@ -108,8 +110,10 @@ Organizations, agencies, vendors, and competitors named anywhere in the suite.
 | **Department of Trade and Industry (DTI)** | Government Agency | **Prospective target** | `S-01` §2, `S-03` | 2026-10-27 | Referenced for June 2024 MSME digital accounting push; no endorsement or partnership |
 | **Philippine Sari-Sari Store Owners** | End User Segment | **Prospective target** | `S-01` §2, §11 | 2026-10-27 | 3–5 discovery interviews planned; zero live commercial customers |
 | **Cooperatives / Barangay Hubs / LGUs** | Prospective B2B Customer | **Prospective target** | `S-01` §3, §6 | 2026-10-27 | Hypothesis for self-hosted local Glimmer GPU boxes; no agreements |
-| **Micro-Lenders / Fintechs / FMCG Distributors** | Prospective Ecosystem Target | **Prospective target** | `S-01` §6 | 2026-10-27 | Hypothesis for consented ledger sharing and restock ordering; no agreements |
+| **Micro-Lenders / Fintechs / FMCG Distributors** | Prospective Ecosystem Target | **Prospective target** | `S-01` §6 | 2026-11-02 | Hypothesis for consented ledger sharing and restock ordering; no agreements |
 | **Supabase / Vercel / Kaggle / NVIDIA** | Infrastructure Vendors | **Prospective target** (Standard Developer Tier) | `S-01` §4 | 2026-10-27 | Standard cloud/compute tooling used to host, build, and run Muse Glimmer inference |
+| **Brevo** | Email Service Provider | **Prospective target** (Standard Developer Tier) | `.env` / SMTP | 2026-11-02 | Transactional SMTP service for auth verification and recovery emails |
+| **SMS API PH** | SMS Gateway Provider | **Prospective target** (Standard Developer Tier) | `https://smsapiph.netlify.app` | 2026-11-02 | Philippine SMS dispatch endpoint for automated debt reminder notices |
 
 ---
 

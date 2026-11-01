@@ -24,18 +24,20 @@
 flowchart TB
   subgraph app ["Talaan Web App (Next.js 16.4.3)"]
     S0["/login (anon)"]
+    S0b["/reset-password (anon & store_owner)"]
     S1["/ (anon & store_owner)"]
     S1b["/dashboard (store_owner)"]
     S2["/pages/[id]/review (store_owner)"]
     S3["/customers & /customers/[id] (store_owner)"]
   end
-  S0 --> A1["✅ 1-Tap Demo Store Login & Email/Password Auth (TAL-01)"]
+  S0 --> A1["✅ Full Auth: Email/Password, 6-Digit Brevo OTP, 1-Click /auth/confirm Link (TAL-01)"]
+  S0b --> A2["✅ Dedicated Password Reset Screen (/reset-password)"]
   S1 --> B1["✅ English Landing Page: Paper Sovereign Showcase & Direct CTA (src/app/page.tsx)"]
   S1b --> B2["✅ /dashboard: Floating Dock, Counter Ledger Sheet, Notepad Slips & Scan FAB (TAL-05)"]
   S1b --> B3["✅ Tanungin si Talaan: Ask Ledger Counter Query Slip & SSE Stream (POST /api/ask)"]
   S2 --> C1["✅ Review Screen: Red Margin Gutter + Two-Ply Proof Bar + Confirm API (TAL-05)"]
   S3 --> D1["✅ Customer Utang Balances & History (TAL-06)"]
-  S3 --> D2["✅ Taglish Reminder Card: Friendly/Firm + Copy/Share (TAL-06)"]
+  S3 --> D2["✅ Taglish Reminder Card: Automated SMS via SMS API PH + Manual Copy/Share Fallback (TAL-06)"]
 ```
 
 ---
@@ -45,7 +47,7 @@ flowchart TB
 ```mermaid
 flowchart LR
   subgraph A ["A — Authenticate"]
-    A1["✅ 1-Tap Demo Login (/login)"]
+    A1["✅ Full Auth: Email/Password + 6-Digit Brevo OTP (/login)"]
   end
   subgraph B ["B — Prepare (Extract & Check)"]
     B1["✅ Upload Photo + sharp prep"]
@@ -58,7 +60,7 @@ flowchart LR
   end
   subgraph D ["D — Act (Balances, Reminders & Ask Agent)"]
     D1["✅ View Customer Utang Balances"]
-    D2["✅ Draft & Share Taglish Reminder"]
+    D2["✅ Automated SMS Reminders via SMS API PH"]
     D3["✅ Tanungin si Talaan (Conversational Ledger Agent)"]
   end
   A1 --> B1 --> B2 --> B3 --> C1 --> C2 --> D1 --> D2 --> D3

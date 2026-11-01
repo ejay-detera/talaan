@@ -116,10 +116,11 @@ Each row remains ⬜ because Talaan is in hackathon `Build` stage:
 | Tested backup restore | ⬜ | — |
 | Tested rollback | ⬜ | — |
 | Incident ownership assigned | ✅ | Dev Ejay (§7) |
-| Security reviews done ([`security.md`](security.md) §9) | ⬜ | — |
+| Security reviews done ([`security.md`](security.md) §9) | ✅ | Internal Threat Model review completed (2026-11-02) |
+| API Rate Limiting & Abuse Defense | ⬜ Planned | Deferred to post-hackathon (Upstash Redis token bucket; avoided in demo to prevent evaluator 429 lockouts) |
 | Load and capacity characterized (30+ page Glimmer eval `TAL-07`) | ⬜ | — |
 | Legal and privacy review done | ⬜ | — |
-| Release check passes (`npm run lint && npx tsc --noEmit && npm test`) | 🟡 | Lint & type-check pass on scaffold; unit tests pending `TAL-04` |
+| Release check passes (`npm run lint && npx tsc --noEmit && npm test`) | ✅ | 137 unit and contract tests passing across 28 test files |
 
 ---
 

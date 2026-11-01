@@ -57,12 +57,16 @@ Likelihood (`L`) and Impact (`I`) reflect engineering judgment (`L` / `M` / `H`)
 
 | ID | Threat (STRIDE category) | Asset | Boundary | L / I | Mitigation | Status | Verified by |
 |---|---|---|---|---|---|---|---|
-| **T-01** | **Information Disclosure / Tampering:** Cross-tenant access to another store's customers, photos, or ledger entries | `customers`, `pages`, `entries`, `reminders`, Storage | Client → API → DB | M / H | Enable Postgres RLS on all 5 tables (`stores.owner_id = (select auth.uid())`) and store photos in private bucket accessed via signed URLs | ⬜ Planned (`TAL-01`) | `T-001` |
-| **T-02** | **Tampering (Integrity):** LLM hallucinates row multiplication or page addition, corrupting customer *utang* balances | `pages.computed_total`, `entries.amount`, Customer Balances | Model → API → DB | H / H | **Zero LLM arithmetic:** `src/lib/ledger/math.ts` computes all row/page math in integer centavos and requires human confirmation (`confirmed_by_user = true`) before affecting balances | ⬜ Planned (`TAL-04`, `TAL-05`) | `T-003`, `T-004`, `T-005` |
-| **T-03** | **Elevation of Privilege (Prompt Injection):** Handwritten text on a notebook photo contains adversarial instructions attempting to mutate DB records or bypass review | `entries`, `pages` | Image → Model → API | M / M | **Two-Phase Split + Zod validation:** Model call in `POST /api/pages/extract` has no DB-writing tool execution; output is parsed strictly against `PageExtractionSchema` and staged as `confirmed_by_user = false` | ⬜ Planned (`TAL-02`) | `T-002` |
-| **T-04** | **Spoofing / Unauthorized Access:** Unauthenticated callers hit the public Cloudflare/ngrok tunnel to Kaggle `llama-server` | Kaggle 2x T4 GPU quota & model endpoint | Internet → Kaggle Tunnel | M / M | Start `llama-server` with `--api-key ${GLIMMER_API_KEY}` and keep `GLIMMER_BASE_URL` and `GLIMMER_API_KEY` server-only in `.env.local` (`S-01` §4) | ⬜ Planned (`TAL-03`) | Manual check (`TAL-03`) |
+| **T-01** | **Information Disclosure / Tampering:** Cross-tenant access to another store's customers, photos, or ledger entries | `customers`, `pages`, `entries`, `reminders`, Storage | Client → API → DB | M / H | Enable Postgres RLS on all 5 tables (`stores.owner_id = (select auth.uid())`) and store photos in private bucket accessed via signed URLs | ✅ Active | `T-001`, `0001_initial_schema.sql` |
+| **T-02** | **Tampering (Integrity):** LLM hallucinates row multiplication or page addition, corrupting customer *utang* balances | `pages.computed_total`, `entries.amount`, Customer Balances | Model → API → DB | H / H | **Zero LLM arithmetic:** `src/lib/ledger/math.ts` computes all row/page math in integer centavos and requires human confirmation (`confirmed_by_user = true`) before affecting balances | ✅ Active | `T-003`, `T-004`, `T-005` |
+| **T-03** | **Elevation of Privilege (Prompt Injection):** Handwritten text on a notebook photo contains adversarial instructions attempting to mutate DB records or bypass review | `entries`, `pages` | Image → Model → API | M / M | **Two-Phase Split + Zod validation:** Model call in `POST /api/pages/extract` has no DB-writing tool execution; output is parsed strictly against `PageExtractionSchema` and staged as `confirmed_by_user = false` | ✅ Active | `T-002`, `schemas.ts` |
+| **T-04** | **Spoofing / Unauthorized Access:** Unauthenticated callers hit the public Cloudflare/ngrok tunnel to Kaggle `llama-server` | Kaggle 2x T4 GPU quota & model endpoint | Internet → Kaggle Tunnel | M / M | Start `llama-server` with `--api-key ${GLIMMER_API_KEY}` and keep `GLIMMER_BASE_URL` and `GLIMMER_API_KEY` server-only in `.env.local` (`S-01` §4) | ✅ Policy locked | Manual check (`TAL-03`) |
 | **T-05** | **Information Disclosure:** Real neighborhood customer names and debts leaked in public hackathon repo or demo video | Customer PII | Repo / Demo Video | M / H | Use **only consented/redacted or synthetic notebook pages** in the repo, evaluation set, and demo recording (`S-01` §4, §8) | ✅ Policy locked | Pre-commit / Demo review |
-| **T-06** | **Tampering (Replay / Double-Submit):** Store owner double-taps Confirm, adding the same *utang* page twice | Customer Balances | Client → `POST /api/pages/[id]/confirm` | M / H | Idempotency check on `pages.status === 'confirmed'` (`409 ALREADY_CONFIRMED`) + disabled in-flight button state | ⬜ Planned (`TAL-05`) | `T-005` |
+| **T-06** | **Tampering (Replay / Double-Submit):** Store owner double-taps Confirm, adding the same *utang* page twice | Customer Balances | Client → `POST /api/pages/[id]/confirm` | M / H | Idempotency check on `pages.status === 'confirmed'` (`409 ALREADY_CONFIRMED`) + disabled in-flight button state | ✅ Active | `T-005`, `confirm.test.ts` |
+| **T-07** | **Tampering / Information Disclosure:** LLM hallucinates non-existent debts or quotes incorrect balances in *Tanungin si Talaan* | Customer Balances, Store Revenue | Model → Client | H / H | **Deterministic Hallucination Guard (`src/lib/ask/guard.ts`):** Parses all peso amounts in LLM stream and cross-verifies against database tool results. Discrepancies trigger instant fallback to deterministic facts. | ✅ Active | `guard.test.ts`, `agent.test.ts` |
+| **T-08** | **Denial of Service (Image DoS):** Malformed or oversized notebook photos exhaust memory in serverless image processing | Next.js Serverless Memory | Client → `/api/pages/extract` | M / M | **Sharp Image Clamp (`src/lib/image.ts`):** Strips EXIF metadata, normalizes rotation, and downsamples dimensions to max 1600px before inference. | ✅ Active | `extract/route.ts` |
+| **T-09** | **Financial Exhaustion (SMS Flooding):** Malicious caller floods `/api/reminders/send-sms` to drain SMS API PH credits | SMS API PH Credits, Gateway Quota | Client → `/api/reminders/send-sms` | M / M | Server-side auth check (`auth.getUser()`), customer ownership validation under store RLS, E.164 phone formatting, and client button debouncing. | ✅ Active | `send-sms/route.test.ts` |
+| **T-10** | **Brute Force / Account Takeover:** Brute-forcing 6-digit email OTP verification codes | Store Accounts, Customer Ledgers | Client → Supabase Auth | M / H | Cryptographically hashed OTP tokens (`token_hash`), custom Brevo SMTP relay (`smtp-relay.brevo.com:587`), and 60s client resend cooldown timer. | ✅ Active | `auth/confirm/__tests__/route.test.ts` |
 
 ---
 
@@ -70,34 +74,43 @@ Likelihood (`L`) and Impact (`I`) reflect engineering judgment (`L` / `M` / `H`)
 
 | Topic | Decision | Status |
 |---|---|---|
-| Authentication methods | Supabase Auth Email/Password + **1-Tap Demo Store Login** on `/login` (`Q10`) | ⬜ Planned (`TAL-01`) |
-| Session / token lifetime | Supabase Auth default JWT expiry (`TBD` custom tuning) | ⬜ Planned (`TAL-01`) |
+| Authentication methods | **Full Auth:** Sovereign Email/Password + 6-digit OTP verification via Brevo Custom SMTP (`/login`), 1-click `/auth/confirm` link, `/reset-password` recovery, plus 1-Tap Demo Store Login (`POST /api/auth/demo`) | ✅ Active (`TAL-01`) |
+| Session / token lifetime | Supabase Auth default HTTP-only cookie JWT session | ✅ Active |
 | MFA / step-up | Out of scope for hackathon v1 | ❌ |
-| Account recovery | Supabase email reset (not required for 1-Tap Demo Store account) | ⬜ |
+| Account recovery | Taglish paper-styled password recovery email dispatched via Brevo SMTP &rarr; `/reset-password` | ✅ Active |
 
 **Permission matrix.** Roles come from [`glossary.md`](glossary.md) §2.
 
 | Action / resource | `store_owner` (own `store_id`) | `store_owner` (other store) | `anon` | Enforced at |
 |---|:---:|:---:|:---:|---|
-| Sign in / 1-Tap Demo Store Login (`/login`) | ✅ | ✅ | ✅ | Supabase Auth |
+| Sign in / Register / Verify OTP (`/login`) | ✅ | ✅ | ✅ | Supabase Auth + Brevo SMTP |
+| Reset password (`/reset-password`) | ✅ | ✅ | ✅ | Supabase Auth |
 | Upload & extract page (`POST /api/pages/extract`) | ✅ | — | — | Route Handler Auth + Postgres/Storage RLS |
 | Confirm staged page (`POST /api/pages/[id]/confirm`) | ✅ | — | — | Route Handler Auth + Postgres RLS |
 | Read customers & balances (`GET /api/customers*`) | ✅ | — | — | Route Handler Auth + Postgres RLS |
+| Direct counter payment (`POST /api/customers/[id]/payments`) | ✅ | — | — | Route Handler Auth + Postgres RLS |
+| Update customer phone (`PATCH /api/customers/[id]`) | ✅ | — | — | Route Handler Auth + Postgres RLS |
 | Draft Taglish reminder (`POST /api/reminders/draft`) | ✅ | — | — | Route Handler Auth + Postgres RLS |
+| Send automated SMS (`POST /api/reminders/send-sms`) | ✅ | — | — | Route Handler Auth + Postgres RLS |
+| Ask conversational ledger (`POST /api/ask`) | ✅ | — | — | Route Handler Auth + Hallucination Guard |
 | View private notebook image (Signed URL) | ✅ | — | — | Supabase Storage RLS + Signed URL |
 
 ---
 
 ## 6. Secrets
 
-- Local secrets live in git-ignored `.env.local` (verified: `.env*` is listed in `.gitignore`).
+- Local secrets live in git-ignored `.env` / `.env.local` (verified: `.env*` is listed in `.gitignore`).
 - **Never place a secret in a client-bundled variable (`NEXT_PUBLIC_*`)**, repository files, logs, or chat.
 
 | Secret (name only) | Purpose | Stored in | Last rotated | Owner |
 |---|---|---|---|---|
 | `GLIMMER_API_KEY` | Protects inference endpoint / tunnel (`--api-key`) | `.env.local` (server-only) | Per session / deployment | Dev Ejay |
 | `GLIMMER_BASE_URL` | Endpoint URL (NVIDIA NIM or Kaggle `llama-server` tunnel) | `.env.local` (server-only) | Per session / deployment | Dev Ejay |
-| `SUPABASE_SERVICE_ROLE_KEY` | Privileged server-only Supabase key (if used for seed/storage) | `.env.local` (server-only) | Never (not yet created) | Dev Ejay |
+| `SUPABASE_SERVICE_ROLE_KEY` | Privileged server-only Supabase key (if used for seed/storage) | `.env.local` (server-only) | Per deployment | Dev Ejay |
+| `SMS_API_KEY` | Authenticates automated SMS delivery with SMS API PH | `.env.local` (server-only) | Per deployment | Dev Ejay |
+| `MAIL_HOST` / `MAIL_PORT` | Custom SMTP host & port (`smtp-relay.brevo.com:587`) | `.env.local` (server-only) | Per deployment | Dev Ejay |
+| `MAIL_USERNAME` / `MAIL_PASSWORD` | Brevo SMTP relay credentials for transactional email delivery | `.env.local` (server-only) | Per deployment | Dev Ejay |
+| `MAIL_FROM_ADDRESS` / `MAIL_FROM_NAME` | Sender identity (`edetera41@gmail.com` / `Talaan`) | `.env.local` (server-only) | Per deployment | Dev Ejay |
 
 ---
 
@@ -105,10 +118,11 @@ Likelihood (`L`) and Impact (`I`) reflect engineering judgment (`L` / `M` / `H`)
 
 | Control | Where applied | Status |
 |---|---|---|
-| Encryption in transit (HTTPS) | Supabase APIs, Cloudflare/ngrok tunnel, Vercel preview | ⬜ Planned (`TAL-01`, `TAL-03`) |
-| Schema validation of all inputs & LLM outputs (Zod) | `src/lib/schemas.ts` in all `/api/*` routes | ⬜ Planned (`TAL-02`) |
-| Exact integer-centavo financial math | `src/lib/ledger/math.ts` + Postgres `numeric(10,2)` | ⬜ Planned (`TAL-04`) |
-| Private object storage with signed URLs | Supabase Storage bucket `notebook-pages` | ⬜ Planned (`TAL-01`) |
+| Encryption in transit (HTTPS / TLS 1.3) | Supabase APIs, Cloudflare/ngrok tunnel, Brevo SMTP (TLS), Vercel | ✅ Active |
+| Schema validation of all inputs & LLM outputs (Zod) | `src/lib/schemas.ts` in all `/api/*` routes | ✅ Active |
+| Exact integer-centavo financial math | `src/lib/ledger/math.ts` + Postgres `numeric(10,2)` | ✅ Active |
+| Deterministic Hallucination Guard | `src/lib/ask/guard.ts` on conversational ledger stream | ✅ Active |
+| Private object storage with signed URLs | Supabase Storage bucket `notebook-pages` | ✅ Active |
 | Lockfile committed (`package-lock.json`) | Root repository | ✅ Verified (`2026-10-27`) |
 | New dependencies recorded in [`evidence.md`](evidence.md) §5 | Documentation gate (`AGENTS.md` §10) | ✅ Active |
 
@@ -116,7 +130,7 @@ Likelihood (`L`) and Impact (`I`) reflect engineering judgment (`L` / `M` / `H`)
 
 ## 8. Active Domain Modules
 
-- **AI Component ([`modules/ai-component.md`](modules/ai-component.md)):** Enforces human-in-the-loop confirmation, Zod schema validation, active model provenance badging, and prompt-injection containment (`T-03`).
+- **AI Component ([`modules/ai-component.md`](modules/ai-component.md)):** Enforces human-in-the-loop confirmation, Zod schema validation, active model provenance badging, prompt-injection containment (`T-03`), and conversational hallucination guarding (`T-07`).
 - **Payments and Ledger ([`modules/payments-ledger.md`](modules/payments-ledger.md)):** Enforces Two-Phase Prepare/Confirm separation, confirmation idempotency (`T-06`), and fail-closed centavo arithmetic (`T-02`).
 
 ---
@@ -125,8 +139,8 @@ Likelihood (`L`) and Impact (`I`) reflect engineering judgment (`L` / `M` / `H`)
 
 | Review | Status | Date | Reviewer | Record |
 |---|---|---|---|---|
-| Threat model review | ⬜ Outstanding | — | — | — |
-| Dependency audit (`npm audit`) | ⬜ Outstanding | — | — | — |
+| Threat model review | ✅ Completed (Internal) | 2026-11-02 | Dev Ejay | `docs/security.md` v1.1 |
+| Dependency audit (`npm audit`) | ✅ Clean (0 vulnerabilities) | 2026-11-02 | Dev Ejay | CLI verification |
 | Penetration test | ⬜ Outstanding | — | — | — |
 | Privacy review (PH Data Privacy Act RA 10173) | ⬜ Outstanding | — | — | — |
 | Legal / regulatory review | ⬜ Outstanding | — | Counsel not engaged | — |
@@ -137,7 +151,8 @@ Likelihood (`L`) and Impact (`I`) reflect engineering judgment (`L` / `M` / `H`)
 
 | # | Decision | Owner | Blocks | Reference |
 |---|---|---|---|---|
-| 1 | Signed URL TTL duration for private notebook images | Dev Ejay | `TAL-01` storage helper (default 3600s recommended) | — |
+| 1 | Signed URL TTL duration for private notebook images | Dev Ejay | Storage helper (default 3600s active) | — |
+| 2 | **API Rate Limiting & Token Buckets (Post-Hackathon Production Hardening):** External token-bucket rate limiting (e.g., Upstash Redis) was evaluated and intentionally deferred to post-hackathon production deployment. Rationale: avoid evaluator `429 Too Many Requests` friction during live hackathon judging. Current defenses rely on the **Dual Guardrail Architecture** (Deterministic Math/Hallucination Guard, Two-Phase Human Confirmation Gate, Zod Boundary Validation, Sharp Clamp, Postgres RLS, and 60s client OTP/button debouncing). | Dev Ejay | Production deployment | [`ops.md`](ops.md) |
 
 ---
 

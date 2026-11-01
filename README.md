@@ -48,8 +48,11 @@ Everything in this repository was designed, architected, and built from scratch 
 
 - **Two-Phase Bookkeeping & Integer-Centavo Discrepancy Engine (`src/lib/ledger/`):** Row multiplication checker (`quantity * unit_price !== amount`), page running-total checker (`computed_total !== written_total`), fuzzy customer name matcher (`src/lib/ledger/match.ts`), store summary & restock velocity engine (`src/lib/ledger/summary.ts`), and 1-tap UTF-8 CSV export.
 - **Unified Open-Weights Vision & Tool-Calling Layer (`src/lib/model.ts`):** OpenAI-compatible client targeting **Meta Muse Glimmer 30B** (`meta/muse-glimmer-30b` via NVIDIA NIM or Kaggle 2x T4 tunnel) for `extract_rows`, `flag_unreadable`, and `draft_reminder`, with exact model logging on every database page record server-side.
+- **Full Auth & Brevo Custom SMTP Relay (`src/app/login/`, `src/app/auth/confirm/`, `templates/email/`):** Sovereign store authentication with email/password signup, in-place 6-digit OTP verification card, 1-click token confirmation handler (`/auth/confirm`), password reset flow (`/reset-password`), and custom Taglish paper-styled email templates dispatched via Brevo SMTP relay (`smtp-relay.brevo.com:587`).
+- **Automated SMS Notifications via SMS API PH (`src/lib/sms.ts`, `src/app/api/reminders/send-sms/`):** Direct 1-tap SMS payment reminder dispatch to customer phone numbers with E.164 normalization, balance tracking, and graceful fallback to manual copy/share.
+- **Dual Guardrail Security Architecture (`src/lib/ask/guard.ts`, `src/lib/ledger/math.ts`):** Deterministic Hallucination Guard preventing financial disinformation in *Tanungin si Talaan*, strict human confirmation gate (`/api/pages/[id]/confirm`) preventing unreviewed DB mutations, Zod schema boundary validation, and `sharp` 1600px image DoS protection.
 - **"The Notebook, Kept" Daylight UI (`src/app/`, `src/components/`):** High-contrast Daylight palette (`#F2F5EC` Analysis Pad Paper, `#C8302F` Red Margin Gutter, `#1E3FAE` Ballpen Blue), signature `RedMarginGutter` and sticky `TwoPlyProofBar`, audited with `impeccable detect`.
-- **Supabase Multi-Tenant Postgres Schema & Atomic RPC (`supabase/migrations/`):** Row-Level Security (`stores.owner_id = (select auth.uid())`), `numeric(10,2)` currency columns, transactional `confirm_page_entries` RPC, 1-tap Demo Store auth, and scheduled demo cleanup.
+- **Supabase Multi-Tenant Postgres Schema & Atomic RPC (`supabase/migrations/`):** Row-Level Security (`stores.owner_id = (select auth.uid())`), `numeric(10,2)` currency columns, transactional `confirm_page_entries` RPC, and scheduled demo cleanup.
 - **30-Page Evaluation Harness (`scripts/eval-glimmer.ts`, `src/lib/eval/score.ts`, `eval/pages-30/`):** Deterministic centavo-exact scoring engine (`T-008`) and 30 labeled synthetic pages (15 clean, 12 planted arithmetic discrepancies, 3 unreadable blurry pages) with strict Muse Glimmer provenance watermarking.
 
 ---
@@ -92,6 +95,8 @@ npm run eval            # Run scripts/eval-glimmer.ts against Meta Muse Glimmer 
 - npm 10+
 - Supabase account (Postgres + Storage + Auth)
 - Meta Muse Glimmer 30B API key (NVIDIA NIM or Kaggle 2x T4 tunnel)
+- *(Optional)* Brevo SMTP credentials for custom email verification & password reset
+- *(Optional)* SMS API PH key for 1-tap automated SMS reminders
 
 ### 2. Install & Configure
 ```bash
@@ -111,13 +116,24 @@ SUPABASE_SERVICE_ROLE_KEY=<your-service-role-key>
 GLIMMER_BASE_URL=https://integrate.api.nvidia.com/v1
 GLIMMER_API_KEY=<your-api-key>
 GLIMMER_MODEL=meta/muse-glimmer-30b
+
+# Brevo Custom SMTP (for OTP & Password Reset emails)
+MAIL_HOST=smtp-relay.brevo.com
+MAIL_PORT=587
+MAIL_USERNAME=<your-brevo-smtp-user>
+MAIL_PASSWORD=<your-brevo-smtp-key>
+MAIL_FROM_ADDRESS=noreply@yourstore.com
+MAIL_FROM_NAME=Talaan
+
+# SMS Notifications via SMS API PH (optional - falls back to Copy/Share)
+SMS_API_KEY=<your-sms-api-key>
 ```
 
 ### 3. Run Dev Server
 ```bash
 npm run dev
 ```
-Open [http://localhost:3000](http://localhost:3000).
+Open [http://localhost:3000](http://localhost:3000). On `/login`, select **Create Account** to register with Email + Password, receive the 6-digit OTP code, and enter your store dashboard.
 
 ### 4. Quality Gates & Tests
 ```bash

@@ -37,8 +37,13 @@
 | **API-02** | `POST` | `/api/pages/[id]/confirm` | `store_owner` | **Phase 2 (`Confirm`):** Validate human-reviewed rows & customer links, re-verify centavo math in `src/lib/ledger`, and atomically commit `confirmed_by_user = true` & `pages.status = 'confirmed'` via Postgres RPC | ✅ Built (`TAL-05`) | **Yes** (by `page_id`) | `T-005` |
 | **CRON-01** | `GET` | `/api/cron/cleanup-demo` | `vercel_cron` | **Scheduled Cleanup:** Delete expired anonymous demo users (>7 days) and remove associated Storage objects | ✅ Built (`TAL-05`) | **Yes** | `demo-cleanup.test.ts` |
 | **API-03** | `GET` | `/api/customers` & `/api/customers/[id]/balance` | `store_owner` | List store customers with deterministic *utang* balances (`sum(credit) - sum(payment)` from confirmed entries) and itemized history | ✅ Built (`TAL-06`) | Yes | `T-006` |
-| **API-04** | `POST` | `/api/reminders/draft` | `store_owner` | Generate a polite Taglish payment reminder draft (`friendly` / *Malumanay* or `firm` / *Pormal*) from confirmed unpaid entries using `src/lib/model.ts` (`draft_reminder`) | ✅ Built (`TAL-06`) | No (creates new draft) | `T-007` |
+| **API-04** | `POST` | `/api/reminders/draft` | `store_owner` | Generate a polite Taglish payment reminder draft (`friendly` / *Malumanay` or `firm` / *Pormal*) from confirmed unpaid entries using `src/lib/model.ts` (`draft_reminder`) | ✅ Built (`TAL-06`) | No (creates new draft) | `T-007` |
 | **API-05** | `GET` | `/api/ledger/export` | `store_owner` | Export all confirmed store ledger entries as a UTF-8 BOM CSV attachment (`text/csv; charset=utf-8`) | ✅ Built (`US-08`) | Yes | `T-009` |
+| **API-06** | `POST` | `/api/reminders/send-sms` | `store_owner` | Send real-time SMS reminder via SMS API PH (`https://smsapiph.netlify.app`), formatting phone numbers to E.164 and recording delivery status | ✅ Built (`TAL-06`) | No | `send-sms/route.test.ts`, `sms.test.ts` |
+| **API-07** | `PATCH` | `/api/customers/[id]` | `store_owner` | Update customer phone number and metadata under store RLS isolation | ✅ Built (`TAL-06`) | Yes | `customers/[id]/__tests__/route.test.ts` |
+| **API-08** | `POST` | `/api/customers/[id]/payments` | `store_owner` | Record counter cash payment directly against customer ledger, updating balance atomically | ✅ Built (`US-11`) | No | `payments/route.test.ts` |
+| **API-09** | `POST` | `/api/ask` | `store_owner` | Conversational ledger query agent with SSE stream output and Deterministic Hallucination Guard (`src/lib/ask/guard.ts`) | ✅ Built (`US-15`) | No | `agent.test.ts`, `guard.test.ts` |
+| **AUTH-01** | `GET` | `/auth/confirm` | `anon` / `store_owner` | 1-click token hash confirmation and auto-session creation (`type=email` or `type=recovery`) | ✅ Built (`TAL-01`) | Yes | `auth/confirm/__tests__/route.test.ts` |
 
 ---
 
@@ -194,6 +199,8 @@ None. Talaan uses synchronous HTTP Route Handlers.
 |---|---|---|---|---|
 | **Meta Muse Glimmer 30B (`meta/muse-glimmer-30b`)** | OpenAI-compatible `/v1/chat/completions` | Canonical exclusive vision extraction & Taglish reminder tool calls | `Bearer ${GLIMMER_API_KEY}` | [`evidence.md`](evidence.md) §5 |
 | **Supabase API** | REST / Storage / Auth v2 | Database persistence, RLS auth, private Storage bucket | Supabase JWT / Service key | [`evidence.md`](evidence.md) §5 |
+| **Brevo Custom SMTP Relay** | SMTP over TLS (Port 587) | Transactional email delivery for 6-digit OTP verification and password recovery | `AUTH LOGIN` (`MAIL_USERNAME` / `MAIL_PASSWORD`) | [`evidence.md`](evidence.md) §5 |
+| **SMS API PH** | REST v1 | Automated SMS payment reminder dispatch (`src/lib/sms.ts`) | `Bearer ${SMS_API_KEY}` / Query token | [`evidence.md`](evidence.md) §5 |
 
 ---
 

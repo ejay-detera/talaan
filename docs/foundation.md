@@ -27,9 +27,9 @@
 
 | Module | Active? | Why | File |
 |---|:---:|---|---|
-| Payments and ledger | **Y** | Talaan maintains a financial *utang* (credit), *bayad* (payment), and cash-sale bookkeeping ledger requiring two-phase prepare/confirm, fail-closed centavo arithmetic, and append-only confirmed records (no external payment rail). | [`modules/payments-ledger.md`](modules/payments-ledger.md) |
+| Payments and ledger | **Y** | Talaan maintains a financial *utang* (credit), *bayad* (payment), and cash-sale bookkeeping ledger requiring two-phase prepare/confirm, fail-closed centavo arithmetic, append-only confirmed records, and real-time automated SMS payment reminder dispatch via SMS API PH (`src/lib/sms.ts`, with graceful fallback to manual Copy/Share drafts). | [`modules/payments-ledger.md`](modules/payments-ledger.md) |
 | Mobile client | **N** | Native mobile apps are out of scope (`S-01` §8). Talaan ships as a mobile-first Next.js web app; 44×44px touch targets and mobile viewport rules live in [`dsd.md`](dsd.md). | Deleted (`N/A`) |
-| AI component | **Y** | Core extraction, Taglish reminder drafting, and "Tanungin si Talaan" conversational ledger querying call Meta's open-weights **Muse Glimmer 30B** model behind a strict Zod schema, Number Guard, and human-in-the-loop gate. | [`modules/ai-component.md`](modules/ai-component.md) |
+| AI component | **Y** | Core extraction, Taglish reminder drafting, and "Tanungin si Talaan" conversational ledger querying call Meta's open-weights **Muse Glimmer 30B** model behind a strict Zod schema, Deterministic Hallucination Guard (`src/lib/ask/guard.ts`), and human-in-the-loop gate. | [`modules/ai-component.md`](modules/ai-component.md) |
 
 ---
 
@@ -39,9 +39,9 @@
 
 ### What we are building
 
-**Talaan** is a mobile-first web application and AI bookkeeping agent that turns a phone photo of a handwritten sari-sari store *utang* (credit) notebook page, supplier receipt, or typed list into a clean, arithmetic-checked digital ledger. The platform manages the complete notebook-to-ledger lifecycle: **1. Capture & Pre-process**, **2. Structured Extraction & Deterministic Discrepancy Check (Prepare Phase)**, **3. Human-in-the-Loop Review & Ledger Commit (Confirm Phase)**, and **4. Customer Balance Tracking & Taglish Reminder Drafting (Act Phase)**.
+**Talaan** is a mobile-first web application and AI bookkeeping agent that turns a phone photo of a handwritten sari-sari store *utang* (credit) notebook page, supplier receipt, or typed list into a clean, arithmetic-checked digital ledger. The platform manages the complete notebook-to-ledger lifecycle: **1. Capture & Pre-process**, **2. Structured Extraction & Deterministic Discrepancy Check (Prepare Phase)**, **3. Human-in-the-Loop Review & Ledger Commit (Confirm Phase)**, and **4. Customer Balance Tracking, Automated SMS Reminders, & Conversational Ledger Agent (Act Phase)**.
 
-The brief specifies a **Next.js (App Router) + React + Tailwind CSS** client and API route layer; **TypeScript**; **Supabase (Postgres, Private Storage, Auth + RLS)**; **Meta Muse Glimmer 30B** (`meta/muse-glimmer-30b` served via OpenAI-compatible endpoint on Kaggle/NVIDIA NIM); **Zod** for schema validation; **sharp** for image pre-processing; **Vitest** for unit and evaluation testing; and deterministic TypeScript ledger math in `src/lib/ledger`. Currently, only the Next.js 16.4.3 / React 19.3.0 scaffold is installed (`S-10`); all domain features are `⬜` Planned.
+The brief specifies a **Next.js (App Router) + React + Tailwind CSS** client and API route layer; **TypeScript**; **Supabase (Postgres, Private Storage, Auth + RLS)**; **Meta Muse Glimmer 30B** (`meta/muse-glimmer-30b` served via OpenAI-compatible endpoint on Kaggle/NVIDIA NIM); **Brevo Custom SMTP Relay** for 6-digit OTP verification and password recovery; **SMS API PH** for automated SMS reminders; **Zod** for schema validation; **sharp** for image pre-processing; **Vitest** for unit and evaluation testing; and deterministic TypeScript ledger math in `src/lib/ledger`.
 
 ### Brief-defined and user-locked product decisions
 
@@ -57,7 +57,7 @@ The brief specifies a **Next.js (App Router) + React + Tailwind CSS** client and
 | Discrepancy checking | **Two-Level Deterministic Math (`src/lib/ledger`):** Row-level (`quantity * unit_price === amount` when unit price is written) + Page-level (`computed_total === written_total`). Zero LLM arithmetic. | Locked user decision (`Q3`) |
 | Model policy | **Meta Muse Glimmer 30B** is the exclusive canonical engine suite-wide (`ADR-0003`). Zero secondary or fallback model. Active model logged per page in `pages.model`. Fails closed if model unavailable. | Directly stated (`S-01` §4, `ADR-0003`) |
 | Design system | **"The Notebook, Kept"** (`impeccable`, [`docs/design.md`](design.md)): High-contrast daylight mode (`#F2F5EC` paper, `#FFFFFF` sheet, `#1E3FAE` ink, `#C8302F` red margin, `#FFE14D` highlighter, `Bricolage Grotesque` + `Atkinson Hyperlegible Next` + `Caveat`) | Locked user decision (`Q7`) |
-| Implementation status | Next.js 16.4.3 / Tailwind v4 scaffold with `/` Landing Page, `/login` 1-tap demo auth (`TAL-01`), `POST /api/pages/extract` (`TAL-02`), and `src/lib/ledger` math (`TAL-04`) | Verified in repository (`S-10`) |
+| Implementation status | Full Auth with Brevo SMTP (`/login`, `/auth/confirm`, `/reset-password`), Extraction (`/api/pages/extract`), Two-Ply Review (`/pages/[id]/review`), Balances (`/customers`), Direct Payments (`/api/customers/[id]/payments`), Automated SMS (`/api/reminders/send-sms`), Conversational Agent (`POST /api/ask` + Hallucination Guard), Store Summary (`/summary`), and CSV Export (`/api/ledger/export`) | Verified in repository (`137 tests passing`) |
 
 ### Proposed architecture in one paragraph
 
