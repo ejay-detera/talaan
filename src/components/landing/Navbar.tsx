@@ -18,34 +18,63 @@ const NAV_ITEMS: GooeyNavItem[] = [
 export function Navbar({}: NavbarProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const isAnimatingRef = useRef(false);
+  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Synchronize scroll position with active gooey nav item (suppressed during programmatic flight)
   useEffect(() => {
     const handleScroll = () => {
       if (isAnimatingRef.current) return;
 
-      const scrollPosition = window.scrollY + 160;
-      const sectionIds = ["how-it-works", "verification", "features"];
+      const scrollY = window.scrollY;
+      const windowHeight = window.innerHeight;
+      const documentHeight = document.documentElement.scrollHeight;
 
-      for (let i = sectionIds.length - 1; i >= 0; i--) {
-        const el = document.getElementById(sectionIds[i]);
-        if (el) {
-          const top = el.offsetTop;
-          if (scrollPosition >= top) {
-            setActiveIndex(i);
-            return;
-          }
+      // 1. Detect document bottom (features section at bottom of page)
+      if (scrollY + windowHeight >= documentHeight - 90) {
+        setActiveIndex(NAV_ITEMS.length - 1);
+        return;
+      }
+
+      // 2. Detect page top / hero
+      if (scrollY < 120) {
+        setActiveIndex(0);
+        return;
+      }
+
+      // 3. Dynamically map sections by actual physical DOM offsetTop
+      const readingLine = scrollY + 200;
+      const sections = NAV_ITEMS.map((item, idx) => {
+        const id = item.href?.startsWith("#") ? item.href.slice(1) : null;
+        const el = id ? document.getElementById(id) : null;
+        return {
+          index: idx,
+          id,
+          top: el ? el.offsetTop : Infinity,
+        };
+      }).filter((s) => s.top !== Infinity);
+
+      // Sort ascending by DOM top
+      sections.sort((a, b) => a.top - b.top);
+
+      for (let i = sections.length - 1; i >= 0; i--) {
+        if (readingLine >= sections[i].top - 50) {
+          setActiveIndex(sections[i].index);
+          return;
         }
       }
 
-      if (window.scrollY < 200) {
-        setActiveIndex(0);
-      }
+      setActiveIndex(0);
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+    };
   }, []);
 
   const handleNavChange = (index: number, item: GooeyNavItem) => {
@@ -55,46 +84,46 @@ export function Navbar({}: NavbarProps) {
       const target = document.getElementById(targetId);
       if (target) {
         isAnimatingRef.current = true;
+        if (scrollTimeoutRef.current) {
+          clearTimeout(scrollTimeoutRef.current);
+        }
 
-        const targetY = Math.max(
-          0,
-          target.getBoundingClientRect().top + window.scrollY - 88
-        );
-        const startY = window.scrollY;
-        const distance = Math.abs(targetY - startY);
-
-        // Accelerated travel timing: snappier speed up (300ms - 460ms max)
-        const duration = Math.min(460, Math.max(300, distance * 0.18));
-        const startTime = performance.now();
-
-        // High-velocity easeInOutQuart acceleration curve
-        const ease = (t: number) =>
-          t < 0.5 ? 8 * t * t * t * t : 1 - Math.pow(-2 * t + 2, 4) / 2;
-
-        const animateScroll = (now: number) => {
-          const elapsed = now - startTime;
-          const progress = Math.min(elapsed / duration, 1);
-          const easedProgress = ease(progress);
-
-          window.scrollTo(0, startY + (targetY - startY) * easedProgress);
-
-          if (progress < 1) {
-            requestAnimationFrame(animateScroll);
-          } else {
-            isAnimatingRef.current = false;
-
-            // Trigger tactile arrival pulse on the arrived section
-            target.classList.remove("section-arrival-pulse");
-            void target.offsetWidth; // force browser layout recalculation
-            target.classList.add("section-arrival-pulse");
-
-            setTimeout(() => {
-              target.classList.remove("section-arrival-pulse");
-            }, 1000);
+        // Programmatic travel via Lenis if initialized, or native smooth scroll
+        const lenis = (
+          window as unknown as {
+            __lenis?: {
+              scrollTo: (
+                target: HTMLElement | number | string,
+                opts?: Record<string, unknown>
+              ) => void;
+            };
           }
-        };
+        ).__lenis;
 
-        requestAnimationFrame(animateScroll);
+        if (lenis) {
+          lenis.scrollTo(target, { offset: -88, duration: 0.8 });
+        } else {
+          const targetY = Math.max(
+            0,
+            target.getBoundingClientRect().top + window.scrollY - 88
+          );
+          window.scrollTo({ top: targetY, behavior: "smooth" });
+        }
+
+        // Lock scroll spy during travel, then confirm active index and arrival effect
+        scrollTimeoutRef.current = setTimeout(() => {
+          isAnimatingRef.current = false;
+          setActiveIndex(index);
+
+          // Tactile arrival pulse on target section
+          target.classList.remove("section-arrival-pulse");
+          void target.offsetWidth;
+          target.classList.add("section-arrival-pulse");
+
+          setTimeout(() => {
+            target.classList.remove("section-arrival-pulse");
+          }, 1000);
+        }, 850);
       }
     }
   };
@@ -102,43 +131,40 @@ export function Navbar({}: NavbarProps) {
   return (
     <div className="fixed top-3.5 sm:top-5 inset-x-0 z-40 flex justify-center items-center px-3 sm:px-4 pointer-events-none">
       {/* Floating Center Dock with GooeyNav */}
-      <header className="pointer-events-auto flex items-center gap-2 sm:gap-3.5 p-2 sm:p-2.5 pl-2.5 sm:pl-3.5 rounded-full bg-sheet/95 backdrop-blur-md border border-rule shadow-paper-lg transition-all duration-300">
+      <header className="pointer-events-auto flex items-center gap-2 sm:gap-3.5 p-2 sm:p-2.5 pl-2.5 sm:pl-3.5 rounded-sheet bg-sheet border border-rule shadow-paper-lg transition-all duration-300">
         {/* Placement Icon & Brand */}
         <Link
           href="#hero"
           onClick={(e) => {
             e.preventDefault();
-            const hero = document.getElementById("hero");
-            if (hero) {
-              const targetY = 0;
-              const startY = window.scrollY;
-              const distance = Math.abs(targetY - startY);
-              const duration = Math.min(460, Math.max(300, distance * 0.18));
-              const startTime = performance.now();
-              const ease = (t: number) =>
-                t < 0.5 ? 8 * t * t * t * t : 1 - Math.pow(-2 * t + 2, 4) / 2;
+            isAnimatingRef.current = true;
+            setActiveIndex(0);
+            if (scrollTimeoutRef.current) {
+              clearTimeout(scrollTimeoutRef.current);
+            }
 
-              isAnimatingRef.current = true;
-              const animateScroll = (now: number) => {
-                const elapsed = now - startTime;
-                const progress = Math.min(elapsed / duration, 1);
-                const easedProgress = ease(progress);
+            const lenis = (
+              window as unknown as {
+                __lenis?: {
+                  scrollTo: (
+                    target: HTMLElement | number | string,
+                    opts?: Record<string, unknown>
+                  ) => void;
+                };
+              }
+            ).__lenis;
 
-                window.scrollTo(0, startY + (targetY - startY) * easedProgress);
-
-                if (progress < 1) {
-                  requestAnimationFrame(animateScroll);
-                } else {
-                  isAnimatingRef.current = false;
-                  setActiveIndex(0);
-                  window.history.pushState(null, "", "#hero");
-                }
-              };
-
-              requestAnimationFrame(animateScroll);
+            if (lenis) {
+              lenis.scrollTo(0, { duration: 0.8 });
             } else {
               window.scrollTo({ top: 0, behavior: "smooth" });
             }
+
+            scrollTimeoutRef.current = setTimeout(() => {
+              isAnimatingRef.current = false;
+              setActiveIndex(0);
+              window.history.pushState(null, "", "#hero");
+            }, 850);
           }}
           className="flex items-center gap-2.5 p-1 pr-2.5 sm:pr-3.5 rounded-full hover:bg-paper transition-all select-none group active:scale-[0.98]"
           title="Talaan - Back to top"

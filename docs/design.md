@@ -183,15 +183,23 @@ Grain alpha stays at or below `0.08`. If it is visible as a pattern at arm's len
 
 **Page stack** (recent notebook pages on the dashboard): the top page is a Slip; two copies sit behind it using pseudo-elements offset `translate(3px, 4px)` and `translate(6px, 8px)`, same `sheet` fill, `shadow-slip` on the lowest only.
 
-### Motion: The Paper Motion Rule
+### Motion & Animation: The Paper Motion & Animation Stack
 
-Paper is laid down, settles, lifts, and presses flat. Nothing else.
+Paper is laid down, settles, lifts, and presses flat. All motion in Talaan must feel weighted, physical, and exceptionally smooth—like authentic paper resting on a wooden desk.
 
+#### Animation Tooling Architecture
+- **Impeccable as Design Foundation:** Every screen, component, and interaction is built upon the `impeccable` design system baseline: high-contrast daylight fidelity, minimum 48×48px touch targets, 17px body floor, zero visual fluff, and rigorous craft checks.
+- **Lenis for Smooth Normalized Scrolling:** Use Lenis (`@studio-freight/lenis` / `lenis`) for buttery-smooth, normalized momentum scrolling across mobile browsers and desktop viewports, eliminating jarring jumps while preserving native touch velocity.
+- **GSAP for Complex Paper Choreography:** Use GSAP (`gsap`) for high-precision timeline sequences: the landing hero proof stack settling, physical stamp presses (`scale(1.08)` to `scale(1)` with `-4deg` settle), perforated paper tear interactions, and multi-layer choreographed paper entrances.
+- **Motion for Declarative Layout Motion:** Use Motion (`motion` / `motion/react`) for layout motion (`layout`, `layoutId`), reactive grid reflows, modal drawer slide-ins, and shared element state transitions without layout thrashing.
+- **FormKit for Dynamic Form Transitions:** Use FormKit AutoAnimate (`@formkit/auto-animate`) for zero-configuration, fluid row additions, deletions, inline arithmetic mismatch reveals, and form validation feedback without jarring height snaps.
+
+#### Physics & Timing Rules
 - **App screens (dashboard, review, customers, summary):** one `paper-enter` per route (`260ms`, `cubic-bezier(0.22, 1, 0.36, 1)`), a capped stagger on lists (`45ms` steps, max 6), one slip `paper-settle` for the memo, the `margin-draw` on Review, and `paper-press` on buttons. No idle or looping motion except the loading state.
 - **Landing page:** `paper-settle` on the hero slips, two secondary slips with `paper-drift`, and `paper-lift` on interactive slips.
 - **Never:** animate sheets with shadows, animate on scroll, add route exit animations, use `transform` where `translate` / `rotate` will do, or animate anything but `opacity`, `translate`, `rotate`, and `scaleY` on the margin line.
 - **Sticky & Fixed Bar Isolation:** Fixed floating buttons (FAB), sticky navigation docks, and bottom reconciliation proof bars live outside transformed containers so their coordinates never jump during route transitions.
-- Everything is disabled under `@media (prefers-reduced-motion: reduce)`; slips and pages render at their static resting state.
+- **Accessibility:** Everything is disabled under `@media (prefers-reduced-motion: reduce)`; slips and pages render at their static resting state.
 
 ---
 
@@ -409,15 +417,40 @@ Implementation notes: set each slip's resting rotation with the `rotate` propert
 ## Named Rules
 
 - **The Paper Sovereign Rule.** Every surface is one of the four layers (desk, pad, sheet, slip). Digital elements look like ink on paper or paper slips resting on the desk.
+- **The Sovereign Paper Background Rule.** Never remove, strip, or replace the physical analysis pad paper background (`#F2F5EC`), desk ground (`#E3E9D3`), or organic SVG fiber grain (`--paper-grain`). The desk and pad are the permanent tactile foundation of the workspace. Blank pure-white screens, default grays, or dark backgrounds are strictly forbidden.
 - **The Edge-or-Shadow Rule.** Borders for attached paper, shadows for loose paper. Never both.
 - **The Uncertainty Signal Rule.** Only discrepancies, errors, and low-confidence fields use `margin` or `marker`. The one structural exception is the margin line drawn on ledger sheets. Never red or yellow for decoration, branding, or marketing. Sticky notes are `slip`, not yellow.
 - **The Marker Contrast Rule.** The only text color on `marker` is `pencil`.
 - **The Status Label Rule.** Never use `ink` for status. Never rely on color alone; every row state pairs a text label with its mark (`Needs review`, `Math mismatch`, `Paid`).
-- **The Anti-Tag Rule.** No pill tags, no colored-dot badges, no admin chips. Provenance and status are stamps or plain typographic captions.
-- **The Zero Monospace Rule.** No monospace fonts or `<code>` on any marketing or UI surface.
+- **The Anti-Pill Badge Rule.** No pill badges (`rounded-full`, `rounded-pill`), tag clouds, or floating pill chips for status or metadata. Status must be an honest physical stamp (`rounded.row`, rotated `-4deg`, bordered) or plain typographic label paired with an icon. The only allowed pill shape in the entire application is the floating circular/pill Scan FAB and floating top dock navigation tabs.
+- **The Zero Monospace Rule.** Zero monospace typography (`font-mono`, `<code>`, monospace font stacks) anywhere in UI, receipts, or marketing. All tabular figures, receipts, peso columns, quantities, and dates strictly use `Atkinson Hyperlegible Next` (`font-sans`) with `tabular-nums` (`font-feature-settings: 'tnum' 1`).
+- **The No Random FIG Rule.** Never use blueprint or technical schematic tropes like "FIG 01 //", "FIG //", schematic coordinate tags, or faux-industrial metadata.
+- **The Zero Gradient Rule.** Zero decorative CSS linear or radial gradients, glowing neon highlights, or colorful gradient text. The only functional gradient exceptions are physical paper ruling lines (`.ruled` repeating hairline) and the subtle SVG paper fiber grain (`--paper-grain`).
+- **The Zero Glassmorphism Rule.** Zero translucent frosted glass, fake acrylic blur cards, or glowing borders (`backdrop-blur` on paper surfaces). Every surface is an opaque physical sheet of paper, analysis pad, or slip.
+- **The No Emoji as Icons Rule.** Never use raw Unicode emojis (⚡, 📶, ℹ, ▲, etc.) as UI icons or status markers. Strictly use semantic Lucide SVG icons with explicit size and color tokens, always paired with a descriptive text label.
+- **The High-Contrast Daylight Rule.** Talaan is designed exclusively for high-glare tropical sunlight and storefront fluorescent tubes: High-Contrast Daylight Mode (`#F2F5EC` analysis pad background, `#FFFFFF` notebook sheet).
+- **The Impeccable Craft Foundation Rule.** Every UI element must satisfy the `impeccable` design criteria: touch targets ≥48×48px, minimum body floor of 17px, robust contrast ratios, responsive layouts without horizontal scroll at 360px, and purposeful visual hierarchy.
 - **The Two Motion Budgets Rule.** App screens get one authored moment; the landing page gets settle-in, two idle drifts, and interactive hover-lift. Nothing else moves.
 - **The Real Content Rule.** No lorem ipsum, no generic names. Use realistic sari-sari store data (customers like `Aling Nena`, items like `Lucky Me Pancit Canton`, `Gardenia`, `3-in-1 Kape`, plausible peso amounts) in every demo.
 - **The Deterministic Total Rule.** Never display a total or balance that `src/lib/ledger/` did not compute. Never auto-send reminders.
+
+---
+
+## The Prohibited "Don'ts" (Strict Design Enforcement)
+
+Every engineer, designer, and agent working on Talaan must enforce these prohibitions without exception:
+
+| Prohibited Anti-Pattern | Rationale & Violation | Required Canonical Replacement |
+|---|---|---|
+| ❌ **Pill Badges & Tag Clouds** (`rounded-full`, `rounded-pill` on status/chips) | Makes the UI look like a generic SaaS admin dashboard instead of real ledger paper. | Physical stamps (`rounded.row`, `rotate(-4deg)`, `2px solid paid/muted`), or plain text labels paired with Lucide icons. |
+| ❌ **Monospace Typography** (`font-mono`, `<code>`, Courier, Consolas) | Cold, mechanical, and illegible on low-cost Android displays under sunlight. | `Atkinson Hyperlegible Next` (`font-sans`) with `tabular-nums` for all numbers, receipts, and tables. |
+| ❌ **Random "FIG//" or Schematic Labels** ("FIG 01 //", "FIG //") | Faux-blueprint developer aesthetic that alienates sari-sari store owners. | Clear, plain-language English headings in `Bricolage Grotesque`. |
+| ❌ **Decorative Gradients** (Linear/radial color fades, neon accents) | Paper is not an RGB display; colored gradients destroy print credibility. | Solid flat ink colors (`ink`, `margin`, `paid`, `pencil`). Repeating hairline `.ruled` is the only gradient exception. |
+| ❌ **Glassmorphism & Frosted Glass** (`backdrop-blur` on paper surfaces) | Paper is opaque physical cellulose fiber, not frosted acrylic glass. | Solid, opaque `sheet` (`#FFFFFF`), `paper` (`#F2F5EC`), or `slip` (`#FFFEF8`). Modal backdrop keeps dimming, but card content is 100% solid paper. |
+| ❌ **Emoji as UI Icons** (⚡, 📶, ℹ, ▲, 💰, etc.) | Render unpredictably across Android OS versions and look unprofessional. | Semantic Lucide SVG icons (`AlertCircle`, `WifiOff`, `CloudUpload`, `CheckCircle2`) paired with explicit text. |
+| ❌ **Removing the Background** (Stripping `#F2F5EC` or grain to pure `#FFF`) | Stripping the paper ground turns Talaan into a sterile, glare-heavy white box. | **Do NOT remove the background.** The `#F2F5EC` analysis pad paper with subtle SVG grain is the sovereign foundation. |
+| ❌ **Dark Mode** | Store owners operate at roadside counters under blistering tropical glare; dark themes create unreadable reflections. | Supported appearance is strictly **High-Contrast Daylight Mode**. |
+| ❌ **Generic AI SaaS Tropes** (Floating purple sparkles, glowing cards, robotic badges) | Store owners distrust "magic AI"; they trust verifiable ledger math. | Verification-first paper proofs: Red Margin Gutter and Two-Ply Proof Bar. Raw model names logged server-side only. |
 
 ---
 
@@ -426,12 +459,12 @@ Implementation notes: set each slip's resting rotation with the `rotate` propert
 Build, screenshot at `1440px` and `390px`, then verify each line. Fix failures and screenshot again.
 
 1. Every surface maps to exactly one of the four layers. No surface has both a border and a shadow.
-2. Grain is visible on `paper` and `desk` at full size but never on text surfaces.
+2. Grain is visible on `paper` and `desk` at full size but never on text surfaces. Background is permanently preserved.
 3. Landing hero: three overlapping paper layers, at least two rotated, one stamp, headline at least `72px` at `1440px`.
 4. Landing sections 1–4 use four different layouts; no two adjacent sections share a grid.
 5. Landing slips have non-zero rotation; app-screen sheets and rows have none.
-6. No horizontal scroll at `360px`.
-7. No monospace, no emoji, no pill tags, no all-caps, no gradients except `.ruled` and `--paper-grain`.
+6. No horizontal scroll at `360px`. Touch targets are at least 48×48px.
+7. No monospace, no emoji as icons, no pill tags, no random FIG//, no gradients except `.ruled` and `--paper-grain`.
 8. Red and yellow appear only on discrepancy or low-confidence content (plus the margin line).
 9. Peso columns are right-aligned, tabular, and show `₱`.
 10. Reduced-motion mode renders every slip at its resting position.
@@ -445,6 +478,12 @@ When `src/components/landing/Hero.tsx` exists, it is the craft benchmark: match 
 
 ### Do:
 - **Do** build with real layered paper: ruled lines, margin lines, tape, torn edges, stamps, overlapping slips.
+- **Do** keep the physical analysis pad paper background (`#F2F5EC`) and desk ground (`#E3E9D3`) permanently active.
+- **Do** use **Impeccable** as the baseline design standard for layout craft, touch targets, and visual hierarchy.
+- **Do** use **Lenis** for smooth, normalized momentum scrolling across mobile and desktop viewports.
+- **Do** use **GSAP** for high-precision authored paper choreography and hero settling sequences.
+- **Do** use **Motion** (`motion/react`) for fluid layout transitions, route enters, and shared element state shifts.
+- **Do** use **FormKit** (`@formkit/auto-animate`) for seamless list row insertions, deletions, and form disclosures.
 - **Do** use the shadow, grain, and tape recipes verbatim.
 - **Do** load `Bricolage_Grotesque`, `Atkinson_Hyperlegible_Next`, and `Caveat` via `next/font/google` in `src/app/layout.tsx`.
 - **Do** apply `tabular-nums` on every peso amount, quantity, unit price, and total.
@@ -452,11 +491,16 @@ When `src/components/landing/Hero.tsx` exists, it is the craft benchmark: match 
 - **Do** use real, local content in every demo state.
 
 ### Don't:
+- **Don't** remove or whiten the background (`#F2F5EC` pad paper and `#E3E9D3` desk with grain must stay intact).
+- **Don't** use pill badges (`rounded-full`/`rounded-pill`) or tag clouds for status or metadata.
+- **Don't** use monospace typography (`font-mono`, `<code>`) anywhere—use `font-sans tabular-nums`.
+- **Don't** use random blueprint/schematic tags ("FIG 01 //", "FIG //").
+- **Don't** use decorative gradients, neon glows, or gradient text.
+- **Don't** use glassmorphism or `backdrop-blur` on paper sheets—surfaces are opaque physical paper.
+- **Don't** use emojis as interface icons (no ⚡, 📶, ℹ, ▲)—use Lucide SVG icons paired with text.
 - **Don't** make centered stacks of identical white rounded cards. If three things look the same, one of them should be a different piece of paper.
 - **Don't** use `shadow-md`, default Tailwind grays or blues, or any color outside the token list.
-- **Don't** use pill tags with status dots, badge clouds, or developer chips.
-- **Don't** use monospace, emoji icons, glassmorphism, glowing borders, or decorative gradients.
 - **Don't** introduce a second accent color or use `margin` / `marker` for decoration.
 - **Don't** render Caveat outside `.notebook` and `.pinned-note`.
-- **Don't** add scroll-triggered fade-ups, bounce effects, or animations violating The Paper Motion Rule (§ Motion). Strictly use canonical paper motion tokens (`.paper-enter`, `.paper-settle`, `.paper-stagger`, `.paper-lift`, `.paper-press`, `.paper-row`, `.margin-draw`).
+- **Don't** add scroll-triggered fade-ups, bounce effects, or animations violating The Paper Motion Rule (§ Motion).
 - **Don't** display any total the deterministic code did not compute, and never auto-send reminders.

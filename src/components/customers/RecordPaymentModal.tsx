@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { X, Check, HandCoins, AlertCircle, Loader2 } from "lucide-react";
+import { motion } from "motion/react";
 import { useRouter } from "next/navigation";
 
 interface RecordPaymentModalProps {
@@ -71,9 +72,14 @@ export function RecordPaymentModal({
       role="dialog"
       aria-modal="true"
       aria-labelledby="record-payment-title"
-      className="fixed inset-0 z-50 bg-pencil/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 overflow-y-auto animate-in fade-in duration-150"
+      className="fixed inset-0 z-50 bg-pencil/60 flex items-center justify-center p-3 sm:p-4 overflow-y-auto"
     >
-      <div className="relative w-full max-w-sm my-auto bg-sheet rounded-sheet border border-rule shadow-paper-lg overflow-hidden text-pencil font-sans select-none">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95, y: 12 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+        className="relative w-full max-w-sm my-auto bg-sheet rounded-sheet border border-rule shadow-paper-lg overflow-hidden text-pencil font-sans select-none"
+      >
         {/* Header Strip */}
         <div className="px-4 py-3 bg-paper border-b border-rule flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -87,7 +93,7 @@ export function RecordPaymentModal({
             onClick={onClose}
             disabled={isSubmitting}
             aria-label="Close dialog"
-            className="w-7 h-7 rounded-full hover:bg-sheet flex items-center justify-center text-muted hover:text-pencil transition-colors cursor-pointer"
+            className="w-8 h-8 rounded-xs hover:bg-sheet flex items-center justify-center text-muted hover:text-pencil transition-colors cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
@@ -136,7 +142,7 @@ export function RecordPaymentModal({
                   key={preset}
                   type="button"
                   onClick={() => setAmount(String(preset))}
-                  className="px-2.5 py-1 text-xs font-bold rounded-pill bg-paper hover:bg-[#E8EDE0] border border-rule/70 text-pencil transition-colors cursor-pointer"
+                  className="px-2.5 py-1 text-xs font-bold rounded-xs bg-paper hover:bg-[#E8EDE0] border border-rule/70 text-pencil transition-colors cursor-pointer"
                 >
                   +₱{preset}
                 </button>
@@ -145,7 +151,7 @@ export function RecordPaymentModal({
                 <button
                   type="button"
                   onClick={() => setAmount(String(currentBalance))}
-                  className="px-2.5 py-1 text-xs font-bold rounded-pill bg-[#EAF5EE] hover:bg-[#D5EEDD] border border-paid/40 text-paid transition-colors cursor-pointer"
+                  className="px-2.5 py-1 text-xs font-bold rounded-xs bg-[#EAF5EE] hover:bg-[#D5EEDD] border border-paid/40 text-paid transition-colors cursor-pointer"
                 >
                   Full (₱{currentBalance.toFixed(2)})
                 </button>
@@ -181,14 +187,14 @@ export function RecordPaymentModal({
               type="button"
               onClick={onClose}
               disabled={isSubmitting}
-              className="min-h-[44px] rounded-row border border-rule bg-sheet hover:bg-paper text-pencil font-sans font-bold text-xs transition-colors cursor-pointer"
+              className="min-h-[48px] rounded-row border border-rule bg-sheet hover:bg-paper text-pencil font-sans font-bold text-xs transition-colors cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={!isValid || isSubmitting}
-              className="min-h-[44px] rounded-row bg-paid hover:bg-[#18623D] text-sheet font-sans font-bold text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-xs disabled:opacity-50"
+              className="min-h-[48px] rounded-row bg-paid hover:bg-[#18623D] text-sheet font-sans font-bold text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-xs disabled:opacity-50"
             >
               {isSubmitting ? (
                 <>
@@ -204,7 +210,7 @@ export function RecordPaymentModal({
             </button>
           </div>
         </form>
-      </div>
+      </motion.div>
     </div>
   );
 }

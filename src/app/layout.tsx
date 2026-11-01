@@ -39,6 +39,7 @@ export const metadata: Metadata = {
 };
 
 import { SystemBackground } from "@/components/shared/SystemBackground";
+import { SmoothScrollProvider } from "@/components/providers/SmoothScrollProvider";
 
 export default function RootLayout({
   children,
@@ -52,10 +53,12 @@ export default function RootLayout({
       className={`${bricolageGrotesque.variable} ${atkinsonHyperlegible.variable} ${caveat.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-paper text-pencil font-sans relative">
-        <SystemBackground />
-        <div className="relative z-10 flex-1 flex flex-col">
-          {children}
-        </div>
+        <SmoothScrollProvider>
+          <SystemBackground />
+          <div className="relative z-10 flex-1 flex flex-col">
+            {children}
+          </div>
+        </SmoothScrollProvider>
       </body>
     </html>
   );

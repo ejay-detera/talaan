@@ -37,7 +37,7 @@ export function InitialLoader() {
 
   return (
     <div
-      className={`fixed inset-0 z-50 flex items-center justify-center p-4 bg-paper/70 backdrop-blur-xs text-pencil font-sans selection:bg-marker transition-all duration-250 pointer-events-none ${
+      className={`fixed inset-0 z-50 flex items-center justify-center p-4 bg-paper/90 text-pencil font-sans selection:bg-marker transition-all duration-250 pointer-events-none ${
         fadeOut ? "opacity-0 invisible scale-[0.98]" : "opacity-100 scale-100"
       }`}
       aria-hidden="true"
@@ -92,9 +92,9 @@ export function InitialLoader() {
 
         {/* Dynamic Progress Bar */}
         <div className="space-y-2 pt-4">
-          <div className="h-1.5 w-full bg-rule/60 rounded-full overflow-hidden relative">
+          <div className="h-1.5 w-full bg-rule/60 rounded-xs overflow-hidden relative">
             <div
-              className="h-full bg-gradient-to-r from-ink via-[#2550D8] to-ink rounded-full transition-all duration-300 ease-out"
+              className="h-full bg-ink rounded-xs transition-all duration-300 ease-out"
               style={{
                 width: `${STEPS[stepIndex].percent}%`,
               }}

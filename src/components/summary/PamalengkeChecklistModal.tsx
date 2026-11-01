@@ -2,6 +2,8 @@
 
 import React, { useState } from "react";
 import { X, Copy, Share2, Printer, Check, ShoppingBag, CheckSquare, RotateCcw } from "lucide-react";
+import { motion } from "motion/react";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 import type { RestockItemSummary } from "@/lib/ledger/summary";
 import { formatPamalengkeListText } from "@/lib/ledger/formatters";
 import { Amount } from "@/components/shared/Amount";
@@ -36,6 +38,7 @@ export function PamalengkeChecklistModal({
     return {};
   });
 
+  const [listRef] = useAutoAnimate<HTMLDivElement>();
   const [copied, setCopied] = useState(false);
   const [shareFeedback, setShareFeedback] = useState<string | null>(null);
 
@@ -118,9 +121,14 @@ export function PamalengkeChecklistModal({
       role="dialog"
       aria-modal="true"
       aria-labelledby="pamalengke-modal-title"
-      className="fixed inset-0 z-50 bg-pencil/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 overflow-y-auto animate-in fade-in duration-150"
+      className="fixed inset-0 z-50 bg-pencil/60 flex items-center justify-center p-3 sm:p-4 overflow-y-auto"
     >
-      <div className="relative w-full max-w-lg my-auto space-y-4">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.96, y: 16 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
+        className="relative w-full max-w-lg my-auto space-y-4"
+      >
         {/* Main Paper Sheet Card */}
         <div className="bg-sheet rounded-sheet border border-rule shadow-paper-lg overflow-hidden text-pencil font-sans">
           {/* Top Control Bar (Hidden when printing) */}
@@ -135,7 +143,7 @@ export function PamalengkeChecklistModal({
               type="button"
               onClick={onClose}
               aria-label="Close pamalengke dialog"
-              className="w-8 h-8 rounded-full hover:bg-sheet flex items-center justify-center text-muted hover:text-pencil transition-colors cursor-pointer"
+              className="w-8 h-8 rounded-xs hover:bg-sheet flex items-center justify-center text-muted hover:text-pencil transition-colors cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
@@ -143,7 +151,7 @@ export function PamalengkeChecklistModal({
 
           {/* Main Paper Content Area */}
           <div className="p-4 sm:p-6 space-y-4 select-none print:p-0">
-            {/* Header: Store Name, Subtitle, and Fixed Single-Line Progress Pill */}
+            {/* Header: Store Name, Subtitle, and Fixed Single-Line Progress Stamp */}
             <div className="flex items-center justify-between gap-3 border-b border-rule/70 pb-3">
               <div className="min-w-0">
                 <h2 className="font-display font-bold text-lg sm:text-xl text-pencil tracking-tight truncate">
@@ -154,8 +162,8 @@ export function PamalengkeChecklistModal({
                 </p>
               </div>
 
-              {/* Progress Count Badge: strictly whitespace-nowrap & shrink-0 */}
-              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-pill bg-paper border border-rule text-xs font-bold font-sans whitespace-nowrap shrink-0 shadow-xs">
+              {/* Progress Count Badge: physical stamp */}
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xs bg-paper border border-rule text-xs font-bold font-sans whitespace-nowrap shrink-0 shadow-xs">
                 <span className="text-ink tabular-nums">{checkedCount}</span>
                 <span className="text-muted">of {items.length} bought</span>
               </div>
@@ -197,7 +205,7 @@ export function PamalengkeChecklistModal({
                 <span className="font-hand font-bold text-base text-[#465A30] tracking-wide">
                   Listahan sa Pamilihan
                 </span>
-                <span className="text-[10px] font-mono uppercase tracking-widest text-muted/70">
+                <span className="text-[10px] font-sans tabular-nums uppercase tracking-widest text-muted/70">
                   Restock Pad
                 </span>
               </div>
@@ -211,7 +219,7 @@ export function PamalengkeChecklistModal({
                 />
 
                 {/* Ruled Notebook Rows */}
-                <div className="divide-y divide-[#E2E9D8] min-h-[220px] max-h-[360px] overflow-y-auto">
+                <div ref={listRef} className="divide-y divide-[#E2E9D8] min-h-[220px] max-h-[360px] overflow-y-auto">
                   {items.length === 0 ? (
                     <div className="py-12 text-center text-xs text-muted font-sans pl-14">
                       No confirmed sales transactions in this period.
@@ -338,7 +346,7 @@ export function PamalengkeChecklistModal({
             </button>
           </div>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }

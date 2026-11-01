@@ -46,8 +46,8 @@ export default function CustomersLoading() {
                   <div className="h-3 w-20 bg-rule/40 rounded" />
                 </div>
                 <div className="flex justify-between items-center gap-3">
-                  <div className="h-7 flex-1 max-w-xs bg-sheet border border-rule rounded-pill" />
-                  <div className="h-7 w-44 bg-rule/40 rounded-pill" />
+                  <div className="h-7 flex-1 max-w-xs bg-sheet border border-rule rounded-row" />
+                  <div className="h-7 w-44 bg-rule/40 rounded-xs" />
                 </div>
               </div>
 

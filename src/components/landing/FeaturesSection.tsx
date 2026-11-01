@@ -30,7 +30,7 @@ export function FeaturesSection() {
   ];
 
   return (
-    <section id="how-it-works" className="w-full py-14 sm:py-20 border-t border-rule bg-paper">
+    <section id="how-it-works" className="w-full py-14 sm:py-20 border-t border-rule bg-paper scroll-mt-20">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-10 sm:space-y-14">
         <div className="text-center max-w-2xl mx-auto space-y-3">
           <h2 className="font-display font-bold text-2xl sm:text-4xl text-pencil tracking-tight">

@@ -4,7 +4,7 @@ import { ShieldCheck } from "lucide-react";
 
 export default function Loading() {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-paper/70 backdrop-blur-xs text-pencil font-sans selection:bg-marker">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-paper/90 text-pencil font-sans selection:bg-marker">
       {/* Sovereign Notebook Loading Slip */}
       <div className="relative w-full max-w-[360px] bg-sheet border border-rule border-l-4 border-l-margin rounded-sheet shadow-paper-lg p-6 sm:p-7 select-none overflow-hidden animate-in fade-in zoom-in-95 duration-200">
         {/* Binder Edge Holes */}
@@ -55,8 +55,8 @@ export default function Loading() {
 
         {/* Fluid Ink Travel Progress Beam */}
         <div className="space-y-2 pt-4">
-          <div className="h-1.5 w-full bg-rule/60 rounded-full overflow-hidden relative">
-            <div className="absolute inset-y-0 w-2/5 bg-gradient-to-r from-ink via-[#2550D8] to-ink rounded-full animate-shimmer-slide" />
+          <div className="h-1.5 w-full bg-rule/60 rounded-xs overflow-hidden relative">
+            <div className="absolute inset-y-0 w-2/5 bg-ink rounded-xs animate-shimmer-slide" />
           </div>
 
           <div className="flex items-center justify-between text-xs font-sans">

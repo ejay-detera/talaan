@@ -195,10 +195,11 @@ export function ExcelReviewRow({
             )}
             {isLimitExceeded && (
               <span
-                className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-bold bg-[#FFF2E5] text-[#9A4A00] border border-[#FFD8B3] shrink-0 whitespace-nowrap"
+                className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-row text-[10px] font-bold bg-[#FFF2E5] text-[#9A4A00] border border-[#FFD8B3] shrink-0 whitespace-nowrap"
                 title={`Projected debt ₱${creditLimitCheck?.projectedBalance.toFixed(2)} exceeds ₱${creditLimitCheck?.limit.toFixed(2)} limit`}
               >
-                ▲ Limit Exceeded
+                <AlertCircle className="w-3 h-3 text-[#9A4A00]" />
+                <span>Limit Exceeded</span>
               </span>
             )}
           </div>
@@ -379,8 +380,8 @@ export function ExcelReviewRow({
       {/* 24h Duplicate Counter Payment Advisory Sub-Row */}
       {hasRecentPayment && !isMismatch && (
         <tr className="bg-[#FFFDF5] border-b border-[#F6E05E]/60 text-xs">
-          <td className="w-12 bg-[#FEFCBF]/30 border-r border-rule text-center font-bold text-[#B45309] select-none">
-            ℹ
+          <td className="w-12 bg-[#FEFCBF]/30 border-r border-rule text-center select-none py-1.5">
+            <AlertCircle className="w-4 h-4 mx-auto text-[#B45309]" />
           </td>
           <td colSpan={7} className="py-2 px-3 text-[#744210] font-sans">
             <span className="font-bold">Duplicate Payment Check:</span>{" "}
@@ -394,8 +395,8 @@ export function ExcelReviewRow({
       {/* Credit Limit Exceeded Advisory Sub-Row */}
       {isLimitExceeded && !isMismatch && (
         <tr className="bg-[#FFFDF5] border-b border-[#F6E05E]/60 text-xs">
-          <td className="w-12 bg-[#FEFCBF]/30 border-r border-rule text-center font-bold text-[#B45309] select-none">
-            ▲
+          <td className="w-12 bg-[#FEFCBF]/30 border-r border-rule text-center select-none py-1.5">
+            <AlertCircle className="w-4 h-4 mx-auto text-[#B45309]" />
           </td>
           <td colSpan={7} className="py-2 px-3 text-[#744210] font-sans">
             <span className="font-bold">Credit Limit Notice:</span> Adding ₱{entry.amount.toFixed(2)}{" "}

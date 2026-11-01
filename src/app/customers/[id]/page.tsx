@@ -61,7 +61,7 @@ export default async function CustomerDetailPage({
   return (
     <div className="min-h-screen bg-transparent text-pencil font-sans selection:bg-marker selection:text-pencil pb-24">
       {/* Sticky Header matching Image 2 */}
-      <header className="sticky top-0 z-20 bg-sheet/95 backdrop-blur-sm border-b border-rule px-4 sm:px-6 py-4">
+      <header className="sticky top-0 z-20 bg-sheet border-b border-rule px-4 sm:px-6 py-4">
         <div className="max-w-5xl mx-auto flex items-center justify-between gap-4">
           {/* Back to Customers link */}
           <Link

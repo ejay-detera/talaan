@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Plus, CheckCircle2, AlertTriangle } from "lucide-react";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { NotebookStrip } from "./NotebookStrip";
 import { ExcelReviewRow } from "./ExcelReviewRow";
 import { TwoPlyProofBar } from "./TwoPlyProofBar";
@@ -40,6 +41,7 @@ export function ReviewSheet({
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [selectedIdx, setSelectedIdx] = useState<number>(0);
+  const [tableBodyRef] = useAutoAnimate<HTMLTableSectionElement>();
 
   const {
     entries,
@@ -247,7 +249,7 @@ export function ReviewSheet({
               </tr>
             </thead>
 
-            <tbody className="divide-y divide-rule/60 bg-sheet">
+            <tbody ref={tableBodyRef} className="divide-y divide-rule/60 bg-sheet">
               {entries.map((entry, idx) => (
                 <ExcelReviewRow
                   key={entry.id || `row-${idx}`}

@@ -13,6 +13,7 @@ import {
   ChevronRight,
   Eye,
 } from "lucide-react";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { Amount } from "@/components/shared/Amount";
 
 export interface PreviewRow {
@@ -63,6 +64,7 @@ export function RecentPagesList({
   className = "",
 }: RecentPagesListProps) {
   const [activePageIndex, setActivePageIndex] = useState(0);
+  const [rowsContainerRef] = useAutoAnimate<HTMLDivElement>();
 
   if (pages.length === 0) {
     return (
@@ -231,7 +233,7 @@ export function RecentPagesList({
             </div>
 
             {/* Handwritten cursive line entries */}
-            <div className="space-y-2 font-hand text-pencil text-base sm:text-lg leading-relaxed select-text min-h-[100px]">
+            <div ref={rowsContainerRef} className="space-y-2 font-hand text-pencil text-base sm:text-lg leading-relaxed select-text min-h-[100px]">
               {rowsToDisplay.length > 0 ? (
                 rowsToDisplay.map((row, idx) => (
                   <div
@@ -263,7 +265,7 @@ export function RecentPagesList({
               type="button"
               onClick={() => setActivePageIndex((prev) => Math.max(0, prev - 1))}
               disabled={safeIndex === 0}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-row border border-rule bg-sheet text-pencil hover:bg-paper active:scale-95 disabled:opacity-30 disabled:pointer-events-none transition-all text-xs font-semibold shadow-xs"
+              className="inline-flex items-center gap-1.5 px-3 min-h-[48px] rounded-row border border-rule bg-sheet text-pencil hover:bg-paper active:scale-95 disabled:opacity-30 disabled:pointer-events-none transition-all text-xs font-semibold shadow-xs"
             >
               <ChevronLeft className="w-3.5 h-3.5 text-muted" />
               <span>Previous page</span>
@@ -276,7 +278,7 @@ export function RecentPagesList({
                   key={p.id}
                   type="button"
                   onClick={() => setActivePageIndex(idx)}
-                  className={`h-2 rounded-full transition-all ${
+                  className={`h-2 rounded-xs transition-all ${
                     idx === safeIndex
                       ? "w-6 bg-ink"
                       : "w-2 bg-rule/80 hover:bg-muted"
@@ -293,7 +295,7 @@ export function RecentPagesList({
                 setActivePageIndex((prev) => Math.min(pages.length - 1, prev + 1))
               }
               disabled={safeIndex === pages.length - 1}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-row border border-rule bg-sheet text-pencil hover:bg-paper active:scale-95 disabled:opacity-30 disabled:pointer-events-none transition-all text-xs font-semibold shadow-xs"
+              className="inline-flex items-center gap-1.5 px-3 min-h-[48px] rounded-row border border-rule bg-sheet text-pencil hover:bg-paper active:scale-95 disabled:opacity-30 disabled:pointer-events-none transition-all text-xs font-semibold shadow-xs"
             >
               <span>Next page</span>
               <ChevronRight className="w-3.5 h-3.5 text-muted" />

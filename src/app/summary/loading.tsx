@@ -10,7 +10,7 @@ export default function SummaryLoading() {
             <div className="h-7 w-48 bg-rule/70 rounded" />
             <div className="h-4 w-64 bg-rule/40 rounded" />
           </div>
-          <div className="h-8 w-44 bg-rule/40 rounded-pill" />
+          <div className="h-8 w-44 bg-rule/40 rounded-xs" />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">

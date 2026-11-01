@@ -30,7 +30,7 @@ export function TwoPlyProofBar({
 }: TwoPlyProofBarProps) {
   return (
     <footer
-      className={`sticky bottom-3 z-30 rounded-sheet border border-rule bg-sheet/95 backdrop-blur-md shadow-paper-lg p-4 sm:p-5 ${
+      className={`sticky bottom-3 z-30 rounded-sheet border border-rule bg-sheet shadow-paper-lg p-4 sm:p-5 ${
         hasPageDiscrepancy ? "border-l-4 border-l-margin" : ""
       } ${className}`}
     >

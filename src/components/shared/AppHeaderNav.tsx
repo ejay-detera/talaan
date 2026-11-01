@@ -31,7 +31,7 @@ export function AppHeaderNav({ activeTab }: AppHeaderNavProps) {
   return (
     <div className="sticky top-2.5 sm:top-4 z-40 flex justify-center items-center px-3 sm:px-4 pointer-events-none print:hidden mb-4">
       {/* Floating Center Dock with GooeyNav */}
-      <header className="pointer-events-auto flex items-center gap-1.5 sm:gap-2.5 p-1.5 sm:p-2 pl-2 sm:pl-3 rounded-full bg-sheet/95 backdrop-blur-md border border-rule shadow-paper-lg transition-all duration-300">
+      <header className="pointer-events-auto flex items-center gap-1.5 sm:gap-2.5 p-1.5 sm:p-2 pl-2 sm:pl-3 rounded-sheet bg-sheet border border-rule shadow-paper-lg transition-all duration-300">
         {/* Placement Icon & Brand (Static & non-interactive on user pages) */}
         <div className="flex items-center gap-2 p-1 pr-1.5 sm:pr-2.5 select-none pointer-events-none cursor-default">
           <Image
