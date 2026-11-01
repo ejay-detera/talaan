@@ -63,6 +63,15 @@ export interface ReviewEntry {
   accept_written?: boolean;
 }
 
+export interface ReviewCustomerCandidate {
+  id: string;
+  name: string;
+  credit_limit?: number | null;
+  current_balance?: number;
+  recent_payments?: Array<{ amount: number; created_at: string }>;
+}
+
+
 export interface ConfirmEntryInput {
   id?: string | null;
   customer_id?: string | null;
@@ -82,6 +91,7 @@ export interface CustomerSummary {
   store_id: string;
   name: string;
   phone_optional: string | null;
+  credit_limit?: number | null;
   balance: number;
   total_credit: number;
   total_payment: number;
@@ -90,7 +100,7 @@ export interface CustomerSummary {
 
 export interface CustomerLedgerEntry {
   id: string;
-  page_id: string;
+  page_id: string | null;
   page_date: string | null;
   item: string;
   quantity: number | null;
@@ -114,6 +124,7 @@ export interface CustomerBalanceDetail {
     id: string;
     name: string;
     phone_optional: string | null;
+    credit_limit?: number | null;
   };
   balance: number;
   total_credit: number;

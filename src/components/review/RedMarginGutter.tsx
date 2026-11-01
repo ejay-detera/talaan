@@ -4,6 +4,8 @@ import { Check, AlertTriangle, X } from "lucide-react";
 interface RedMarginGutterProps {
   lineDiscrepancy: boolean;
   needsReview: boolean;
+  limitExceeded?: boolean;
+  duplicateWarning?: boolean;
   className?: string;
 }
 
@@ -14,6 +16,8 @@ interface RedMarginGutterProps {
 export function RedMarginGutter({
   lineDiscrepancy,
   needsReview,
+  limitExceeded,
+  duplicateWarning,
   className = "",
 }: RedMarginGutterProps) {
   if (lineDiscrepancy) {
@@ -24,6 +28,30 @@ export function RedMarginGutter({
       >
         <X className="w-3.5 h-3.5 text-margin flex-shrink-0" aria-hidden="true" />
         <span className="hidden sm:inline">Mismatch</span>
+      </div>
+    );
+  }
+
+  if (duplicateWarning) {
+    return (
+      <div
+        className={`flex items-center gap-1 text-xs font-bold text-[#B45309] border-l-2 border-l-[#B45309] pl-2 font-sans ${className}`}
+        title="Recent counter payment recorded within 24h: verify if duplicate"
+      >
+        <AlertTriangle className="w-3.5 h-3.5 text-[#B45309] flex-shrink-0" aria-hidden="true" />
+        <span className="hidden sm:inline">Duplicate?</span>
+      </div>
+    );
+  }
+
+  if (limitExceeded) {
+    return (
+      <div
+        className={`flex items-center gap-1 text-xs font-bold text-[#B45309] border-l-2 border-l-[#B45309] pl-2 font-sans ${className}`}
+        title="Credit limit exceeded for this customer"
+      >
+        <AlertTriangle className="w-3.5 h-3.5 text-[#B45309] flex-shrink-0" aria-hidden="true" />
+        <span className="hidden sm:inline">Over Limit</span>
       </div>
     );
   }

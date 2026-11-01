@@ -37,6 +37,7 @@ export interface Database {
           name: string;
           normalized_name: string;
           phone_optional: string | null;
+          credit_limit: number | null;
           created_at: string;
         };
         Insert: {
@@ -45,6 +46,7 @@ export interface Database {
           name: string;
           normalized_name: string;
           phone_optional?: string | null;
+          credit_limit?: number | null;
           created_at?: string;
         };
         Update: {
@@ -53,6 +55,7 @@ export interface Database {
           name?: string;
           normalized_name?: string;
           phone_optional?: string | null;
+          credit_limit?: number | null;
           created_at?: string;
         };
         Relationships: [];
@@ -108,7 +111,7 @@ export interface Database {
       entries: {
         Row: {
           id: string;
-          page_id: string;
+          page_id: string | null;
           store_id: string;
           customer_id: string | null;
           extracted_customer_name: string | null;
@@ -125,7 +128,7 @@ export interface Database {
         };
         Insert: {
           id?: string;
-          page_id: string;
+          page_id?: string | null;
           store_id: string;
           customer_id?: string | null;
           extracted_customer_name?: string | null;
@@ -142,7 +145,7 @@ export interface Database {
         };
         Update: {
           id?: string;
-          page_id?: string;
+          page_id?: string | null;
           store_id?: string;
           customer_id?: string | null;
           extracted_customer_name?: string | null;

@@ -77,19 +77,23 @@ Talaan runs as a unified **Next.js App Router** application in TypeScript. On th
 
 | Capability | Priority | Defined by brief | Built or deployed today |
 |---|---|---:|---:|
-| 1. Photo upload of notebook page, receipt, or list | Must (MVP) | Yes (`S-01` §5) | ⬜ Planned |
-| 2. Structured extraction (`credit`/`payment`/`cash_sale`, confidence) | Must (MVP) | Yes (`S-01` §5) | ⬜ Planned |
-| 3. Review screen with low-confidence highlights & customer matching | Must (MVP) | Yes (`S-01` §5) | ⬜ Planned |
-| 4. Two-level deterministic discrepancy finder (row + page totals) | Must (MVP) | Yes (`S-01` §5) | ⬜ Planned |
-| 5. Customer balances (`sum(credit) - sum(payment)`) & activity history | Must (MVP) | Yes (`S-01` §5) | ⬜ Planned |
-| 6. Taglish reminder drafts with tone selector & copy/share handoff | Must (MVP) | Yes (`S-01` §5) | ⬜ Planned |
-| 7. Retake request when a page or region is unreadable | Must (MVP) | Yes (`S-01` §5) | ⬜ Planned |
+| 1. Photo upload of notebook page, receipt, or list | Must (MVP) | Yes (`S-01` §5) | ✅ Built |
+| 2. Structured extraction (`credit`/`payment`/`cash_sale`, confidence) | Must (MVP) | Yes (`S-01` §5) | ✅ Built |
+| 3. Review screen with low-confidence highlights & customer matching | Must (MVP) | Yes (`S-01` §5) | ✅ Built |
+| 4. Two-level deterministic discrepancy finder (row + page totals) | Must (MVP) | Yes (`S-01` §5) | ✅ Built |
+| 5. Customer balances (`sum(credit) - sum(payment)`) & activity history | Must (MVP) | Yes (`S-01` §5) | ✅ Built |
+| 6. Taglish reminder drafts with tone selector & copy/share handoff | Must (MVP) | Yes (`S-01` §5) | ✅ Built |
+| 7. Retake request when a page or region is unreadable | Must (MVP) | Yes (`S-01` §5) | ✅ Built |
 | S1. Supplier receipt to restock list and cost tracking | Stretch | Yes (`S-01` §5) | ✅ Built (Pamalengke restock checklist on `/summary`) |
 | S2. Weekly summary (top items, total *utang*, estimated profit) | Stretch | Yes (`S-01` §5) | ✅ Built |
 | S3. Multi-page month view using 131K long context | Stretch | Yes (`S-01` §5) | ⬜ Planned |
 | S4. Shelf photo stock count (experimental) | Stretch | Yes (`S-01` §5) | ⬜ Planned |
 | S5. Export to CSV or printable ledger | Stretch | Yes (`S-01` §5) | ✅ Built |
 | S6. Customer E-Resibo itemized statement slip & text export | Extension | Dev Ejay | ✅ Built |
+| S7. Direct Counter Payment (`+ Magbayad` modal & API) | Extension | Dev Ejay | ✅ Built |
+| S8. Store Liquidity Health indicator (`7d` vs `today`) | Extension | Dev Ejay | ✅ Built |
+| S9. Customer Credit Limit alerts & 24h duplicate payment warning | Extension | Dev Ejay | ✅ Built |
+| S10. Semi-Offline Fast-Scan Queue (IndexedDB store-and-forward) | Extension | Dev Ejay | ✅ Built |
 
 ### Contributor named in the brief
 

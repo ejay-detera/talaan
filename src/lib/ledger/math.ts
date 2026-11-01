@@ -108,3 +108,42 @@ export function computeCustomerBalance(
     totalPayment: toPesos(paymentCentavos),
   };
 }
+
+export interface CreditLimitCheck {
+  isExceeded: boolean;
+  limit: number;
+  currentBalance: number;
+  projectedBalance: number;
+  excessAmount: number;
+}
+
+/**
+ * Checks whether adding a new credit transaction exceeds the customer's credit limit.
+ * Uses exact integer-centavo math. Default limit is 500.00 pesos.
+ */
+export function checkCreditLimitExceeded(
+  currentBalancePesos: number,
+  newCreditAmountPesos: number,
+  creditLimitPesos: number | null | undefined = 500
+): CreditLimitCheck {
+  const limit =
+    creditLimitPesos !== null && creditLimitPesos !== undefined
+      ? creditLimitPesos
+      : 500;
+  const currentCentavos = toCentavos(currentBalancePesos);
+  const newCreditCentavos = toCentavos(newCreditAmountPesos);
+  const projectedCentavos = currentCentavos + newCreditCentavos;
+  const limitCentavos = toCentavos(limit);
+
+  const isExceeded = projectedCentavos > limitCentavos;
+  const excessCentavos = isExceeded ? projectedCentavos - limitCentavos : 0;
+
+  return {
+    isExceeded,
+    limit,
+    currentBalance: toPesos(currentCentavos),
+    projectedBalance: toPesos(projectedCentavos),
+    excessAmount: toPesos(excessCentavos),
+  };
+}
+

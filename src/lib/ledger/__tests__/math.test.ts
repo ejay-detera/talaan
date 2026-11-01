@@ -5,6 +5,7 @@ import {
   checkRowDiscrepancy,
   computePageTotals,
   computeCustomerBalance,
+  checkCreditLimitExceeded,
 } from "../math";
 
 describe("T-003: Integer-Centavo Math & Row Discrepancy", () => {
@@ -164,3 +165,44 @@ describe("T-006: Customer Balance Computation", () => {
     expect(result.totalPayment).toBe(0);
   });
 });
+
+describe("T-006: Credit Limit Exceeded Checks", () => {
+  it("detects when new credit pushes balance over default 500 limit", () => {
+    // Current balance 400 + 150 = 550 > 500
+    const result = checkCreditLimitExceeded(400, 150);
+    expect(result.isExceeded).toBe(true);
+    expect(result.limit).toBe(500);
+    expect(result.currentBalance).toBe(400);
+    expect(result.projectedBalance).toBe(550);
+    expect(result.excessAmount).toBe(50);
+  });
+
+  it("permits new credit within limit", () => {
+    // Current balance 250 + 100 = 350 <= 500
+    const result = checkCreditLimitExceeded(250, 100);
+    expect(result.isExceeded).toBe(false);
+    expect(result.limit).toBe(500);
+    expect(result.projectedBalance).toBe(350);
+    expect(result.excessAmount).toBe(0);
+  });
+
+  it("handles custom store credit limit and floating-point centavos", () => {
+    // Custom limit of 1000 with fractional centavos
+    const result = checkCreditLimitExceeded(950.5, 50.75, 1000);
+    expect(result.isExceeded).toBe(true);
+    expect(result.limit).toBe(1000);
+    expect(result.projectedBalance).toBe(1001.25);
+    expect(result.excessAmount).toBe(1.25);
+  });
+
+  it("defaults to 500 if limit is null or undefined", () => {
+    const resultNull = checkCreditLimitExceeded(501, 0, null);
+    expect(resultNull.isExceeded).toBe(true);
+    expect(resultNull.limit).toBe(500);
+
+    const resultUndefined = checkCreditLimitExceeded(400, 50, undefined);
+    expect(resultUndefined.isExceeded).toBe(false);
+    expect(resultUndefined.limit).toBe(500);
+  });
+});
+

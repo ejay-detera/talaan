@@ -168,6 +168,39 @@ Delivery stories in [`sprint.md`](sprint.md) cite these `US-` IDs.
 - Given the modal, when the owner taps **Copy List** or **Share**, then `formatPamalengkeListText` generates a clean checkbox text list (`[ ] <qty> pcs - <item>`) for SMS or Messenger.
 - **Traces:** BR-08, BR-10 · TAL-09 · tests `formatters.test.ts`
 
+### US-11 — Direct Counter Payment Recording (`+ Magbayad`) ✅
+
+> As a **Store Owner**, I want to record cash payments handed to me directly at the counter without needing to take a photo of a notebook page, so that customer balances stay accurate in real time.
+
+- Given an open customer detail page on `/customers/[id]`, when the owner taps **Record Pay** (`+ Magbayad`), then `RecordPaymentModal` opens with quick increment chips (+₱50, +₱100, +₱200, Full Balance) and a tabular amount input.
+- Given a valid positive amount, when the owner confirms, then `POST /api/customers/[id]/payments` inserts an atomic `payment` entry (`page_id = null`, `confirmed_by_user = true`) and updates the customer's balance immediately.
+- **Traces:** BR-01, BR-06 · TAL-10 · tests `payments/route.test.ts`
+
+### US-12 — Store Liquidity Health Engine ✅
+
+> As a **Store Owner**, I want to see my store's cash vs credit ratio at a glance so I know whether my working capital is tied up in customer debt or liquid enough for wholesaler restocking.
+
+- Given confirmed store entries, when viewing `/dashboard`, then `LiquidityHealthCard` calculates total cash collected (payments + cash sales) vs. credit extended over a 7-day rolling window (with a 1-tap "Today" toggle).
+- Displays a visual progress bar and non-judgmental advisory nudge (Healthy, Moderate, or High Risk) calculated via `src/lib/ledger/liquidity.ts`.
+- **Traces:** BR-01, BR-08 · TAL-10 · tests `liquidity.test.ts`
+
+### US-13 — Customer Credit Limit Alerts & 24h Duplicate Payment Warning ✅
+
+> As a **Store Owner**, I want review warnings when a customer exceeds their credit limit, and advisory alerts if a handwritten payment was already recorded directly at the counter, preventing double-counting.
+
+- Given an extracted credit row on `/pages/[id]/review`, if the customer's projected balance exceeds their custom limit (default ₱500), then an amber `▲ Limit Exceeded` badge is displayed in the table and status column (non-blocking).
+- Given an extracted payment row on `/pages/[id]/review`, if that customer had a direct payment recorded in the last 24 hours, an advisory warning is displayed in `RedMarginGutter` and as an inline notice row.
+- **Traces:** BR-04, BR-05 · TAL-10 · tests `math.test.ts`
+
+### US-14 — Semi-Offline Fast-Scan Queue ✅
+
+> As a **Store Owner**, I want to photograph notebook pages even when my counter mobile data connection is weak or disconnected, having them store locally and sync automatically when connection restores.
+
+- Given an offline device (`!navigator.onLine`), when the owner snaps a photo via `ScanButton`, then the downscaled image is stored locally in device IndexedDB (`src/lib/offline-db.ts`) with a confirmation toast.
+- Given queued offline scans, `OfflineQueueBanner` displays the pending count and a manual "Upload Now" button on `/dashboard`.
+- When network reconnects, `useOfflineScanQueue` automatically drains the queue sequentially via `POST /api/pages/extract` and removes synced items from local storage.
+- **Traces:** BR-02, BR-07 · TAL-10 · tests `offline-db.test.ts`
+
 ---
 
 ## 5. Key User Flows

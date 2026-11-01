@@ -8,7 +8,7 @@ import { ExcelReviewRow } from "./ExcelReviewRow";
 import { TwoPlyProofBar } from "./TwoPlyProofBar";
 import { useReviewDraft } from "@/hooks/useReviewDraft";
 import { computePageTotals, checkRowDiscrepancy } from "@/lib/ledger/math";
-import type { ReviewEntry } from "@/types/ledger";
+import type { ReviewEntry, ReviewCustomerCandidate } from "@/types/ledger";
 
 interface ReviewSheetProps {
   page: {
@@ -19,7 +19,7 @@ interface ReviewSheetProps {
     model: string;
   };
   initialEntries: ReviewEntry[];
-  customerCandidates: Array<{ id: string; name: string }>;
+  customerCandidates: ReviewCustomerCandidate[];
   imageUrl?: string | null;
 }
 
