@@ -61,13 +61,14 @@ describe("computeLiquidityHealth", () => {
     expect(health.status).toBe("healthy");
   });
 
-  it("handles zero volume gracefully as 100% healthy", () => {
+  it("handles zero volume gracefully as no_data (awaiting sales)", () => {
     const health = computeLiquidityHealth([], "7d", referenceDate);
     expect(health.totalCash).toBe(0);
     expect(health.totalCredit).toBe(0);
-    expect(health.cashRatioPercent).toBe(100);
+    expect(health.cashRatioPercent).toBe(0);
     expect(health.creditRatioPercent).toBe(0);
-    expect(health.status).toBe("healthy");
+    expect(health.status).toBe("no_data");
+    expect(health.statusMessage).toContain("No sales or payments recorded yet");
   });
 
   it("handles customer payment clearing debt in full (100% cash flow)", () => {

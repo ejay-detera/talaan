@@ -2,7 +2,7 @@ import { toCentavos, toPesos } from "./math";
 
 export type LiquidityPeriod = "7d" | "today";
 
-export type LiquidityRiskStatus = "healthy" | "moderate" | "high_risk";
+export type LiquidityRiskStatus = "healthy" | "moderate" | "high_risk" | "no_data";
 
 export interface LiquidityEntry {
   id: string;
@@ -81,16 +81,21 @@ export function computeLiquidityHealth(
   const totalCredit = toPesos(netCreditCentavos);
   const totalVolume = toPesos(totalVolumeCentavos);
 
-  const cashRatioPercent =
-    totalVolumeCentavos > 0
-      ? Math.round((totalCashCentavos / totalVolumeCentavos) * 100)
-      : 100;
-  const creditRatioPercent = Math.max(0, 100 - cashRatioPercent);
+  const hasTransactions = totalVolumeCentavos > 0;
+  const cashRatioPercent = hasTransactions
+    ? Math.round((totalCashCentavos / totalVolumeCentavos) * 100)
+    : 0;
+  const creditRatioPercent = hasTransactions
+    ? Math.max(0, 100 - cashRatioPercent)
+    : 0;
 
   let status: LiquidityRiskStatus = "healthy";
   let statusMessage = "Low Credit Risk &bull; Healthy Cash Flow";
 
-  if (cashRatioPercent < 40) {
+  if (!hasTransactions) {
+    status = "no_data";
+    statusMessage = "No sales or payments recorded yet for this period";
+  } else if (cashRatioPercent < 40) {
     status = "high_risk";
     statusMessage = "High Credit Risk &bull; Collect payments before restocking";
   } else if (cashRatioPercent < 60) {

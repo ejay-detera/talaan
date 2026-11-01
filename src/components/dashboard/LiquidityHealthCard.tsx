@@ -25,8 +25,9 @@ export function LiquidityHealthCard({
     [entries, period]
   );
 
-  const isHealthy = health.status === "healthy";
-  const isModerate = health.status === "moderate";
+  const isNoData = health.status === "no_data" || health.totalVolume === 0;
+  const isHealthy = !isNoData && health.status === "healthy";
+  const isModerate = !isNoData && health.status === "moderate";
 
   return (
     <div
@@ -90,11 +91,19 @@ export function LiquidityHealthCard({
               Cash vs. Credit Sales
             </span>
             <div className="flex items-baseline gap-2">
-              <span className="font-display font-black text-3xl sm:text-4xl text-pencil tabular-nums">
-                {health.cashRatioPercent}%
+              <span
+                className={`font-display font-black text-3xl sm:text-4xl tabular-nums ${
+                  isNoData ? "text-muted/70" : "text-pencil"
+                }`}
+              >
+                {isNoData ? "—" : `${health.cashRatioPercent}%`}
               </span>
-              <span className="text-xs font-bold text-paid font-sans">
-                Cash Sales
+              <span
+                className={`text-xs font-bold font-sans ${
+                  isNoData ? "text-muted" : "text-paid"
+                }`}
+              >
+                {isNoData ? "No Sales Yet" : "Cash Sales"}
               </span>
             </div>
           </div>
@@ -102,14 +111,18 @@ export function LiquidityHealthCard({
           {/* Status Badge: Physical Stamp */}
           <div
             className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xs border text-xs font-bold tracking-tight uppercase ${
-              isHealthy
+              isNoData
+                ? "bg-[#F4F6EE] text-muted border-rule"
+                : isHealthy
                 ? "bg-[#EAF5EE] text-paid border-paid/40"
                 : isModerate
                 ? "bg-[#EEF2FC] text-ink border-ink/40"
                 : "bg-[#FDF2F2] text-margin border-margin/50"
             }`}
           >
-            {isHealthy ? (
+            {isNoData ? (
+              <span className="w-1.5 h-1.5 rounded-full bg-muted/60" aria-hidden="true" />
+            ) : isHealthy ? (
               <ShieldCheck className="w-3.5 h-3.5" />
             ) : isModerate ? (
               <AlertTriangle className="w-3.5 h-3.5" />
@@ -117,37 +130,51 @@ export function LiquidityHealthCard({
               <ShieldAlert className="w-3.5 h-3.5" />
             )}
             <span>
-              {isHealthy ? "Healthy Flow" : isModerate ? "Moderate" : "High Utang"}
+              {isNoData
+                ? "Awaiting Sales"
+                : isHealthy
+                ? "Healthy Flow"
+                : isModerate
+                ? "Moderate"
+                : "High Utang"}
             </span>
           </div>
         </div>
 
         {/* Two-Tone Ratio Progress Bar */}
         <div className="space-y-1.5">
-          <div className="h-2.5 w-full rounded-xs bg-[#F2F5EC] border border-rule/60 overflow-hidden flex">
-            <motion.div
-              initial={false}
-              animate={{ width: `${health.cashRatioPercent}%` }}
-              transition={{ type: "spring", stiffness: 180, damping: 24 }}
-              className={`h-full ${
-                isHealthy ? "bg-paid" : isModerate ? "bg-ink" : "bg-[#E8A020]"
-              }`}
-            />
-            <motion.div
-              initial={false}
-              animate={{ width: `${health.creditRatioPercent}%` }}
-              transition={{ type: "spring", stiffness: 180, damping: 24 }}
-              className="h-full bg-margin/80"
-            />
+          <div className="h-2.5 w-full rounded-xs bg-[#E8EDE0]/70 border border-rule/60 overflow-hidden flex">
+            {!isNoData ? (
+              <>
+                <motion.div
+                  initial={false}
+                  animate={{ width: `${health.cashRatioPercent}%` }}
+                  transition={{ type: "spring", stiffness: 180, damping: 24 }}
+                  className={`h-full ${
+                    isHealthy ? "bg-paid" : isModerate ? "bg-ink" : "bg-[#E8A020]"
+                  }`}
+                />
+                <motion.div
+                  initial={false}
+                  animate={{ width: `${health.creditRatioPercent}%` }}
+                  transition={{ type: "spring", stiffness: 180, damping: 24 }}
+                  className="h-full bg-margin/80"
+                />
+              </>
+            ) : (
+              <div className="h-full w-full bg-[#E4EAD9]/50" />
+            )}
           </div>
 
           {/* Ratio Breakdown Labels */}
           <div className="flex items-center justify-between text-[11px] font-sans font-medium text-muted">
             <span>
-              Cash: <strong className="text-pencil font-bold">₱{health.totalCash.toFixed(2)}</strong> ({health.cashRatioPercent}%)
+              Cash: <strong className={isNoData ? "text-muted font-bold" : "text-pencil font-bold"}>₱{health.totalCash.toFixed(2)}</strong>
+              {!isNoData && ` (${health.cashRatioPercent}%)`}
             </span>
             <span>
-              Credit: <strong className="text-margin font-bold">₱{health.totalCredit.toFixed(2)}</strong> ({health.creditRatioPercent}%)
+              Credit: <strong className={isNoData ? "text-muted font-bold" : "text-margin font-bold"}>₱{health.totalCredit.toFixed(2)}</strong>
+              {!isNoData && ` (${health.creditRatioPercent}%)`}
             </span>
           </div>
         </div>
@@ -157,7 +184,9 @@ export function LiquidityHealthCard({
       <div className="pt-2 border-t border-rule/60 text-xs font-sans text-muted">
         <p
           className={`${
-            isHealthy
+            isNoData
+              ? "text-muted font-normal"
+              : isHealthy
               ? "text-pencil"
               : isModerate
               ? "text-ink font-medium"

@@ -17,14 +17,14 @@ export function getActiveModelName(): string {
   const provider = getActiveProvider();
   return provider === "gemini"
     ? process.env.GEMINI_MODEL || "gemini-2.0-flash"
-    : "muse-glimmer";
+    : process.env.GLIMMER_MODEL || "meta/muse-glimmer-30b";
 }
 
 export const activeProvider: ModelProvider = (process.env.MODEL_PROVIDER as ModelProvider) ?? "glimmer";
 export const activeModelName: string =
   activeProvider === "gemini"
     ? process.env.GEMINI_MODEL || "gemini-2.0-flash"
-    : "muse-glimmer";
+    : process.env.GLIMMER_MODEL || "meta/muse-glimmer-30b";
 
 export function getModelClient(): { client: OpenAI; model: string; provider: ModelProvider } {
   const provider = getActiveProvider();

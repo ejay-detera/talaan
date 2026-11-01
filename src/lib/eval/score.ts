@@ -265,7 +265,7 @@ export function aggregateEvalReport(
   const isOfficial =
     metadata.isOfficialMuseGlimmer &&
     metadata.provider === "glimmer" &&
-    metadata.model === "muse-glimmer";
+    (metadata.model === "muse-glimmer" || metadata.model === "meta/muse-glimmer-30b");
 
   const watermark = isOfficial
     ? "OFFICIAL META MUSE GLIMMER 30B EVALUATION"
