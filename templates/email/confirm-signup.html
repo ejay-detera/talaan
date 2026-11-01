@@ -1,0 +1,77 @@
+<!--
+  Supabase Auth > Email Templates > Confirm signup
+  Subject: I-verify ang Talaan account mo
+  Variables: {{ .SiteURL }}, {{ .TokenHash }}, {{ .Token }}, {{ .Email }}
+-->
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="x-apple-disable-message-reformatting">
+<meta name="color-scheme" content="light only">
+<meta name="supported-color-schemes" content="light only">
+<title>I-verify ang Talaan account mo</title>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;700&family=Bricolage+Grotesque:wght@700&display=swap" rel="stylesheet">
+<style>
+  body { margin:0; padding:0; background:#F2F5EC; -webkit-text-size-adjust:100%; }
+  table { border-collapse:collapse; }
+  a { color:#1E3FAE; }
+  @media only screen and (max-width:480px) {
+    .margin { width:16px !important; }
+    .px { padding:24px 20px 24px 16px !important; }
+    .h1 { font-size:24px !important; line-height:30px !important; }
+    .code { font-size:28px !important; letter-spacing:5px !important; }
+    .stack { display:block !important; width:100% !important; text-align:left !important; }
+    .btn a { display:block !important; text-align:center !important; }
+  }
+</style>
+</head>
+<body style="margin:0;padding:0;background:#F2F5EC;">
+<div style="display:none;max-height:0;overflow:hidden;opacity:0;font-size:1px;line-height:1px;color:#F2F5EC;">Isang tap na lang para ma-verify ang email mo at masimulan ang unang tala.&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;</div>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="#F2F5EC" style="background:#F2F5EC;">
+<tr><td align="center" style="padding:24px 12px;">
+<table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:100%;max-width:600px;">
+
+  <tr><td style="padding:0 4px 14px 4px;">
+    <span style="display:inline-block;padding-bottom:3px;border-bottom:3px solid #1E3FAE;font-family:'Bricolage Grotesque','Trebuchet MS',Arial,sans-serif;font-size:26px;line-height:30px;font-weight:700;color:#23262B;">Talaan</span>
+  </td></tr>
+
+  <tr><td>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF" style="background:#FFFFFF;border:1px solid #D5DEC6;box-shadow:0 2px 0 #D5DEC6;">
+      <tr>
+        <td class="margin" width="28" style="width:28px;border-right:2px solid #C8302F;font-size:0;line-height:0;">&nbsp;</td>
+        <td class="px" style="padding:32px 32px 28px 28px;font-family:'Atkinson Hyperlegible Next','Atkinson Hyperlegible',Verdana,Arial,sans-serif;font-size:16px;line-height:26px;color:#23262B;">
+<h1 class="h1" style="margin:0 0 16px 0;font-family:'Bricolage Grotesque','Trebuchet MS',Arial,sans-serif;font-size:28px;line-height:34px;font-weight:700;color:#23262B;">Isang tap na lang, handa na ang Talaan mo.</h1>
+<p style="margin:0 0 16px 0;">Salamat sa pag-sign up! I-verify ang email mo para masimulan ang iyong unang tala.</p>
+<table role="presentation" cellpadding="0" cellspacing="0" class="btn" style="margin:8px 0 24px 0;"><tr>
+<td bgcolor="#1E3FAE" style="background:#1E3FAE;border-radius:2px;"><a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email&next=/dashboard" style="display:inline-block;min-height:48px;line-height:48px;padding:0 28px;font-family:'Atkinson Hyperlegible Next','Atkinson Hyperlegible',Verdana,Arial,sans-serif;font-size:16px;font-weight:700;color:#FFFFFF;text-decoration:none;">I-verify ang email</a></td>
+</tr></table>
+<div style="border-top:1px solid #D5DEC6;margin:8px 0 20px 0;font-size:0;line-height:0;">&nbsp;</div>
+<p style="margin:0 0 16px 0;margin-bottom:10px;">Kung mas gusto mo, ilagay ang code na ito sa Talaan:</p>
+<table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 8px 0;"><tr>
+<td bgcolor="#FFE14D" style="background:#FFE14D;padding:12px 20px;"><span class="code" style="font-family:'Atkinson Hyperlegible Next','Atkinson Hyperlegible',Verdana,Arial,sans-serif;font-size:34px;line-height:40px;font-weight:700;letter-spacing:8px;color:#23262B;">{{ .Token }}</span></td>
+</tr></table>
+<p style="margin:0 0 16px 0;font-size:14px;line-height:22px;color:#5B6068;">Mag-e-expire ang link at code na ito, kaya gamitin agad.</p>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 20px 0;"><tr>
+<td bgcolor="#FFF6BF" style="background:#FFF6BF;border-left:4px solid #FFE14D;padding:12px 16px;font-size:15px;line-height:23px;color:#23262B;">
+<strong>Mag-ingat sa scam.</strong> Hindi kami hihingi ng password o code sa text, tawag, o chat. Kung may humingi, huwag ibigay.
+</td></tr></table>
+<p style="margin:0 0 20px 0;font-size:14px;line-height:22px;color:#5B6068;">Hindi gumagana ang button? I-paste ang link na ito sa browser:<br><a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email&next=/dashboard" style="color:#1E3FAE;word-break:break-all;">{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email&next=/dashboard</a></p>
+<p style="margin:0 0 16px 0;margin-bottom:0;font-size:14px;line-height:22px;color:#5B6068;">Hindi ikaw ang nag-sign up? Balewalain lang ang email na ito. Walang mabe-verify na account.</p>
+        </td>
+      </tr>
+    </table>
+  </td></tr>
+
+  <tr><td style="padding:18px 8px 0 8px;font-family:'Atkinson Hyperlegible Next','Atkinson Hyperlegible',Verdana,Arial,sans-serif;font-size:13px;line-height:20px;color:#5B6068;">
+<p style="margin:0 0 6px 0;">Ipinadala sa {{ .Email }}.</p>
+    <p style="margin:0;">Talaan: sulat-kamay mo pa rin, kami na ang bahala sa kuwenta.</p>
+  </td></tr>
+
+</table>
+</td></tr>
+</table>
+</body>
+</html>
+

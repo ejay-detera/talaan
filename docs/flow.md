@@ -98,7 +98,7 @@ Kept in lockstep with [`prd.md`](prd.md) §3:
 | Capability | Priority | Status | Where (path or table) | Verified by |
 |---|---|---|---|---|
 | Next.js 16.4.3 App Shell & Landing Page (`/`) | Must | ✅ | `src/app/layout.tsx`, `src/app/page.tsx`, `src/components/landing/` | `npm run lint`, `npx tsc --noEmit`, `npm test` (`T-004`) |
-| 1. Supabase Email/Password Auth + Seeded Store Account (`edetera41@gmail.com`) | Must | ✅ | `src/app/login/page.tsx`, `supabase/migrations/0001_initial_schema.sql` (`TAL-01`) | `npm run lint`, `npx tsc --noEmit` (`T-001`) |
+| 1. Full Auth: Brevo SMTP OTP & 1-Click Confirmation (`/auth/confirm`), Password Reset (`/reset-password`) | Must | ✅ | `src/app/login/page.tsx`, `src/app/auth/confirm/route.ts`, `src/app/reset-password/page.tsx`, `templates/email/` (`TAL-01`) | `npm test` (`auth/confirm/__tests__/route.test.ts`), `npx tsc --noEmit`, `npm run lint` |
 | 2. Photo Upload & `sharp` Image Prep | Must | ✅ | `src/app/api/pages/extract/route.ts`, `src/lib/image.ts` (`TAL-02`) | `npm run lint`, `npx tsc --noEmit` |
 | 3. Structured Extraction (`credit`/`payment`/`cash_sale`, confidence, model badge) | Must | 🟡 partial | `src/lib/model.ts`, `src/lib/schemas.ts`, `src/app/api/pages/extract/route.ts` (`TAL-02`, `TAL-03`) | `npm run lint`, `npx tsc --noEmit` (Glimmer gate in `TAL-03`) |
 | 4. Unreadable Page Retake Request (`flag_unreadable`) | Must | ✅ | `src/app/api/pages/extract/route.ts`, `src/lib/schemas.ts` (`TAL-02`) | `npm run lint`, `npx tsc --noEmit` |
