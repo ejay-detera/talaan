@@ -57,8 +57,21 @@ export function WhoOwesCreditCard({
 
       {/* Customer List: Clicking any row opens that customer's profile */}
       {debtors.length === 0 ? (
-        <div className="p-6 text-center text-sm text-muted font-sans">
-          No outstanding customer credit recorded.
+        <div className="p-6 text-center text-sm text-muted font-sans space-y-2">
+          <p className="font-semibold text-pencil">No outstanding customer credit recorded.</p>
+          {customers.length > 0 ? (
+            <p className="text-xs text-muted">
+              {customers.length} customer{customers.length > 1 ? "s" : ""} on file (all settled).{" "}
+              <Link href="/customers" className="font-bold text-ink hover:underline inline-flex items-center gap-0.5">
+                <span>View directory</span>
+                <ArrowRight className="w-3 h-3" />
+              </Link>
+            </p>
+          ) : (
+            <p className="text-xs text-muted">
+              Confirm a notebook page or record a counter transaction to see customer balances.
+            </p>
+          )}
         </div>
       ) : (
         <div className="divide-y divide-[#E6ECE0]">
@@ -69,6 +82,7 @@ export function WhoOwesCreditCard({
                 formattedDate = new Intl.DateTimeFormat("en-US", {
                   month: "short",
                   day: "numeric",
+                  timeZone: "Asia/Manila",
                 }).format(new Date(cust.last_activity_at));
               } catch {
                 formattedDate = "Recent";

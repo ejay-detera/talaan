@@ -31,6 +31,7 @@ export default async function CustomersPage() {
     month: "long",
     day: "numeric",
     year: "numeric",
+    timeZone: "Asia/Manila",
   }).format(new Date());
 
   return (

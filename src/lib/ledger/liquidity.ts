@@ -34,11 +34,14 @@ function isWithinLiquidityPeriod(
   if (isNaN(parsed.getTime())) return true;
 
   if (period === "today") {
-    return (
-      parsed.getUTCFullYear() === refDate.getUTCFullYear() &&
-      parsed.getUTCMonth() === refDate.getUTCMonth() &&
-      parsed.getUTCDate() === refDate.getUTCDate()
-    );
+    const toManilaDate = (d: Date) =>
+      new Intl.DateTimeFormat("en-CA", {
+        timeZone: "Asia/Manila",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      }).format(d);
+    return toManilaDate(parsed) === toManilaDate(refDate);
   }
 
   // 7-day rolling window
@@ -53,6 +56,7 @@ export function computeLiquidityHealth(
 ): LiquidityHealthResult {
   let cashCentavos = 0;
   let creditCentavos = 0;
+  let paymentCentavos = 0;
 
   for (const entry of entries) {
     if (entry.confirmed_by_user === false) continue;
@@ -64,17 +68,22 @@ export function computeLiquidityHealth(
       cashCentavos += amtCentavos;
     } else if (entry.entry_type === "credit") {
       creditCentavos += amtCentavos;
+    } else if (entry.entry_type === "payment") {
+      paymentCentavos += amtCentavos;
     }
   }
 
-  const totalVolumeCentavos = cashCentavos + creditCentavos;
-  const totalCash = toPesos(cashCentavos);
-  const totalCredit = toPesos(creditCentavos);
+  const totalCashCentavos = cashCentavos + paymentCentavos;
+  const netCreditCentavos = Math.max(0, creditCentavos - paymentCentavos);
+  const totalVolumeCentavos = totalCashCentavos + netCreditCentavos;
+
+  const totalCash = toPesos(totalCashCentavos);
+  const totalCredit = toPesos(netCreditCentavos);
   const totalVolume = toPesos(totalVolumeCentavos);
 
   const cashRatioPercent =
     totalVolumeCentavos > 0
-      ? Math.round((cashCentavos / totalVolumeCentavos) * 100)
+      ? Math.round((totalCashCentavos / totalVolumeCentavos) * 100)
       : 100;
   const creditRatioPercent = Math.max(0, 100 - cashRatioPercent);
 

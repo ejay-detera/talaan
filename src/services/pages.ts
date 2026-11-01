@@ -123,7 +123,7 @@ export async function getReviewPage(
   const [customersRes, confirmedEntriesRes, signedUrlRes] = await Promise.all([
     supabase
       .from("customers")
-      .select("id, name, credit_limit")
+      .select("id, name")
       .eq("store_id", page.store_id)
       .order("name", { ascending: true }),
     supabase
@@ -174,7 +174,7 @@ export async function getReviewPage(
     return {
       id: c.id,
       name: c.name,
-      credit_limit: c.credit_limit !== null ? Number(c.credit_limit) : 500,
+      credit_limit: (c as unknown as { credit_limit?: number | null }).credit_limit != null ? Number((c as unknown as { credit_limit?: number | null }).credit_limit) : 500,
       current_balance: balanceInfo.balance,
       recent_payments: recentPayments,
     };
