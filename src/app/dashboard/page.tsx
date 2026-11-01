@@ -11,6 +11,7 @@ import { DeterministicTrustCard } from "@/components/dashboard/DeterministicTrus
 import { LiquidityHealthCard } from "@/components/dashboard/LiquidityHealthCard";
 import { OfflineQueueBanner } from "@/components/dashboard/OfflineQueueBanner";
 import { ScanButton } from "@/components/dashboard/ScanButton";
+import { AskDrawer } from "@/components/dashboard/AskDrawer";
 import type { LiquidityEntry } from "@/lib/ledger/liquidity";
 
 export default async function DashboardPage() {
@@ -163,6 +164,9 @@ export default async function DashboardPage() {
           </div>
         </div>
       </main>
+
+      {/* Tanungin si Talaan Floating Action Button (FAB) & Side Panel */}
+      <AskDrawer />
 
       {/* Persistent Scan Floating Action Button (FAB) anchored at bottom-right */}
       <ScanButton />
