@@ -107,6 +107,20 @@ Rules:
 - Signature verification elements: `RedMarginGutter` (left `2px solid #C8302F` status column) and `TwoPlyProofBar` (sticky bottom `Written Total` vs. `Computed Total` reconciliation bar).
 - Navigation & Action Patterns: Floating top dock (`AppHeaderNav.tsx`) with animated `GooeyNav` tabs (`Notebook`, `Customers`, `Summary`). Extended pill Scan Page FAB anchored at fixed bottom-right (`fixed bottom-5 sm:bottom-6 right-4 sm:right-6 z-30`) with `pb-28` container safe-scroll padding.
 - Status presentation: every status must pair a label with an icon or shape, never color alone (`docs/glossary.md` §3).
+- **Animation & Smooth Motion Stack:**
+  - Base design standard: **Impeccable** (`impeccable`) for craft checks, touch targets (≥48×48px), and spacing rhythm.
+  - **Lenis** for smooth, normalized momentum scrolling across mobile and desktop viewports.
+  - **GSAP** for authored paper choreography, hero settling sequences, and stamp press physics.
+  - **Motion** (`motion/react`) for declarative layout motion, route enters, and shared element state transitions.
+  - **FormKit** (`@formkit/auto-animate`) for fluid list row insertions, deletions, and validation feedback.
+- **Strict Prohibited "Don'ts":**
+  - **Do NOT remove or whiten the background:** `#F2F5EC` analysis pad paper ground and `#E3E9D3` desk with organic SVG fiber grain must permanently stay intact.
+  - **No pill badges:** Zero `rounded-full`/`rounded-pill` tag clouds or status chips. Use physical stamps or text paired with Lucide icons.
+  - **No monospace typography:** Zero `font-mono` or `<code>`—use `Atkinson Hyperlegible Next` with `tabular-nums` for all numbers and tables.
+  - **No random "FIG//":** Zero schematic or blueprint coordinate tags ("FIG 01 //", "FIG //").
+  - **No decorative gradients:** Solid flat ink colors only; repeating hairline `.ruled` is the sole functional exception.
+  - **No glassmorphism:** Zero translucent frosted glass or `backdrop-blur` on paper sheets—surfaces are opaque physical paper.
+  - **No emoji as interface icons:** Zero raw Unicode emojis (⚡, 📶, ℹ, ▲)—use Lucide SVG icons paired with explicit text.
 
 ---
 

@@ -13,6 +13,7 @@ import {
   Search,
   X,
 } from "lucide-react";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 import type { CustomerSummary } from "@/types/ledger";
 import { Amount } from "@/components/shared/Amount";
 
@@ -32,6 +33,7 @@ type FilterType = "all" | "owing" | "settled";
 export function CustomerList({ customers }: CustomerListProps) {
   const [filter, setFilter] = useState<FilterType>("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const [listRef] = useAutoAnimate<HTMLDivElement>();
 
   // Calculate totals and counts in integer centavos
   const { owingCount, settledCount, totalUtangCentavos } = useMemo(() => {
@@ -139,7 +141,7 @@ export function CustomerList({ customers }: CustomerListProps) {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search customer name or phone..."
-              className="w-full text-xs font-sans pl-8 pr-7 py-1.5 rounded-pill bg-sheet border border-rule text-pencil placeholder:text-muted focus:border-ink focus:outline-none focus:ring-1 focus:ring-ink"
+              className="w-full text-xs font-sans pl-8 pr-7 py-1.5 rounded-row bg-sheet border border-rule text-pencil placeholder:text-muted focus:border-ink focus:outline-none focus:ring-1 focus:ring-ink"
             />
             {searchQuery && (
               <button
@@ -153,12 +155,12 @@ export function CustomerList({ customers }: CustomerListProps) {
             )}
           </div>
 
-          {/* Filter Pills */}
-          <div className="inline-flex items-center gap-1 bg-paper/80 p-0.5 rounded-pill border border-rule self-start sm:self-center flex-shrink-0">
+          {/* Filter Tabs */}
+          <div className="inline-flex items-center gap-1 bg-paper/80 p-0.5 rounded-sm border border-rule self-start sm:self-center flex-shrink-0">
             <button
               type="button"
               onClick={() => setFilter("all")}
-              className={`px-2.5 py-1 text-xs font-bold rounded-pill transition-all cursor-pointer ${
+              className={`px-2.5 py-1 text-xs font-bold rounded-xs transition-all cursor-pointer ${
                 filter === "all"
                   ? "bg-ink text-sheet shadow-xs"
                   : "text-muted hover:text-pencil"
@@ -169,7 +171,7 @@ export function CustomerList({ customers }: CustomerListProps) {
             <button
               type="button"
               onClick={() => setFilter("owing")}
-              className={`px-2.5 py-1 text-xs font-bold rounded-pill transition-all cursor-pointer ${
+              className={`px-2.5 py-1 text-xs font-bold rounded-xs transition-all cursor-pointer ${
                 filter === "owing"
                   ? "bg-margin text-sheet shadow-xs"
                   : "text-muted hover:text-pencil"
@@ -180,7 +182,7 @@ export function CustomerList({ customers }: CustomerListProps) {
             <button
               type="button"
               onClick={() => setFilter("settled")}
-              className={`px-2.5 py-1 text-xs font-bold rounded-pill transition-all cursor-pointer ${
+              className={`px-2.5 py-1 text-xs font-bold rounded-xs transition-all cursor-pointer ${
                 filter === "settled"
                   ? "bg-paid text-sheet shadow-xs"
                   : "text-muted hover:text-pencil"
@@ -200,7 +202,7 @@ export function CustomerList({ customers }: CustomerListProps) {
             : "No customers found in this category."}
         </div>
       ) : (
-        <div className="divide-y divide-[#E6ECE0] paper-stagger">
+        <div ref={listRef} className="divide-y divide-[#E6ECE0] paper-stagger">
           {filteredCustomers.map((c) => {
             const hasDebt = c.balance > 0;
             const isPaid = c.balance === 0;

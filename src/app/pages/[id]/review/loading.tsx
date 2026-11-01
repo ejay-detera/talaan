@@ -4,7 +4,7 @@ export default function ReviewLoading() {
   return (
     <div className="flex-1 flex flex-col bg-transparent text-pencil font-sans pb-6 animate-pulse select-none">
       {/* Top Header Skeleton */}
-      <header className="bg-sheet/95 backdrop-blur-sm border-b border-rule px-4 sm:px-6 py-4">
+      <header className="bg-sheet border-b border-rule px-4 sm:px-6 py-4">
         <div className="max-w-5xl mx-auto flex items-center gap-4">
           <div className="inline-flex items-center gap-1.5 text-xs text-muted p-1">
             <ArrowLeft className="w-4 h-4" />

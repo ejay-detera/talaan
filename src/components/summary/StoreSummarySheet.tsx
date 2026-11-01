@@ -63,13 +63,13 @@ export function StoreSummarySheet({ storeName, rows }: StoreSummarySheetProps) {
           </p>
         </div>
 
-        {/* Period Filter Pills */}
-        <div className="inline-flex items-center gap-1.5 bg-paper/60 p-1 rounded-pill border border-rule self-start sm:self-center">
+        {/* Period Filter Tabs */}
+        <div className="inline-flex items-center gap-1.5 bg-paper/60 p-1 rounded-sm border border-rule self-start sm:self-center">
           {(
             [
               { id: "7d", label: "7 days" },
               { id: "30d", label: "30 days" },
-              { id: "all", label: "30 days" === "30 days" ? "30 days" : "30 days" },
+              { id: "all", label: "All" },
             ] as const
           ).map((tab) => {
             const actualId = tab.id;
@@ -80,7 +80,7 @@ export function StoreSummarySheet({ storeName, rows }: StoreSummarySheetProps) {
                 key={actualId}
                 type="button"
                 onClick={() => setPeriod(actualId)}
-                className={`px-3.5 py-1.5 text-xs font-bold rounded-pill transition-all cursor-pointer ${
+                className={`px-3.5 py-1.5 text-xs font-bold rounded-xs transition-all cursor-pointer ${
                   period === actualId
                     ? "bg-ink text-sheet shadow-xs"
                     : "bg-sheet text-pencil hover:bg-paper border border-rule/60"
@@ -101,14 +101,14 @@ export function StoreSummarySheet({ storeName, rows }: StoreSummarySheetProps) {
             className="slip paper-settle relative rounded-row border border-[#EADB85] bg-[#FFF9D2] p-5 sm:p-6 shadow-paper space-y-4"
             style={{ ["--tilt" as string]: "-1deg" }}
           >
-            {/* 3D Red Pushpin */}
+            {/* Flat Solid Red Pushpin */}
             <div
               className="absolute -top-3 left-1/2 -translate-x-1/2 z-20 pointer-events-none"
               aria-hidden="true"
             >
               <div className="relative flex items-center justify-center">
-                <div className="w-5 h-5 rounded-full bg-gradient-to-br from-[#E84846] via-[#C8302F] to-[#8C1D1C] shadow-[0_4px_8px_rgba(0,0,0,0.35),inset_0_2px_3px_rgba(255,255,255,0.45)] border border-[#7A1615]/40" />
-                <div className="absolute top-1 left-1.5 w-1.5 h-1.5 rounded-full bg-white/70 blur-[0.4px]" />
+                <div className="w-5 h-5 rounded-full bg-margin shadow-sm border border-[#7A1615]" />
+                <div className="absolute top-1 left-1.5 w-1.5 h-1.5 rounded-full bg-white/70" />
               </div>
             </div>
 
@@ -146,7 +146,7 @@ export function StoreSummarySheet({ storeName, rows }: StoreSummarySheetProps) {
               <a
                 href="/api/ledger/export"
                 download
-                className="w-full h-[46px] rounded-row bg-ink hover:bg-ink/90 active:scale-[0.99] text-xs sm:text-sm font-bold text-sheet flex items-center justify-center gap-2 shadow-paper transition-all cursor-pointer select-none font-sans paper-press"
+                className="w-full min-h-[48px] rounded-row bg-ink hover:bg-ink/90 active:scale-[0.99] text-xs sm:text-sm font-bold text-sheet flex items-center justify-center gap-2 shadow-paper transition-all cursor-pointer select-none font-sans paper-press"
               >
                 <Download className="w-4 h-4" />
                 <span>Download CSV (Excel)</span>
@@ -156,7 +156,7 @@ export function StoreSummarySheet({ storeName, rows }: StoreSummarySheetProps) {
               <button
                 type="button"
                 onClick={() => window.print()}
-                className="w-full h-[46px] rounded-row border border-ink text-ink bg-sheet hover:bg-paper active:scale-[0.99] text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition-all cursor-pointer select-none font-sans paper-press"
+                className="w-full min-h-[48px] rounded-row border border-ink text-ink bg-sheet hover:bg-paper active:scale-[0.99] text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition-all cursor-pointer select-none font-sans paper-press"
               >
                 <Printer className="w-4 h-4" />
                 <span>Print / PDF</span>
@@ -166,7 +166,7 @@ export function StoreSummarySheet({ storeName, rows }: StoreSummarySheetProps) {
               <button
                 type="button"
                 onClick={() => setIsPamalengkeOpen(true)}
-                className="w-full h-[46px] rounded-row border border-dashed border-[#8C7624] text-[#6E5D1E] bg-[#FFF3B0]/70 hover:bg-[#FFF3B0] active:scale-[0.99] text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition-all cursor-pointer select-none font-sans"
+                className="w-full min-h-[48px] rounded-row border border-dashed border-[#8C7624] text-[#6E5D1E] bg-[#FFF3B0]/70 hover:bg-[#FFF3B0] active:scale-[0.99] text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition-all cursor-pointer select-none font-sans"
               >
                 <ShoppingBag className="w-4 h-4 text-[#8C7624]" />
                 <span>Pamalengke Checklist</span>
@@ -271,10 +271,10 @@ export function StoreSummarySheet({ storeName, rows }: StoreSummarySheetProps) {
                     <span className="text-muted">Remaining: {remainingPercent}%</span>
                   </div>
                   {/* Two-tone Progress Bar */}
-                  <div className="h-2 w-full rounded-pill bg-[#E2E8D5] overflow-hidden flex">
+                  <div className="h-2 w-full rounded-xs bg-[#E2E8D5] overflow-hidden flex">
                     <div
                       style={{ width: `${paidPercent}%` }}
-                      className="h-full bg-paid rounded-pill transition-all duration-300"
+                      className="h-full bg-paid rounded-xs transition-all duration-300"
                     />
                   </div>
                 </div>
@@ -344,10 +344,10 @@ export function StoreSummarySheet({ storeName, rows }: StoreSummarySheetProps) {
                                   : "transactions"}
                               </span>
                               {/* Blue Volume Share Bar */}
-                              <div className="h-1.5 w-24 sm:w-28 rounded-pill bg-[#E2E8D5] overflow-hidden">
+                              <div className="h-1.5 w-24 sm:w-28 rounded-xs bg-[#E2E8D5] overflow-hidden">
                                 <div
                                   style={{ width: `${sharePercent}%` }}
-                                  className="h-full bg-ink rounded-pill"
+                                  className="h-full bg-ink rounded-xs"
                                 />
                               </div>
                             </div>

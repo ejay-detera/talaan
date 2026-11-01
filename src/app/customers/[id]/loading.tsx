@@ -5,7 +5,7 @@ export default function CustomerDetailLoading() {
   return (
     <div className="min-h-screen bg-transparent text-pencil font-sans pb-24 animate-pulse select-none">
       {/* Sticky Header Skeleton */}
-      <header className="sticky top-0 z-20 bg-sheet/95 backdrop-blur-sm border-b border-rule px-4 sm:px-6 py-4">
+      <header className="sticky top-0 z-20 bg-sheet border-b border-rule px-4 sm:px-6 py-4">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
           <div className="inline-flex items-center gap-1.5 text-xs font-bold text-muted p-1">
             <ArrowLeft className="w-4 h-4" />

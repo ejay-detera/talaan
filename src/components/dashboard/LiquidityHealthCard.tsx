@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo } from "react";
 import { ShieldCheck, ShieldAlert, AlertTriangle, TrendingUp } from "lucide-react";
+import { motion } from "motion/react";
 import {
   computeLiquidityHealth,
   type LiquidityEntry,
@@ -40,28 +41,42 @@ export function LiquidityHealthCard({
           </h3>
         </div>
 
-        {/* 7d vs Today Toggle Pills */}
-        <div className="inline-flex items-center gap-1 bg-paper/70 p-0.5 rounded-pill border border-rule/80">
+        {/* 7d vs Today Toggle */}
+        <div className="relative inline-flex items-center gap-1 bg-paper/70 p-0.5 rounded-sm border border-rule/80">
           <button
             type="button"
             onClick={() => setPeriod("7d")}
-            className={`px-2.5 py-1 text-[11px] font-bold rounded-pill transition-all cursor-pointer ${
+            className={`relative z-10 px-3 py-1 text-[11px] font-bold rounded-xs transition-colors cursor-pointer ${
               period === "7d"
-                ? "bg-ink text-sheet shadow-xs"
+                ? "text-sheet"
                 : "text-muted hover:text-pencil"
             }`}
           >
+            {period === "7d" && (
+              <motion.span
+                layoutId="liquidity-active-tab"
+                className="absolute inset-0 bg-ink rounded-xs shadow-xs -z-10"
+                transition={{ type: "spring", stiffness: 350, damping: 30 }}
+              />
+            )}
             7 Days
           </button>
           <button
             type="button"
             onClick={() => setPeriod("today")}
-            className={`px-2.5 py-1 text-[11px] font-bold rounded-pill transition-all cursor-pointer ${
+            className={`relative z-10 px-3 py-1 text-[11px] font-bold rounded-xs transition-colors cursor-pointer ${
               period === "today"
-                ? "bg-ink text-sheet shadow-xs"
+                ? "text-sheet"
                 : "text-muted hover:text-pencil"
             }`}
           >
+            {period === "today" && (
+              <motion.span
+                layoutId="liquidity-active-tab"
+                className="absolute inset-0 bg-ink rounded-xs shadow-xs -z-10"
+                transition={{ type: "spring", stiffness: 350, damping: 30 }}
+              />
+            )}
             Today
           </button>
         </div>
@@ -84,14 +99,14 @@ export function LiquidityHealthCard({
             </div>
           </div>
 
-          {/* Status Badge */}
+          {/* Status Badge: Physical Stamp */}
           <div
-            className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-pill border text-xs font-bold ${
+            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xs border text-xs font-bold tracking-tight uppercase ${
               isHealthy
-                ? "bg-[#EAF5EE] text-paid border-paid/30"
+                ? "bg-[#EAF5EE] text-paid border-paid/40"
                 : isModerate
-                ? "bg-[#EEF2FC] text-ink border-ink/30"
-                : "bg-[#FDF2F2] text-margin border-margin/40"
+                ? "bg-[#EEF2FC] text-ink border-ink/40"
+                : "bg-[#FDF2F2] text-margin border-margin/50"
             }`}
           >
             {isHealthy ? (
@@ -109,16 +124,20 @@ export function LiquidityHealthCard({
 
         {/* Two-Tone Ratio Progress Bar */}
         <div className="space-y-1.5">
-          <div className="h-2.5 w-full rounded-pill bg-[#F2F5EC] border border-rule/60 overflow-hidden flex">
-            <div
-              style={{ width: `${health.cashRatioPercent}%` }}
-              className={`h-full transition-all duration-300 ${
+          <div className="h-2.5 w-full rounded-xs bg-[#F2F5EC] border border-rule/60 overflow-hidden flex">
+            <motion.div
+              initial={false}
+              animate={{ width: `${health.cashRatioPercent}%` }}
+              transition={{ type: "spring", stiffness: 180, damping: 24 }}
+              className={`h-full ${
                 isHealthy ? "bg-paid" : isModerate ? "bg-ink" : "bg-[#E8A020]"
               }`}
             />
-            <div
-              style={{ width: `${health.creditRatioPercent}%` }}
-              className="h-full bg-margin/80 transition-all duration-300"
+            <motion.div
+              initial={false}
+              animate={{ width: `${health.creditRatioPercent}%` }}
+              transition={{ type: "spring", stiffness: 180, damping: 24 }}
+              className="h-full bg-margin/80"
             />
           </div>
 

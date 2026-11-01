@@ -10,6 +10,7 @@ import {
   DeterministicShieldWidget,
 } from "@/components/landing/FloatingWidgets";
 import { FeaturesSection } from "@/components/landing/FeaturesSection";
+import { GsapPaperChoreography } from "@/components/landing/GsapPaperChoreography";
 import { InitialLoader } from "@/components/shared/InitialLoader";
 
 export default function HomePage() {
@@ -45,25 +46,25 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Hero Paper Artifact Workspace (Mockup 1 & 2 inspired) */}
-        <section id="verification" className="w-full max-w-7xl mx-auto px-4 sm:px-6 pb-16">
+        {/* Hero Paper Artifact Workspace with GSAP Physics Choreography */}
+        <section id="verification" className="w-full max-w-7xl mx-auto px-4 sm:px-6 pb-16 scroll-mt-20">
           <h2 className="sr-only">Counter Ledger Verification Workspace</h2>
-          <div className="relative p-2 sm:p-6 lg:p-8">
+          <GsapPaperChoreography className="relative p-2 sm:p-6 lg:p-8">
             {/* Desktop Composition: Central Paper Hero Flanked by Micro-Widgets */}
             <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
               {/* Left Column (Desktop Widgets) */}
-              <div className="hidden lg:flex lg:col-span-3 flex-col gap-6 items-end">
+              <div className="hidden lg:flex lg:col-span-3 flex-col gap-6 items-end gsap-flank-left">
                 <PinnedStickyNote />
                 <PaymentReminderDraftWidget />
               </div>
 
               {/* Central Paper Sovereign Showcase (The Notebook, Kept) */}
-              <div className="w-full lg:col-span-6 flex justify-center">
+              <div className="w-full lg:col-span-6 flex justify-center gsap-hero-paper">
                 <PaperMockupShowcase />
               </div>
 
               {/* Right Column (Desktop Widgets) */}
-              <div className="hidden lg:flex lg:col-span-3 flex-col gap-6 items-start">
+              <div className="hidden lg:flex lg:col-span-3 flex-col gap-6 items-start gsap-flank-right">
                 <CustomerBalancesWidget />
                 <DeterministicShieldWidget />
               </div>
@@ -84,14 +85,14 @@ export default function HomePage() {
                 </div>
               </div>
             </div>
-          </div>
+          </GsapPaperChoreography>
         </section>
 
         {/* Features & Workflow Section */}
         <FeaturesSection />
 
         {/* Architectural Trust Floor */}
-        <section id="features" className="w-full py-14 border-t border-rule bg-sheet">
+        <section id="features" className="w-full py-16 sm:py-24 border-t border-rule bg-sheet scroll-mt-20">
           <div className="max-w-4xl mx-auto px-4 text-center space-y-3">
             <h3 className="font-display font-bold text-lg text-pencil">
               Sovereign Ledger Guarantee
@@ -105,7 +106,7 @@ export default function HomePage() {
       </main>
 
       {/* Footer */}
-      <footer className="w-full border-t border-rule py-8 bg-sheet/80 backdrop-blur-xs">
+      <footer className="w-full border-t border-rule py-8 bg-sheet">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted font-sans">
           <div className="flex items-center gap-2.5">
             <Image

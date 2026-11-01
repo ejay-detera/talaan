@@ -114,6 +114,7 @@ Kept in lockstep with [`prd.md`](prd.md) §3:
 | 16. Store Liquidity Health Indicator (`US-12`, `TAL-10`) | Should | ✅ | `src/lib/ledger/liquidity.ts`, `src/components/dashboard/LiquidityHealthCard.tsx` | `npm test` (`liquidity.test.ts`) |
 | 17. Credit Limit Alert & 24h Duplicate Payment Review Warning (`US-13`, `TAL-10`) | Should | ✅ | `src/lib/ledger/math.ts`, `src/components/review/ExcelReviewRow.tsx`, `src/components/review/RedMarginGutter.tsx` | `npm test` (`math.test.ts`) |
 | 18. Semi-Offline Fast-Scan Queue (`US-14`, `TAL-10`) | Should | ✅ | `src/lib/offline-db.ts`, `src/hooks/useOfflineScanQueue.ts`, `src/components/dashboard/OfflineQueueBanner.tsx` | `npm test` (`offline-db.test.ts`) |
+| 18b. Paper Motion & Animation Stack (Lenis, GSAP, Motion, FormKit, Impeccable) | Must | ✅ | `src/components/providers/SmoothScrollProvider.tsx`, `src/components/landing/GsapPaperChoreography.tsx`, `motion/react`, `@formkit/auto-animate` | `npm run lint`, `npx tsc --noEmit`, `npm run build` |
 | 19. Shelf Photo Stock Count (Experimental) | Could | ⬜ roadmap | Deferred (`US-08`) | — |
 | 20–23. Voice input, Auto-SMS sending, External payment rails, Credit scoring, Native app | Won't | ❌ out of scope | Excluded by `S-01` §3, §8 | — |
 

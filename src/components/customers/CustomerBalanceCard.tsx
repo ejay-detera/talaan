@@ -75,9 +75,9 @@ export function CustomerBalanceCard({
             }`}
           />
 
-          {/* Credit Limit Badge */}
+          {/* Credit Limit Stamp */}
           <div
-            className={`inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-pill border ${
+            className={`inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-xs border ${
               isOverLimit
                 ? "bg-[#FDF2F2] text-margin border-margin/40"
                 : "bg-paper text-muted border-rule"
@@ -110,7 +110,7 @@ export function CustomerBalanceCard({
           <button
             type="button"
             onClick={() => setIsPaymentOpen(true)}
-            className="w-full min-h-[46px] rounded-row bg-paid hover:bg-[#18623D] active:scale-[0.99] text-xs sm:text-sm font-bold text-sheet flex items-center justify-center gap-1.5 transition-all cursor-pointer select-none font-sans shadow-xs"
+            className="w-full min-h-[48px] rounded-row bg-paid hover:bg-[#18623D] active:scale-[0.99] text-xs sm:text-sm font-bold text-sheet flex items-center justify-center gap-1.5 transition-all cursor-pointer select-none font-sans shadow-xs"
           >
             <HandCoins className="w-4 h-4" />
             <span>Record Pay</span>
@@ -119,7 +119,7 @@ export function CustomerBalanceCard({
           <button
             type="button"
             onClick={() => setIsReceiptOpen(true)}
-            className="w-full min-h-[46px] rounded-row border border-ink text-ink bg-sheet hover:bg-paper active:scale-[0.99] text-xs sm:text-sm font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer select-none font-sans shadow-xs"
+            className="w-full min-h-[48px] rounded-row border border-ink text-ink bg-sheet hover:bg-paper active:scale-[0.99] text-xs sm:text-sm font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer select-none font-sans shadow-xs"
           >
             <ReceiptText className="w-4 h-4 text-ink" />
             <span>View E-Resibo</span>

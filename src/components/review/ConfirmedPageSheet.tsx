@@ -347,7 +347,7 @@ export function ConfirmedPageSheet({
 
       {/* Original Photo Lightbox Modal */}
       {showPhotoModal && imageUrl && (
-        <div className="fixed inset-0 z-50 bg-pencil/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-pencil/80 flex items-center justify-center p-4">
           <div className="relative max-w-3xl w-full bg-sheet rounded-sheet border border-rule shadow-paper-lg overflow-hidden flex flex-col max-h-[90vh]">
             {/* Modal Header */}
             <div className="p-3.5 sm:p-4 border-b border-rule flex items-center justify-between bg-paper/50">
@@ -360,7 +360,7 @@ export function ConfirmedPageSheet({
               <button
                 type="button"
                 onClick={() => setShowPhotoModal(false)}
-                className="w-8 h-8 rounded-full hover:bg-paper flex items-center justify-center text-pencil transition-colors cursor-pointer"
+                className="w-8 h-8 rounded-xs hover:bg-paper flex items-center justify-center text-pencil transition-colors cursor-pointer"
                 aria-label="Close photo preview"
               >
                 <X className="w-4 h-4" />

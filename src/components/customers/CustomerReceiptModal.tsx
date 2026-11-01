@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo } from "react";
 import { X, Copy, Share2, Printer, Check } from "lucide-react";
+import { motion } from "motion/react";
 import type { CustomerLedgerEntry } from "@/types/ledger";
 import { formatResiboText } from "@/lib/ledger/formatters";
 
@@ -104,23 +105,28 @@ export function CustomerReceiptModal({
       role="dialog"
       aria-modal="true"
       aria-labelledby="receipt-modal-title"
-      className="fixed inset-0 z-50 bg-pencil/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 overflow-y-auto animate-in fade-in duration-150"
+      className="fixed inset-0 z-50 bg-pencil/60 flex items-center justify-center p-3 sm:p-4 overflow-y-auto"
     >
-      <div className="relative w-full max-w-[330px] sm:max-w-[340px] my-auto flex flex-col items-center space-y-3">
+      <motion.div
+        initial={{ opacity: 0, y: 16, scale: 0.96 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
+        className="relative w-full max-w-[330px] sm:max-w-[340px] my-auto flex flex-col items-center space-y-3"
+      >
         {/* Floating Close Button Top Right */}
         <div className="print:hidden w-full flex justify-end">
           <button
             type="button"
             onClick={onClose}
             aria-label="Close receipt dialog"
-            className="w-8 h-8 rounded-full bg-sheet/95 hover:bg-sheet text-pencil hover:text-ink flex items-center justify-center shadow-md transition-colors cursor-pointer border border-rule/50"
+            className="w-8 h-8 rounded-xs bg-sheet/95 hover:bg-sheet text-pencil hover:text-ink flex items-center justify-center shadow-md transition-colors cursor-pointer border border-rule/50"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Thermal Receipt Paper Roll Slip (Image 2 Replica) */}
-        <div className="w-full bg-white text-zinc-900 font-mono text-xs shadow-[0_12px_40px_rgba(0,0,0,0.22)] border border-zinc-300 p-5 sm:p-6 space-y-3 select-none print:p-0 print:border-none print:shadow-none">
+        <div className="w-full bg-white text-zinc-900 font-sans tabular-nums text-xs shadow-[0_12px_40px_rgba(0,0,0,0.22)] border border-zinc-300 p-5 sm:p-6 space-y-3 select-none print:p-0 print:border-none print:shadow-none">
           {/* Header Title (Matching Image 2) */}
           <div className="text-center space-y-0.5">
             <h2
@@ -283,7 +289,7 @@ export function CustomerReceiptModal({
           <button
             type="button"
             onClick={handleCopy}
-            className="min-h-[44px] rounded-row bg-sheet hover:bg-paper border border-rule text-pencil font-sans font-bold text-xs flex items-center justify-center gap-1 shadow-xs active:scale-[0.98] transition-all cursor-pointer"
+            className="min-h-[48px] rounded-row bg-sheet hover:bg-paper border border-rule text-pencil font-sans font-bold text-xs flex items-center justify-center gap-1 shadow-xs active:scale-[0.98] transition-all cursor-pointer"
           >
             {copied ? (
               <>
@@ -301,7 +307,7 @@ export function CustomerReceiptModal({
           <button
             type="button"
             onClick={handleShare}
-            className="min-h-[44px] rounded-row bg-ink hover:bg-ink/90 text-sheet font-sans font-bold text-xs flex items-center justify-center gap-1 shadow-paper active:scale-[0.98] transition-all cursor-pointer"
+            className="min-h-[48px] rounded-row bg-ink hover:bg-ink/90 text-sheet font-sans font-bold text-xs flex items-center justify-center gap-1 shadow-paper active:scale-[0.98] transition-all cursor-pointer"
           >
             <Share2 className="w-3.5 h-3.5" />
             <span>{shareFeedback || "Share"}</span>
@@ -310,13 +316,13 @@ export function CustomerReceiptModal({
           <button
             type="button"
             onClick={() => window.print()}
-            className="min-h-[44px] rounded-row bg-sheet hover:bg-paper border border-ink text-ink font-sans font-bold text-xs flex items-center justify-center gap-1 shadow-xs active:scale-[0.98] transition-all cursor-pointer"
+            className="min-h-[48px] rounded-row bg-sheet hover:bg-paper border border-ink text-ink font-sans font-bold text-xs flex items-center justify-center gap-1 shadow-xs active:scale-[0.98] transition-all cursor-pointer"
           >
             <Printer className="w-3.5 h-3.5" />
             <span>Print</span>
           </button>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }
