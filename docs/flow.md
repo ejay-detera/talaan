@@ -98,7 +98,7 @@ Kept in lockstep with [`prd.md`](prd.md) §3:
 | Capability | Priority | Status | Where (path or table) | Verified by |
 |---|---|---|---|---|
 | Next.js 16.4.3 App Shell & Landing Page (`/`) | Must | ✅ | `src/app/layout.tsx`, `src/app/page.tsx`, `src/components/landing/` | `npm run lint`, `npx tsc --noEmit`, `npm test` (`T-004`) |
-| 1. 1-Tap Demo Store Login & Supabase Auth + RLS | Must | ✅ | `src/app/login/page.tsx`, `supabase/migrations/0001_initial_schema.sql` (`TAL-01`) | `npm run lint`, `npx tsc --noEmit` (`T-001`) |
+| 1. Supabase Email/Password Auth + Seeded Store Account (`edetera41@gmail.com`) | Must | ✅ | `src/app/login/page.tsx`, `supabase/migrations/0001_initial_schema.sql` (`TAL-01`) | `npm run lint`, `npx tsc --noEmit` (`T-001`) |
 | 2. Photo Upload & `sharp` Image Prep | Must | ✅ | `src/app/api/pages/extract/route.ts`, `src/lib/image.ts` (`TAL-02`) | `npm run lint`, `npx tsc --noEmit` |
 | 3. Structured Extraction (`credit`/`payment`/`cash_sale`, confidence, model badge) | Must | 🟡 partial | `src/lib/model.ts`, `src/lib/schemas.ts`, `src/app/api/pages/extract/route.ts` (`TAL-02`, `TAL-03`) | `npm run lint`, `npx tsc --noEmit` (Glimmer gate in `TAL-03`) |
 | 4. Unreadable Page Retake Request (`flag_unreadable`) | Must | ✅ | `src/app/api/pages/extract/route.ts`, `src/lib/schemas.ts` (`TAL-02`) | `npm run lint`, `npx tsc --noEmit` |
@@ -108,7 +108,7 @@ Kept in lockstep with [`prd.md`](prd.md) §3:
 | 6c. Responsive Ledger & Spreadsheet Page Review | Must | ✅ | `src/app/pages/[id]/review/`, `src/components/review/` | `npm test` (`T-005`), `npx tsc --noEmit` |
 | 6c. Daily Demo Data & Storage Cleanup (`/api/cron/cleanup-demo`) | Should | ✅ | `src/app/api/cron/cleanup-demo/route.ts`, `vercel.json` | `npm test` |
 | 7. Customer Balances Ledger (`sum(credit) - sum(payment)`) | Must | ✅ | `src/services/customers.ts`, `src/app/customers/`, `src/app/api/customers/` (`TAL-06`) | `npm test` (`T-006`) |
-| 8. Taglish Reminder Drafts (Tone Selector + Copy & Web Share / `sms:`) | Must | ✅ | `src/app/customers/[id]/page.tsx`, `src/components/customers/ReminderCard.tsx`, `src/app/api/reminders/draft/route.ts` (`TAL-06`) | `npm test` (`T-007`) |
+| 8. Automated SMS via SMS API PH & Taglish Reminder Drafts | Must | ✅ | `src/lib/sms.ts`, `src/app/api/reminders/send-sms/`, `src/components/customers/CustomerPhoneModal.tsx`, `src/components/customers/ReminderCard.tsx` (`TAL-06`) | `npm test` (`sms.test.ts`, `send-sms/route.test.ts`) |
 | 9. 30+ Page Muse Glimmer Evaluation Harness | Must | 🟡 partial | `scripts/eval-glimmer.ts`, `src/lib/eval/score.ts`, `eval/pages-30/` (`TAL-07`) | `npm test` (`T-008`) — live Glimmer run pending `TAL-03` tunnel |
 | 10–12. Weekly Store Summary, Restock Velocity & 1-Tap CSV/Print Export (`US-08`) | Could | ✅ | `src/lib/ledger/summary.ts`, `src/app/summary/page.tsx`, `src/app/api/ledger/export/route.ts` | `npm test` (`summary.test.ts`, `export/route.test.ts`) |
 | 13. Customer E-Resibo Itemized Statement Slip & Text Export (`US-09`, `TAL-09`) | Could | ✅ | `src/components/customers/CustomerReceiptModal.tsx`, `src/components/customers/CustomerBalanceCard.tsx`, `src/lib/ledger/formatters.ts` | `npm test` (`formatters.test.ts`) |

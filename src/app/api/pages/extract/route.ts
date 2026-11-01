@@ -25,11 +25,20 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { data: store } = await supabase
+    let { data: store } = await supabase
       .from("stores")
       .select("id")
       .eq("owner_id", authData.user.id)
       .maybeSingle();
+
+    if (!store) {
+      const { data: createdStore } = await supabase
+        .from("stores")
+        .insert({ owner_id: authData.user.id, name: "Aling Nena's Sari-Sari Store" })
+        .select("id")
+        .single();
+      store = createdStore;
+    }
 
     if (!store) {
       return NextResponse.json(

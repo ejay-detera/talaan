@@ -11,7 +11,6 @@ import {
   Lock,
   Mail,
   ShieldCheck,
-  Store,
   Loader2,
   AlertCircle,
 } from "lucide-react";
@@ -24,7 +23,6 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [demoLoading, setDemoLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const supabase = createClient();
@@ -50,27 +48,6 @@ export default function LoginPage() {
       setErrorMessage("Unable to connect to the authentication server. Please retry.");
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleDemoSignIn = async () => {
-    setErrorMessage(null);
-    setDemoLoading(true);
-
-    try {
-      const res = await fetch("/api/auth/demo", { method: "POST" });
-      const data = await res.json();
-
-      if (!res.ok) {
-        setErrorMessage(data.error || "Could not launch demo store.");
-      } else {
-        router.push("/dashboard");
-        router.refresh();
-      }
-    } catch {
-      setErrorMessage("Network issue launching demo store. Please retry.");
-    } finally {
-      setDemoLoading(false);
     }
   };
 
@@ -208,7 +185,7 @@ export default function LoginPage() {
                 <Button
                   type="submit"
                   size="lg"
-                  disabled={loading || demoLoading}
+                  disabled={loading}
                   className="w-full shadow-paper min-h-[50px] text-base"
                 >
                   {loading ? (
@@ -222,48 +199,38 @@ export default function LoginPage() {
                 </Button>
               </form>
 
-              {/* Or Continue With Divider */}
-              <div className="relative my-4 text-center select-none">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-rule" />
+              {/* Seeded Store Owner Account Helper */}
+              <div className="p-4 rounded-row bg-paper/70 border border-rule space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-bold text-pencil uppercase tracking-wider font-sans">
+                    Seeded Store Account
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setEmail("edetera41@gmail.com");
+                      setPassword("Password123!");
+                      setErrorMessage(null);
+                    }}
+                    className="text-xs font-bold text-ink hover:underline cursor-pointer flex items-center gap-1"
+                  >
+                    <span>Fill Credentials</span>
+                  </button>
                 </div>
-                <span className="relative bg-sheet px-3 text-xs text-muted font-sans font-medium">
-                  or continue with
-                </span>
+                <div className="space-y-1 text-xs font-sans text-muted">
+                  <p>
+                    Email: <code className="text-pencil font-semibold">edetera41@gmail.com</code>
+                  </p>
+                  <p>
+                    Password: <code className="text-pencil font-semibold">Password123!</code>
+                  </p>
+                </div>
               </div>
-
-              {/* 1-Tap Demo Store Instant Access Button */}
-              <button
-                type="button"
-                onClick={handleDemoSignIn}
-                disabled={demoLoading || loading}
-                className="w-full min-h-[48px] px-4 py-2.5 bg-paper hover:bg-[#E8EDE0] active:bg-[#DFE5D4] border border-rule rounded-row text-pencil font-sans font-semibold text-sm transition-all flex items-center justify-center gap-2.5 cursor-pointer shadow-xs active:scale-[0.98]"
-              >
-                {demoLoading ? (
-                  <span className="flex items-center gap-2 text-ink">
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    <span>Opening Aling Nena&apos;s Store...</span>
-                  </span>
-                ) : (
-                  <span className="flex items-center gap-2">
-                    <Store className="w-4 h-4 text-paid" />
-                    <span>1-Tap Demo Store (Aling Nena)</span>
-                  </span>
-                )}
-              </button>
             </div>
 
             {/* Bottom Footer Note */}
-            <div className="pt-6 text-center text-xs text-muted font-sans border-t border-rule/50 mt-6">
-              <span>Not a member yet? </span>
-              <button
-                type="button"
-                onClick={handleDemoSignIn}
-                disabled={demoLoading}
-                className="font-semibold text-ink hover:underline cursor-pointer"
-              >
-                Launch Live Demo
-              </button>
+            <div className="pt-4 text-center text-xs text-muted font-sans border-t border-rule/50 mt-4">
+              <span>Secure password authentication with Supabase Auth.</span>
             </div>
           </div>
 
