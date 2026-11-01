@@ -84,11 +84,12 @@ Talaan runs as a unified **Next.js App Router** application in TypeScript. On th
 | 5. Customer balances (`sum(credit) - sum(payment)`) & activity history | Must (MVP) | Yes (`S-01` §5) | ⬜ Planned |
 | 6. Taglish reminder drafts with tone selector & copy/share handoff | Must (MVP) | Yes (`S-01` §5) | ⬜ Planned |
 | 7. Retake request when a page or region is unreadable | Must (MVP) | Yes (`S-01` §5) | ⬜ Planned |
-| S1. Supplier receipt to restock list and cost tracking | Stretch | Yes (`S-01` §5) | ⬜ Planned |
-| S2. Weekly summary (top items, total *utang*, estimated profit) | Stretch | Yes (`S-01` §5) | ⬜ Planned |
+| S1. Supplier receipt to restock list and cost tracking | Stretch | Yes (`S-01` §5) | ✅ Built (Pamalengke restock checklist on `/summary`) |
+| S2. Weekly summary (top items, total *utang*, estimated profit) | Stretch | Yes (`S-01` §5) | ✅ Built |
 | S3. Multi-page month view using 131K long context | Stretch | Yes (`S-01` §5) | ⬜ Planned |
 | S4. Shelf photo stock count (experimental) | Stretch | Yes (`S-01` §5) | ⬜ Planned |
-| S5. Export to CSV or printable ledger | Stretch | Yes (`S-01` §5) | ⬜ Planned |
+| S5. Export to CSV or printable ledger | Stretch | Yes (`S-01` §5) | ✅ Built |
+| S6. Customer E-Resibo itemized statement slip & text export | Extension | Dev Ejay | ✅ Built |
 
 ### Contributor named in the brief
 

@@ -2,13 +2,14 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
-import { Download, Printer } from "lucide-react";
+import { Download, Printer, ShoppingBag } from "lucide-react";
 import { Amount } from "@/components/shared/Amount";
 import {
   computeStoreSummary,
   type SummaryLedgerRow,
   type SummaryPeriod,
 } from "@/lib/ledger/summary";
+import { PamalengkeChecklistModal } from "./PamalengkeChecklistModal";
 
 interface StoreSummarySheetProps {
   storeName: string;
@@ -17,6 +18,7 @@ interface StoreSummarySheetProps {
 
 export function StoreSummarySheet({ storeName, rows }: StoreSummarySheetProps) {
   const [period, setPeriod] = useState<SummaryPeriod>("7d");
+  const [isPamalengkeOpen, setIsPamalengkeOpen] = useState(false);
 
   const summary = useMemo(() => computeStoreSummary(rows, period), [rows, period]);
 
@@ -159,6 +161,16 @@ export function StoreSummarySheet({ storeName, rows }: StoreSummarySheetProps) {
                 <Printer className="w-4 h-4" />
                 <span>Print / PDF</span>
               </button>
+
+              {/* Tertiary Action: Pamalengke Shopping Checklist */}
+              <button
+                type="button"
+                onClick={() => setIsPamalengkeOpen(true)}
+                className="w-full h-[46px] rounded-row border border-dashed border-[#8C7624] text-[#6E5D1E] bg-[#FFF3B0]/70 hover:bg-[#FFF3B0] active:scale-[0.99] text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition-all cursor-pointer select-none font-sans"
+              >
+                <ShoppingBag className="w-4 h-4 text-[#8C7624]" />
+                <span>Pamalengke Checklist</span>
+              </button>
             </div>
           </div>
         </div>
@@ -278,13 +290,23 @@ export function StoreSummarySheet({ storeName, rows }: StoreSummarySheetProps) {
             <div className="relative border-l-4 border-l-margin flex flex-col justify-between p-4 sm:p-5 bg-sheet">
               <div className="space-y-4">
                 {/* Page 2 Header */}
-                <div className="pb-2 border-b border-rule/70">
-                  <h2 className="font-display font-bold text-base sm:text-lg text-pencil tracking-tight">
-                    Restock Guide
-                  </h2>
-                  <p className="text-xs text-muted font-sans font-medium">
-                    Fastest moving items, by sales quantity
-                  </p>
+                <div className="pb-2 border-b border-rule/70 flex items-center justify-between gap-2">
+                  <div>
+                    <h2 className="font-display font-bold text-base sm:text-lg text-pencil tracking-tight">
+                      Restock Guide
+                    </h2>
+                    <p className="text-xs text-muted font-sans font-medium">
+                      Fastest moving items, by sales quantity
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setIsPamalengkeOpen(true)}
+                    className="px-2.5 py-1 rounded-row bg-sheet hover:bg-paper border border-rule text-xs font-bold font-sans text-ink inline-flex items-center gap-1 cursor-pointer transition-colors shadow-xs"
+                  >
+                    <ShoppingBag className="w-3.5 h-3.5 text-ink" />
+                    <span>Checklist</span>
+                  </button>
                 </div>
 
                 {/* Item List Ranked */}
@@ -399,6 +421,14 @@ export function StoreSummarySheet({ storeName, rows }: StoreSummarySheetProps) {
           </div>
         </div>
       </div>
+
+      <PamalengkeChecklistModal
+        isOpen={isPamalengkeOpen}
+        onClose={() => setIsPamalengkeOpen(false)}
+        storeName={storeName}
+        items={summary.topItems}
+        periodLabel={periodLabel}
+      />
     </div>
   );
 }
