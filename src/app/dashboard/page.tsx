@@ -8,7 +8,10 @@ import { TotalUtangCard } from "@/components/dashboard/TotalUtangCard";
 import { RecentPagesList, type PreviewRow } from "@/components/dashboard/RecentPagesList";
 import { WhoOwesCreditCard } from "@/components/dashboard/WhoOwesCreditCard";
 import { DeterministicTrustCard } from "@/components/dashboard/DeterministicTrustCard";
+import { LiquidityHealthCard } from "@/components/dashboard/LiquidityHealthCard";
+import { OfflineQueueBanner } from "@/components/dashboard/OfflineQueueBanner";
 import { ScanButton } from "@/components/dashboard/ScanButton";
+import type { LiquidityEntry } from "@/lib/ledger/liquidity";
 
 export default async function DashboardPage() {
   await connection();
@@ -19,8 +22,8 @@ export default async function DashboardPage() {
     redirect("/login");
   }
 
-  // Fetch store, recent pages, and customer debt balances in parallel
-  const [storeRes, recentPages, customersResult] = await Promise.all([
+  // Fetch store, recent pages, customer debt balances, and confirmed entries in parallel
+  const [storeRes, recentPages, customersResult, confirmedEntriesRes] = await Promise.all([
     supabase
       .from("stores")
       .select("id, name")
@@ -28,7 +31,21 @@ export default async function DashboardPage() {
       .maybeSingle(),
     listRecentPages(supabase, 20),
     listCustomersWithBalances(supabase),
+    supabase
+      .from("entries")
+      .select("id, amount, entry_type, confirmed_by_user, created_at")
+      .eq("confirmed_by_user", true)
+      .order("created_at", { ascending: false })
+      .limit(300),
   ]);
+
+  const liquidityEntries: LiquidityEntry[] = (confirmedEntriesRes.data || []).map((e) => ({
+    id: e.id,
+    amount: Number(e.amount),
+    entry_type: e.entry_type,
+    confirmed_by_user: e.confirmed_by_user,
+    created_at: e.created_at,
+  }));
 
   const storeName = storeRes.data?.name || "My Store";
 
@@ -59,6 +76,7 @@ export default async function DashboardPage() {
     if (entriesData && entriesData.length > 0) {
       const customerMap = new Map(customersResult.customers.map((c) => [c.id, c.name]));
       for (const entry of entriesData) {
+        if (!entry.page_id) continue;
         if (!previewRowsByPageId[entry.page_id]) {
           previewRowsByPageId[entry.page_id] = [];
         }
@@ -99,6 +117,9 @@ export default async function DashboardPage() {
           </p>
         </header>
 
+        {/* Offline Fast-Scan Queue & Network Status Banner */}
+        <OfflineQueueBanner />
+
         {/* 2-Column Responsive Dashboard Grid matching the wireframe */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
           {/* Left Column: Total Store Credit & Notebook Pages */}
@@ -109,6 +130,10 @@ export default async function DashboardPage() {
                 activeDebtorCount={customersResult.activeDebtorCount}
                 confirmedPageCount={confirmedPageCount}
               />
+            </section>
+
+            <section aria-label="Liquidity Health">
+              <LiquidityHealthCard entries={liquidityEntries} />
             </section>
 
             <section aria-label="Notebook Pages">

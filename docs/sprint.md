@@ -223,6 +223,32 @@
 
 ---
 
+### TAL-10 — Counter Payment, Credit Limit Alerts, Liquidity Health & Offline Queue
+
+| Field | Value |
+|---|---|
+| Priority | P1 |
+| Points | 5 |
+| Status | ✅ Done |
+| Developer | Dev Ejay |
+| Traces | BR-01..08 · US-11..14 · tests `route.test.ts`, `math.test.ts`, `liquidity.test.ts`, `offline-db.test.ts` |
+
+> **As a Store Owner**, I want to record cash payments directly at the counter (`+ Magbayad`), receive non-blocking credit limit exceedance badges (`▲ Limit Exceeded`) and 24h duplicate payment warnings on review, monitor my store's cash vs credit ratio with Liquidity Health, and snap notebook pages offline with automatic upload when reconnected.
+
+**Acceptance criteria:**
+- [x] Schema migration `0002_counter_payments_and_credit_limit.sql`: `entries.page_id` nullable for direct counter payments; `customers.credit_limit numeric(10,2) default 500.00`.
+- [x] Build `POST /api/customers/[id]/payments` route with integer-centavo validation and unit test suite.
+- [x] Build `RecordPaymentModal.tsx` with quick chips (+₱50, +₱100, +₱200, Full Balance) and mount on `CustomerBalanceCard.tsx`.
+- [x] Implement deterministic `computeLiquidityHealth` in `src/lib/ledger/liquidity.ts` with 7-day default vs today toggle, test-verified in `liquidity.test.ts`.
+- [x] Mount `LiquidityHealthCard.tsx` on `/dashboard` with confirmed store entries.
+- [x] Add integer-centavo `checkCreditLimitExceeded` in `src/lib/ledger/math.ts` and test-verify in `math.test.ts`.
+- [x] In `ExcelReviewRow.tsx` and `RedMarginGutter.tsx`, display `▲ Limit Exceeded` badge and 24h duplicate counter payment advisory notice.
+- [x] Implement store-and-forward IndexedDB client in `src/lib/offline-db.ts` and test-verify in `offline-db.test.ts`.
+- [x] Build `useOfflineScanQueue.ts` hook with network reconnect auto-drain and `OfflineQueueBanner.tsx` banner on `/dashboard`.
+- [x] Route offline camera snaps to IndexedDB in `ScanButton.tsx`.
+
+---
+
 ## §4. Hackathon Sprint Schedule (`S-01` §11)
 
 | Sprint | Dates | Goal | Status |

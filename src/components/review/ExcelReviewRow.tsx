@@ -2,14 +2,14 @@
 
 import React from "react";
 import { Trash2, AlertCircle, CheckCircle2, User, UserPlus } from "lucide-react";
-import { checkRowDiscrepancy, toPesos, toCentavos } from "@/lib/ledger/math";
-import type { ReviewEntry, EntryType } from "@/types/ledger";
+import { checkRowDiscrepancy, toPesos, toCentavos, checkCreditLimitExceeded } from "@/lib/ledger/math";
+import type { ReviewEntry, EntryType, ReviewCustomerCandidate } from "@/types/ledger";
 
 interface ExcelReviewRowProps {
   index: number;
   entry: ReviewEntry;
   isSelected: boolean;
-  customerCandidates: Array<{ id: string; name: string }>;
+  customerCandidates: ReviewCustomerCandidate[];
   onSelect: () => void;
   onUpdate: (updated: ReviewEntry) => void;
   onRemove: () => void;
@@ -20,7 +20,7 @@ interface ExcelReviewRowProps {
  *
  * Implements an interactive spreadsheet row for the Page Review Excel sheet.
  * Supports inline editing, auto-calculation of Qty * Price, customer matching,
- * and deterministic math mismatch resolution.
+ * credit limit exceedance badges, 24h duplicate payment checks, and deterministic math mismatch resolution.
  */
 export function ExcelReviewRow({
   index,
@@ -36,6 +36,31 @@ export function ExcelReviewRow({
   const price = entry.unit_price ?? undefined;
   const isMismatch = checkRowDiscrepancy(qty, price, entry.amount);
   const isPayment = entry.entry_type === "payment";
+  const isCredit = entry.entry_type === "credit";
+
+  // Match customer candidate to evaluate credit limits and recent 24h counter payments
+  const matchedCandidate = entry.customer_id
+    ? customerCandidates.find((c) => c.id === entry.customer_id)
+    : customerCandidates.find(
+        (c) =>
+          c.name.toLowerCase() ===
+          (entry.extracted_customer_name || entry.customer_name || "").trim().toLowerCase()
+      );
+
+  const creditLimitCheck =
+    isCredit && matchedCandidate
+      ? checkCreditLimitExceeded(
+          matchedCandidate.current_balance || 0,
+          entry.amount,
+          matchedCandidate.credit_limit
+        )
+      : null;
+  const isLimitExceeded = creditLimitCheck?.isExceeded ?? false;
+
+  const hasRecentPayment =
+    isPayment &&
+    Boolean(matchedCandidate?.recent_payments && matchedCandidate.recent_payments.length > 0);
+  const recentPayment = hasRecentPayment ? matchedCandidate!.recent_payments![0] : null;
 
   const computedRowAmount =
     qty !== undefined && price !== undefined
@@ -168,6 +193,14 @@ export function ExcelReviewRow({
                 ))}
               </select>
             )}
+            {isLimitExceeded && (
+              <span
+                className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-bold bg-[#FFF2E5] text-[#9A4A00] border border-[#FFD8B3] shrink-0 whitespace-nowrap"
+                title={`Projected debt ₱${creditLimitCheck?.projectedBalance.toFixed(2)} exceeds ₱${creditLimitCheck?.limit.toFixed(2)} limit`}
+              >
+                ▲ Limit Exceeded
+              </span>
+            )}
           </div>
         </td>
 
@@ -267,6 +300,23 @@ export function ExcelReviewRow({
                 <AlertCircle className="w-3.5 h-3.5" />
                 <span>Mismatch</span>
               </span>
+            ) : hasRecentPayment ? (
+              <span
+                className="inline-flex items-center gap-1 text-xs font-bold text-[#B45309]"
+                title={`Advisory: ₱${recentPayment?.amount.toFixed(2)} counter payment recorded in last 24h`}
+              >
+                <AlertCircle className="w-3.5 h-3.5 text-[#B45309]" />
+                <span className="hidden sm:inline">Paid in 24h?</span>
+                <span className="sm:hidden">Duplicate?</span>
+              </span>
+            ) : isLimitExceeded ? (
+              <span
+                className="inline-flex items-center gap-1 text-xs font-bold text-[#B45309]"
+                title={`Projected debt ₱${creditLimitCheck?.projectedBalance.toFixed(2)} exceeds ₱${creditLimitCheck?.limit.toFixed(2)} limit`}
+              >
+                <AlertCircle className="w-3.5 h-3.5 text-[#B45309]" />
+                <span>Over Limit</span>
+              </span>
             ) : entry.needs_review ? (
               <span className="inline-flex items-center gap-1 text-xs font-bold text-pencil">
                 <AlertCircle className="w-3.5 h-3.5 text-margin" />
@@ -322,6 +372,36 @@ export function ExcelReviewRow({
                 </button>
               </div>
             </div>
+          </td>
+        </tr>
+      )}
+
+      {/* 24h Duplicate Counter Payment Advisory Sub-Row */}
+      {hasRecentPayment && !isMismatch && (
+        <tr className="bg-[#FFFDF5] border-b border-[#F6E05E]/60 text-xs">
+          <td className="w-12 bg-[#FEFCBF]/30 border-r border-rule text-center font-bold text-[#B45309] select-none">
+            ℹ
+          </td>
+          <td colSpan={7} className="py-2 px-3 text-[#744210] font-sans">
+            <span className="font-bold">Duplicate Payment Check:</span>{" "}
+            {matchedCandidate?.name || "Customer"} recorded a direct counter payment of{" "}
+            <strong className="tabular-nums font-bold">₱{recentPayment?.amount.toFixed(2)}</strong>{" "}
+            within the last 24 hours. Verify if this handwritten entry was already settled.
+          </td>
+        </tr>
+      )}
+
+      {/* Credit Limit Exceeded Advisory Sub-Row */}
+      {isLimitExceeded && !isMismatch && (
+        <tr className="bg-[#FFFDF5] border-b border-[#F6E05E]/60 text-xs">
+          <td className="w-12 bg-[#FEFCBF]/30 border-r border-rule text-center font-bold text-[#B45309] select-none">
+            ▲
+          </td>
+          <td colSpan={7} className="py-2 px-3 text-[#744210] font-sans">
+            <span className="font-bold">Credit Limit Notice:</span> Adding ₱{entry.amount.toFixed(2)}{" "}
+            pushes {matchedCandidate?.name || "Customer"}&apos;s balance from ₱{creditLimitCheck?.currentBalance.toFixed(2)}{" "}
+            to <strong className="tabular-nums font-bold">₱{creditLimitCheck?.projectedBalance.toFixed(2)}</strong>{" "}
+            (exceeds ₱{creditLimitCheck?.limit.toFixed(2)} limit). Non-blocking advisory.
           </td>
         </tr>
       )}

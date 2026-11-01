@@ -1,7 +1,8 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/types/database";
-import type { ExtractionResponse, ReviewEntry } from "@/types/ledger";
+import type { ExtractionResponse, ReviewEntry, ReviewCustomerCandidate } from "@/types/ledger";
 import { findMatchingCustomer } from "@/lib/ledger/match";
+import { computeCustomerBalance } from "@/lib/ledger/math";
 
 export async function persistExtraction(
   supabase: SupabaseClient<Database>,
@@ -118,19 +119,67 @@ export async function getReviewPage(
 
   const page = pageRes.data;
 
-  // Fetch store customers and signed URL in parallel
-  const [customersRes, signedUrlRes] = await Promise.all([
+  // Fetch store customers, confirmed entries, and signed URL in parallel
+  const [customersRes, confirmedEntriesRes, signedUrlRes] = await Promise.all([
     supabase
       .from("customers")
-      .select("id, name")
+      .select("id, name, credit_limit")
       .eq("store_id", page.store_id)
       .order("name", { ascending: true }),
+    supabase
+      .from("entries")
+      .select("id, customer_id, amount, entry_type, created_at, confirmed_by_user")
+      .eq("confirmed_by_user", true)
+      .not("customer_id", "is", null),
     supabase.storage
       .from("notebook-pages")
       .createSignedUrl(page.image_path, 3600), // 1 hour expiry
   ]);
 
-  const customers = customersRes.data || [];
+  const rawCustomers = customersRes.data || [];
+  const rawConfirmed = confirmedEntriesRes.data || [];
+
+  const entriesByCustomer = new Map<string, typeof rawConfirmed>();
+  for (const entry of rawConfirmed) {
+    if (!entry.customer_id) continue;
+    const list = entriesByCustomer.get(entry.customer_id) || [];
+    list.push(entry);
+    entriesByCustomer.set(entry.customer_id, list);
+  }
+
+  const now = Date.now();
+  const oneDayAgo = now - 24 * 60 * 60 * 1000;
+
+  const customers: ReviewCustomerCandidate[] = rawCustomers.map((c) => {
+    const custEntries = entriesByCustomer.get(c.id) || [];
+    const balanceInfo = computeCustomerBalance(
+      custEntries.map((e) => ({
+        amount: Number(e.amount),
+        entry_type: e.entry_type,
+        confirmed_by_user: true,
+      }))
+    );
+    const recentPayments = custEntries
+      .filter(
+        (e) =>
+          e.entry_type === "payment" &&
+          e.created_at &&
+          new Date(e.created_at).getTime() >= oneDayAgo
+      )
+      .map((e) => ({
+        amount: Number(e.amount),
+        created_at: e.created_at,
+      }));
+
+    return {
+      id: c.id,
+      name: c.name,
+      credit_limit: c.credit_limit !== null ? Number(c.credit_limit) : 500,
+      current_balance: balanceInfo.balance,
+      recent_payments: recentPayments,
+    };
+  });
+
   const customerMap = new Map(customers.map((c) => [c.id, c.name]));
 
   const entries: ReviewEntry[] = (entriesRes.data || []).map((e) => ({

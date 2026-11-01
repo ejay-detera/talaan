@@ -129,8 +129,10 @@ export default async function CustomerDetailPage({
             <section aria-label="Current Customer Balance">
               <CustomerBalanceCard
                 storeName={storeName}
+                customerId={customer.id}
                 customerName={customer.name}
                 phoneOptional={customer.phone_optional}
+                creditLimit={customer.credit_limit}
                 balance={balance}
                 totalCredit={total_credit}
                 totalPayment={total_payment}

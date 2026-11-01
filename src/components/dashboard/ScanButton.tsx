@@ -2,8 +2,9 @@
 
 import React, { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Camera, Loader2, AlertCircle, X } from "lucide-react";
+import { Camera, Loader2, AlertCircle, X, CheckCircle2 } from "lucide-react";
 import { downscaleImage } from "@/lib/image-client";
+import { saveOfflineScan } from "@/lib/offline-db";
 
 interface ScanButtonProps {
   className?: string;
@@ -15,54 +16,70 @@ interface ScanButtonProps {
  * Implements the Floating Action Button (FAB) pattern per user directive.
  * Anchors in the bottom-right thumb zone, keeping the counter workspace
  * uncluttered while maintaining one-tap access to camera capture.
+ * Supports store-and-forward offline queueing when connection is lost.
  */
 export function ScanButton({ className = "" }: ScanButtonProps) {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [noticeMessage, setNoticeMessage] = useState<string | null>(null);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     setErrorMessage(null);
+    setNoticeMessage(null);
     setUploading(true);
 
     try {
       // 1. Client downscale to protect Vercel serverless body limits
       const processedFile = await downscaleImage(file);
 
-      // 2. Upload to extract endpoint
+      // 2. Check offline status first
+      if (typeof navigator !== "undefined" && !navigator.onLine) {
+        await saveOfflineScan(processedFile, file.name);
+        setNoticeMessage("Saved to offline queue. Will auto-upload when you reconnect.");
+        return;
+      }
+
+      // 3. Upload to extract endpoint
       const formData = new FormData();
       formData.append("file", processedFile);
 
-      const res = await fetch("/api/pages/extract", {
-        method: "POST",
-        body: formData,
-      });
+      try {
+        const res = await fetch("/api/pages/extract", {
+          method: "POST",
+          body: formData,
+        });
 
-      const data = await res.json();
+        const data = await res.json();
 
-      if (!res.ok) {
-        setErrorMessage(data.error?.message || "Could not read notebook page. Please try again.");
-        return;
-      }
+        if (!res.ok) {
+          setErrorMessage(data.error?.message || "Could not read notebook page. Please try again.");
+          return;
+        }
 
-      if (data.status === "retake_requested") {
-        setErrorMessage(
-          `Photo is blurry: ${data.reason}. Please retake in brighter lighting.`
-        );
-        return;
-      }
+        if (data.status === "retake_requested") {
+          setErrorMessage(
+            `Photo is blurry: ${data.reason}. Please retake in brighter lighting.`
+          );
+          return;
+        }
 
-      if (data.page_id) {
-        router.push(`/pages/${data.page_id}/review`);
-      } else {
-        setErrorMessage("Could not generate review page. Please try again.");
+        if (data.page_id) {
+          router.push(`/pages/${data.page_id}/review`);
+        } else {
+          setErrorMessage("Could not generate review page. Please try again.");
+        }
+      } catch {
+        // Network dropped mid-upload -> save to offline queue
+        await saveOfflineScan(processedFile, file.name);
+        setNoticeMessage("Connection interrupted. Page saved to offline queue.");
       }
     } catch {
-      setErrorMessage("Network error while uploading photo. Please try again.");
+      setErrorMessage("Could not process photo. Please try again.");
     } finally {
       setUploading(false);
       if (fileInputRef.current) {
@@ -97,6 +114,25 @@ export function ScanButton({ className = "" }: ScanButtonProps) {
             onClick={() => setErrorMessage(null)}
             className="text-margin hover:opacity-75 p-0.5 cursor-pointer"
             aria-label="Dismiss error"
+          >
+            <X className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      )}
+
+      {/* Floating Notice Toast */}
+      {noticeMessage && (
+        <div
+          role="status"
+          className="fixed bottom-24 right-4 sm:right-6 max-w-sm p-3.5 rounded-row bg-[#F2F7EE] border border-paid/40 text-paid text-xs font-semibold shadow-paper-lg flex items-start gap-2.5 z-40 animate-in fade-in slide-in-from-bottom-2 duration-200"
+        >
+          <CheckCircle2 className="w-4 h-4 flex-shrink-0 mt-0.5 text-paid" />
+          <span className="flex-1 leading-relaxed">{noticeMessage}</span>
+          <button
+            type="button"
+            onClick={() => setNoticeMessage(null)}
+            className="text-paid hover:opacity-75 p-0.5 cursor-pointer"
+            aria-label="Dismiss notice"
           >
             <X className="w-3.5 h-3.5" />
           </button>

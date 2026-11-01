@@ -24,7 +24,7 @@ export async function listCustomersWithBalances(
   const [customersRes, entriesRes] = await Promise.all([
     supabase
       .from("customers")
-      .select("id, store_id, name, phone_optional, created_at")
+      .select("id, store_id, name, phone_optional, credit_limit, created_at")
       .order("name", { ascending: true }),
     supabase
       .from("entries")
@@ -82,6 +82,7 @@ export async function listCustomersWithBalances(
       store_id: cust.store_id,
       name: cust.name,
       phone_optional: cust.phone_optional,
+      credit_limit: cust.credit_limit,
       balance: balanceInfo.balance,
       total_credit: balanceInfo.totalCredit,
       total_payment: balanceInfo.totalPayment,
@@ -114,7 +115,7 @@ export async function getCustomerBalanceDetail(
   const [customerRes, entriesRes, reminderRes] = await Promise.all([
     supabase
       .from("customers")
-      .select("id, name, phone_optional")
+      .select("id, name, phone_optional, credit_limit")
       .eq("id", customerId)
       .maybeSingle(),
     supabase
@@ -229,3 +230,67 @@ export async function listConfirmedStoreLedgerRows(
     };
   });
 }
+
+/**
+ * Records a direct counter payment for a customer without requiring a photographed page.
+ */
+export async function recordDirectPayment(
+  supabase: SupabaseClient<Database>,
+  params: {
+    customerId: string;
+    amount: number;
+    item?: string;
+  }
+) {
+  const { data: customer, error: custErr } = await supabase
+    .from("customers")
+    .select("id, store_id")
+    .eq("id", params.customerId)
+    .single();
+
+  if (custErr || !customer) {
+    throw new Error("Customer not found");
+  }
+
+  const { data: newEntry, error: insertErr } = await supabase
+    .from("entries")
+    .insert({
+      store_id: customer.store_id,
+      customer_id: customer.id,
+      page_id: null,
+      item: params.item || "Counter cash payment",
+      amount: params.amount,
+      entry_type: "payment",
+      confirmed_by_user: true,
+      confidence: 1.0,
+      line_discrepancy: false,
+      needs_review: false,
+    })
+    .select()
+    .single();
+
+  if (insertErr || !newEntry) {
+    throw new Error(insertErr?.message || "Failed to record payment");
+  }
+
+  return newEntry;
+}
+
+/**
+ * Updates a customer's custom credit limit.
+ */
+export async function updateCustomerCreditLimit(
+  supabase: SupabaseClient<Database>,
+  customerId: string,
+  creditLimit: number | null
+) {
+  const { error } = await supabase
+    .from("customers")
+    .update({ credit_limit: creditLimit })
+    .eq("id", customerId);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+}
+

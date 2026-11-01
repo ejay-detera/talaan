@@ -110,8 +110,12 @@ Kept in lockstep with [`prd.md`](prd.md) §3:
 | 10–12. Weekly Store Summary, Restock Velocity & 1-Tap CSV/Print Export (`US-08`) | Could | ✅ | `src/lib/ledger/summary.ts`, `src/app/summary/page.tsx`, `src/app/api/ledger/export/route.ts` | `npm test` (`summary.test.ts`, `export/route.test.ts`) |
 | 13. Customer E-Resibo Itemized Statement Slip & Text Export (`US-09`, `TAL-09`) | Could | ✅ | `src/components/customers/CustomerReceiptModal.tsx`, `src/components/customers/CustomerBalanceCard.tsx`, `src/lib/ledger/formatters.ts` | `npm test` (`formatters.test.ts`) |
 | 14. Pamalengke Restock Checklist for Wholesale Trips (`US-10`, `TAL-09`) | Could | ✅ | `src/components/summary/PamalengkeChecklistModal.tsx`, `src/lib/ledger/formatters.ts` | `npm test` (`formatters.test.ts`) |
-| 15. Shelf Photo Stock Count (Experimental) | Could | ⬜ roadmap | Deferred (`US-08`) | — |
-| 16–19. Voice input, Auto-SMS sending, Payments/POS, Credit scoring, Native app | Won't | ❌ out of scope | Excluded by `S-01` §3, §8 | — |
+| 15. Direct Counter Payment Recording (`US-11`, `TAL-10`) | Must | ✅ | `src/app/api/customers/[id]/payments/route.ts`, `src/components/customers/RecordPaymentModal.tsx` | `npm test` (`payments/route.test.ts`) |
+| 16. Store Liquidity Health Indicator (`US-12`, `TAL-10`) | Should | ✅ | `src/lib/ledger/liquidity.ts`, `src/components/dashboard/LiquidityHealthCard.tsx` | `npm test` (`liquidity.test.ts`) |
+| 17. Credit Limit Alert & 24h Duplicate Payment Review Warning (`US-13`, `TAL-10`) | Should | ✅ | `src/lib/ledger/math.ts`, `src/components/review/ExcelReviewRow.tsx`, `src/components/review/RedMarginGutter.tsx` | `npm test` (`math.test.ts`) |
+| 18. Semi-Offline Fast-Scan Queue (`US-14`, `TAL-10`) | Should | ✅ | `src/lib/offline-db.ts`, `src/hooks/useOfflineScanQueue.ts`, `src/components/dashboard/OfflineQueueBanner.tsx` | `npm test` (`offline-db.test.ts`) |
+| 19. Shelf Photo Stock Count (Experimental) | Could | ⬜ roadmap | Deferred (`US-08`) | — |
+| 20–23. Voice input, Auto-SMS sending, External payment rails, Credit scoring, Native app | Won't | ❌ out of scope | Excluded by `S-01` §3, §8 | — |
 
 ---
 

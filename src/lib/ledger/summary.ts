@@ -11,7 +11,7 @@ export type SummaryPeriod = "7d" | "30d" | "all";
 
 export interface SummaryLedgerRow {
   id: string;
-  page_id: string;
+  page_id: string | null;
   page_date: string | null;
   created_at?: string;
   customer_name: string;
