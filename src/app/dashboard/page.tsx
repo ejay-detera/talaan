@@ -48,7 +48,17 @@ export default async function DashboardPage() {
     created_at: e.created_at,
   }));
 
-  const storeName = storeRes.data?.name || "My Store";
+  let store = storeRes.data;
+  if (!store) {
+    const { data: createdStore } = await supabase
+      .from("stores")
+      .insert({ owner_id: authData.user.id, name: "Aling Nena's Sari-Sari Store" })
+      .select("id, name")
+      .single();
+    if (createdStore) store = createdStore;
+  }
+
+  const storeName = store?.name || "Aling Nena's Sari-Sari Store";
 
   // Format today's date (e.g. "Thursday, October 29, 2026")
   const todayFormatted = new Intl.DateTimeFormat("en-US", {

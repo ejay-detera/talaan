@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import { Copy, Share2, MessageSquare, Check, RefreshCw } from "lucide-react";
+import { Copy, Share2, Check, RefreshCw, Send, Loader2, Phone, ExternalLink } from "lucide-react";
 import type { ReminderDraft, ReminderTone } from "@/types/ledger";
+import { CustomerPhoneModal } from "./CustomerPhoneModal";
 
 interface ReminderCardProps {
   customerId: string;
@@ -28,7 +29,7 @@ function getDefaultDraft(name: string, bal: number, t: ReminderTone): string {
  *
  * Implements the Pinned Yellow Sticky Note Reminder (matching Image 2).
  * Styled as a yellow counter memo with a 3D red pushpin, tone selectors,
- * authentic handwriting preview (Caveat font) in Taglish, and instant copy/SMS sharing.
+ * authentic handwriting preview (Caveat font) in Taglish, and direct SMS API sending.
  */
 export function ReminderCard({
   customerId,
@@ -37,6 +38,10 @@ export function ReminderCard({
   balance,
   initialDraft,
 }: ReminderCardProps) {
+  const [phone, setPhone] = useState<string | null>(phoneOptional);
+  const [isPhoneModalOpen, setIsPhoneModalOpen] = useState(false);
+  const [pendingSendAfterPhone, setPendingSendAfterPhone] = useState(false);
+
   const [tone, setTone] = useState<ReminderTone>(initialDraft?.tone || "friendly");
   const hasDebt = balance > 0;
 
@@ -49,6 +54,10 @@ export function ReminderCard({
   const [isGenerating, setIsGenerating] = useState(false);
   const [copied, setCopied] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const [isSendingSms, setIsSendingSms] = useState(false);
+  const [smsSentSuccess, setSmsSentSuccess] = useState<string | null>(null);
+  const [smsError, setSmsError] = useState<string | null>(null);
 
   async function handleGenerate(targetTone = tone) {
     if (!hasDebt) return;
@@ -114,8 +123,56 @@ export function ReminderCard({
     }
   }
 
-  const smsHref = message
-    ? `sms:${phoneOptional ?? ""}?body=${encodeURIComponent(message)}`
+  async function triggerSmsSend(targetPhone: string) {
+    if (!message) return;
+    setIsSendingSms(true);
+    setSmsError(null);
+    setSmsSentSuccess(null);
+
+    try {
+      const res = await fetch("/api/reminders/send-sms", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          customer_id: customerId,
+          message,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        setSmsError(data?.error?.message || "Failed to dispatch SMS.");
+        return;
+      }
+
+      setSmsSentSuccess(`SMS reminder sent successfully to ${targetPhone}!`);
+      setTimeout(() => setSmsSentSuccess(null), 6000);
+    } catch {
+      setSmsError("Network issue dispatching SMS. You can open your phone text app below.");
+    } finally {
+      setIsSendingSms(false);
+    }
+  }
+
+  function handleSendSmsClick() {
+    if (!phone) {
+      setPendingSendAfterPhone(true);
+      setIsPhoneModalOpen(true);
+    } else {
+      triggerSmsSend(phone);
+    }
+  }
+
+  function handlePhoneSaved(savedPhone: string) {
+    setPhone(savedPhone);
+    if (pendingSendAfterPhone) {
+      setPendingSendAfterPhone(false);
+      triggerSmsSend(savedPhone);
+    }
+  }
+
+  const fallbackSmsHref = phone && message
+    ? `sms:${phone}?body=${encodeURIComponent(message)}`
     : undefined;
 
   if (!hasDebt) {
@@ -150,9 +207,17 @@ export function ReminderCard({
 
         {/* Note Header: Title & Tone Selector */}
         <div className="space-y-3">
-          <h2 className="font-display font-bold text-base sm:text-lg text-[#383318] tracking-tight">
-            Reminder for {customerName}
-          </h2>
+          <div className="flex items-center justify-between gap-2">
+            <h2 className="font-display font-bold text-base sm:text-lg text-[#383318] tracking-tight">
+              Reminder for {customerName}
+            </h2>
+            {phone && (
+              <span className="text-[11px] font-semibold text-[#6E5D1E] font-sans flex items-center gap-1">
+                <Phone className="w-3 h-3" />
+                <span>{phone}</span>
+              </span>
+            )}
+          </div>
 
           {/* Tone Selector Pills */}
           <div className="flex items-center gap-2">
@@ -204,12 +269,41 @@ export function ReminderCard({
           {error && (
             <p className="text-xs text-margin font-semibold font-sans">{error}</p>
           )}
+
+          {/* SMS Status Banners */}
+          {smsSentSuccess && (
+            <div
+              role="status"
+              className="p-3 rounded-row bg-[#F0FDF4] border border-[#1F7A4D]/40 text-[#1F7A4D] text-xs font-semibold flex items-center gap-2 animate-in fade-in duration-200"
+            >
+              <Check className="w-4 h-4 flex-shrink-0" />
+              <span>{smsSentSuccess}</span>
+            </div>
+          )}
+
+          {smsError && (
+            <div
+              role="alert"
+              className="p-3 rounded-row bg-[#FDF2F2] border border-margin/40 text-margin text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2 animate-in fade-in duration-200"
+            >
+              <span>{smsError}</span>
+              {fallbackSmsHref && (
+                <a
+                  href={fallbackSmsHref}
+                  className="inline-flex items-center gap-1 font-bold underline text-margin hover:text-pencil flex-shrink-0"
+                >
+                  <span>Open Phone Text App</span>
+                  <ExternalLink className="w-3 h-3" />
+                </a>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Note Footer: Notice & Action Buttons */}
         <div className="pt-2 border-t border-[#EADB85]/60 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <p className="text-xs text-[#6E5D1E] font-sans italic">
-            Draft only. You send it.
+            Automated SMS via SMS API PH.
           </p>
 
           <div className="flex items-center gap-2 w-full sm:w-auto">
@@ -217,7 +311,7 @@ export function ReminderCard({
             <button
               type="button"
               onClick={handleCopy}
-              className="flex-1 sm:flex-initial h-[42px] px-5 rounded-row bg-ink hover:bg-ink/90 active:scale-[0.98] text-xs font-bold text-sheet flex items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer font-sans paper-press"
+              className="flex-1 sm:flex-initial h-[42px] px-4 rounded-row bg-ink hover:bg-ink/90 active:scale-[0.98] text-xs font-bold text-sheet flex items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer font-sans paper-press"
             >
               {copied ? (
                 <>
@@ -232,16 +326,25 @@ export function ReminderCard({
               )}
             </button>
 
-            {/* Send via SMS Button (if phone recorded) */}
-            {smsHref && (
-              <a
-                href={smsHref}
-                className="flex-1 sm:flex-initial h-[42px] px-4 rounded-row bg-[#1F7A4D] hover:bg-[#1A6841] active:scale-[0.98] text-xs font-bold text-sheet flex items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer font-sans"
-              >
-                <MessageSquare className="w-3.5 h-3.5" />
-                <span>Send SMS</span>
-              </a>
-            )}
+            {/* Direct Send SMS Button */}
+            <button
+              type="button"
+              disabled={isSendingSms || !message}
+              onClick={handleSendSmsClick}
+              className="flex-1 sm:flex-initial h-[42px] px-4 rounded-row bg-[#1F7A4D] hover:bg-[#1A6841] active:scale-[0.98] text-xs font-bold text-sheet flex items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer font-sans disabled:opacity-50"
+            >
+              {isSendingSms ? (
+                <>
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                  <span>Sending...</span>
+                </>
+              ) : (
+                <>
+                  <Send className="w-3.5 h-3.5" />
+                  <span>Send SMS</span>
+                </>
+              )}
+            </button>
 
             {/* Share via native web share */}
             <button
@@ -267,12 +370,49 @@ export function ReminderCard({
         </div>
       </div>
 
-      {/* Helper Guidance Below Note */}
-      <p className="text-xs text-muted font-sans px-1 leading-relaxed">
-        {phoneOptional
-          ? `Recorded phone: ${phoneOptional}. Tap Send SMS to open your text app or Copy to paste into Messenger.`
-          : `No phone number on notebook for ${customerName}. Copy the reminder to send directly via SMS or Messenger.`}
-      </p>
+      {/* Helper Guidance & Edit Phone Trigger Below Note */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 px-1 text-xs text-muted font-sans">
+        <p className="leading-relaxed">
+          {phone ? (
+            <span>
+              Recorded phone: <strong className="text-pencil font-semibold">{phone}</strong>. Tap Send SMS to dispatch directly.
+            </span>
+          ) : (
+            <span>No phone number saved yet for {customerName}. Tap Send SMS or Add Phone to record one.</span>
+          )}
+        </p>
+
+        <button
+          type="button"
+          onClick={() => {
+            setPendingSendAfterPhone(false);
+            setIsPhoneModalOpen(true);
+          }}
+          className="inline-flex items-center gap-1 text-xs font-bold text-ink hover:underline cursor-pointer flex-shrink-0"
+        >
+          <Phone className="w-3 h-3" />
+          <span>{phone ? "Edit Phone" : "Add Phone"}</span>
+        </button>
+      </div>
+
+      {/* Customer Phone Modal */}
+      <CustomerPhoneModal
+        isOpen={isPhoneModalOpen}
+        onClose={() => {
+          setIsPhoneModalOpen(false);
+          setPendingSendAfterPhone(false);
+        }}
+        customerId={customerId}
+        customerName={customerName}
+        initialPhone={phone}
+        onSuccess={handlePhoneSaved}
+        title={phone ? "Update Phone Number" : "Add Phone Number"}
+        description={
+          pendingSendAfterPhone
+            ? "Save customer's phone number to send this reminder immediately via SMS."
+            : "Save a Philippine mobile number for direct SMS reminders."
+        }
+      />
     </div>
   );
 }
