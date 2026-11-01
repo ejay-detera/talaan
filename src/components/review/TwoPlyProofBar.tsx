@@ -30,11 +30,11 @@ export function TwoPlyProofBar({
 }: TwoPlyProofBarProps) {
   return (
     <footer
-      className={`sticky bottom-3 z-30 rounded-sheet border border-rule bg-sheet shadow-paper-lg p-4 sm:p-5 ${
+      className={`sticky bottom-3 z-30 w-full max-w-full min-w-0 rounded-sheet border border-rule bg-sheet shadow-paper-lg p-3.5 sm:p-5 ${
         hasPageDiscrepancy ? "border-l-4 border-l-margin" : ""
       } ${className}`}
     >
-      <div className="max-w-2xl mx-auto space-y-3">
+      <div className="max-w-2xl mx-auto space-y-3 w-full min-w-0">
         <div className="flex items-center justify-between gap-4 text-xs">
           <div>
             <span className="block text-muted font-semibold">Written Total:</span>

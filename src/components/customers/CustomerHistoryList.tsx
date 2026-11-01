@@ -42,19 +42,19 @@ export function CustomerHistoryList({ entries, currentBalance }: CustomerHistory
   return (
     <div className="relative rounded-row border border-[#D5DEC6] bg-[#FFFEF8] border-l-4 border-l-margin shadow-paper overflow-hidden select-none">
       {/* Header Pad Strip */}
-      <div className="px-5 py-3.5 border-b border-rule bg-[#FBFDF6]/80 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1" aria-hidden="true">
+      <div className="px-3.5 sm:px-5 py-3 sm:py-3.5 border-b border-rule bg-[#FBFDF6]/80 flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2 min-w-0">
+          <div className="flex items-center gap-1 flex-shrink-0" aria-hidden="true">
             <span className="w-2 h-2 rounded-full bg-paper border border-[#C5D0B4]" />
             <span className="w-2 h-2 rounded-full bg-paper border border-[#C5D0B4]" />
             <span className="w-2 h-2 rounded-full bg-paper border border-[#C5D0B4]" />
           </div>
-          <h2 className="font-display font-bold text-base sm:text-lg text-pencil tracking-tight">
+          <h2 className="font-display font-bold text-sm sm:text-lg text-pencil tracking-tight whitespace-nowrap">
             Transaction History
           </h2>
         </div>
-        <span className="text-xs font-semibold text-muted font-sans">
-          From confirmed pages ({entries.length})
+        <span className="text-[11px] sm:text-xs font-semibold text-muted font-sans whitespace-nowrap flex-shrink-0">
+          <span className="hidden sm:inline">From confirmed pages </span>({entries.length})
         </span>
       </div>
 

@@ -81,6 +81,12 @@ html[data-scroll-behavior="smooth"] {
   outline-offset: 2px;
 }
 
+html,
+body {
+  overflow-x: clip;
+  max-width: 100%;
+}
+
 body {
   background-color: var(--color-paper);
   color: var(--color-pencil);

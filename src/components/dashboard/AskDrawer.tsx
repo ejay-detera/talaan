@@ -41,8 +41,8 @@ export function AskDrawer() {
   const pathname = usePathname();
   const isDashboard = pathname === "/dashboard";
   const fabPositionClass = isDashboard
-    ? "bottom-[84px] sm:bottom-[92px] right-4 sm:right-6"
-    : "bottom-5 sm:bottom-6 right-4 sm:right-6";
+    ? "bottom-[98px] sm:bottom-[104px] right-4 sm:right-6"
+    : "bottom-8 sm:bottom-8 right-4 sm:right-6";
 
   const [isOpen, setIsOpen] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -279,11 +279,11 @@ export function AskDrawer() {
         <button
           type="button"
           onClick={() => setIsOpen(true)}
-          className="h-[50px] px-5 rounded-full bg-[#FFFEF8] hover:bg-white text-pencil border border-[#D5DEC6] hover:border-ink shadow-paper-lg hover:shadow-paper-xl transition-all flex items-center justify-center gap-2.5 cursor-pointer select-none active:scale-[0.98] paper-press"
+          className="h-[48px] w-[48px] sm:h-[50px] sm:w-auto px-0 sm:px-5 rounded-full bg-[#FFFEF8] hover:bg-white text-pencil border border-[#D5DEC6] hover:border-ink shadow-paper-lg hover:shadow-paper-xl transition-all flex items-center justify-center gap-2 cursor-pointer select-none active:scale-[0.98] paper-press"
           aria-label="Tanungin si Talaan (Ask ledger)"
         >
-          <Sparkles className="w-4.5 h-4.5 text-ink shrink-0" />
-          <span className="text-sm font-bold font-sans tracking-tight">
+          <Sparkles className="w-5 h-5 text-ink shrink-0" />
+          <span className="hidden sm:inline text-sm font-bold font-sans tracking-tight">
             Tanungin si Talaan
           </span>
         </button>

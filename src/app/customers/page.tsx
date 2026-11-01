@@ -36,7 +36,7 @@ export default async function CustomersPage() {
   }).format(new Date());
 
   return (
-    <div className="min-h-screen bg-transparent text-pencil font-sans selection:bg-marker selection:text-pencil pb-28">
+    <div className="min-h-screen bg-transparent text-pencil font-sans selection:bg-marker selection:text-pencil pb-36 sm:pb-40">
       {/* Floating Center Dock Navigation */}
       <AppHeaderNav storeName={storeName} activeTab="customers" />
 

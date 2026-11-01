@@ -104,7 +104,8 @@ Kept in lockstep with [`prd.md`](prd.md) §3:
 | 4. Unreadable Page Retake Request (`flag_unreadable`) | Must | ✅ | `src/app/api/pages/extract/route.ts`, `src/lib/schemas.ts` (`TAL-02`) | `npm run lint`, `npx tsc --noEmit` |
 | 5. Two-Level Deterministic Discrepancy Finder | Must | ✅ | `src/lib/ledger/math.ts` (`TAL-04`) | `npm test` (`T-003`, `T-004`) |
 | 6. Review Screen (Red Margin Gutter, Two-Ply Proof Bar, Confirm API) | Must | ✅ | `src/app/pages/[id]/review/page.tsx`, `src/app/api/pages/[id]/confirm/route.ts` (`TAL-05`) | `npm test` (`T-005`), `npx tsc --noEmit` |
-| 6b. Upload Dashboard & Pill Scan Button (`/dashboard`) | Must | ✅ | `src/app/dashboard/page.tsx`, `src/components/dashboard/` (`TAL-05`) | `npm run lint`, `npx tsc --noEmit` |
+| 6b. Upload Dashboard & Scan FAB with Camera Option (`/dashboard`) | Must | ✅ | `src/app/dashboard/page.tsx`, `src/components/dashboard/ScanButton.tsx` (`TAL-05`) | `npm run lint`, `npx tsc --noEmit`, `npm test` |
+| 6c. Responsive Ledger & Spreadsheet Page Review | Must | ✅ | `src/app/pages/[id]/review/`, `src/components/review/` | `npm test` (`T-005`), `npx tsc --noEmit` |
 | 6c. Daily Demo Data & Storage Cleanup (`/api/cron/cleanup-demo`) | Should | ✅ | `src/app/api/cron/cleanup-demo/route.ts`, `vercel.json` | `npm test` |
 | 7. Customer Balances Ledger (`sum(credit) - sum(payment)`) | Must | ✅ | `src/services/customers.ts`, `src/app/customers/`, `src/app/api/customers/` (`TAL-06`) | `npm test` (`T-006`) |
 | 8. Taglish Reminder Drafts (Tone Selector + Copy & Web Share / `sms:`) | Must | ✅ | `src/app/customers/[id]/page.tsx`, `src/components/customers/ReminderCard.tsx`, `src/app/api/reminders/draft/route.ts` (`TAL-06`) | `npm test` (`T-007`) |

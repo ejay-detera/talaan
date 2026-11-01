@@ -74,14 +74,14 @@ export function ConfirmedPageSheet({
   const isMatch = !page.has_page_discrepancy;
 
   return (
-    <div className="space-y-4 select-none pb-6">
+    <div className="space-y-4 select-none pb-6 w-full max-w-full min-w-0">
       {/* Status & Action Banner */}
-      <div className="p-4 sm:p-5 rounded-sheet border border-rule bg-sheet shadow-paper flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
+      <div className="p-4 sm:p-5 rounded-sheet border border-rule bg-sheet shadow-paper flex flex-col sm:flex-row sm:items-center justify-between gap-4 w-full max-w-full min-w-0">
+        <div className="flex items-center gap-3 min-w-0">
           <div className="w-9 h-9 rounded-full bg-paid/10 text-paid flex items-center justify-center flex-shrink-0">
             <CheckCircle2 className="w-5 h-5" />
           </div>
-          <div>
+          <div className="min-w-0">
             <h2 className="text-sm sm:text-base font-bold text-paid font-sans leading-tight">
               Confirmed &amp; saved to ledger
             </h2>
@@ -91,12 +91,12 @@ export function ConfirmedPageSheet({
           </div>
         </div>
 
-        <div className="flex items-center gap-2.5 flex-wrap">
+        <div className="flex items-center gap-2.5 flex-wrap sm:flex-nowrap">
           {imageUrl && (
             <button
               type="button"
               onClick={() => setShowPhotoModal(true)}
-              className="inline-flex items-center gap-2 px-3.5 py-2 min-h-[44px] rounded-row border border-rule bg-sheet text-ink hover:bg-paper active:scale-[0.99] text-xs sm:text-sm font-semibold transition-all cursor-pointer shadow-sm"
+              className="inline-flex items-center justify-center gap-2 px-3.5 py-2 min-h-[44px] rounded-row border border-rule bg-sheet text-ink hover:bg-paper active:scale-[0.99] text-xs sm:text-sm font-semibold transition-all cursor-pointer shadow-sm flex-1 sm:flex-initial"
             >
               <ImageIcon className="w-4 h-4 text-ink" />
               <span>Original photo</span>
@@ -105,7 +105,7 @@ export function ConfirmedPageSheet({
 
           <Link
             href="/customers"
-            className="inline-flex items-center gap-1.5 px-4 py-2 min-h-[44px] rounded-row bg-ink text-sheet text-xs sm:text-sm font-bold shadow-paper hover:bg-ink/90 active:scale-[0.99] transition-all cursor-pointer"
+            className="inline-flex items-center justify-center gap-1.5 px-4 py-2 min-h-[44px] rounded-row bg-ink text-sheet text-xs sm:text-sm font-bold shadow-paper hover:bg-ink/90 active:scale-[0.99] transition-all cursor-pointer flex-1 sm:flex-initial"
           >
             <span>Customers</span>
             <ArrowRight className="w-4 h-4" />
@@ -114,32 +114,38 @@ export function ConfirmedPageSheet({
       </div>
 
       {/* Spreadsheet Ledger Card */}
-      <div className="rounded-sheet border border-rule bg-sheet shadow-paper overflow-hidden">
+      <div className="rounded-sheet border border-rule bg-sheet shadow-paper overflow-hidden w-full max-w-full min-w-0">
         {/* Formula Bar */}
-        <div className="border-b border-rule bg-paper/30 flex items-stretch divide-x divide-rule">
+        <div className="border-b border-rule bg-paper/30 flex items-stretch divide-x divide-rule w-full max-w-full min-w-0">
           {/* Cell Address Box */}
-          <div className="w-14 sm:w-16 h-10 flex items-center justify-center font-sans font-bold text-xs sm:text-sm text-pencil bg-sheet flex-shrink-0">
+          <div className="w-12 sm:w-16 h-10 flex items-center justify-center font-sans font-bold text-xs sm:text-sm text-pencil bg-sheet flex-shrink-0">
             {activeRowCoordinate}
           </div>
 
           {/* Function Symbol */}
-          <div className="w-10 h-10 flex items-center justify-center text-sm font-serif italic text-muted flex-shrink-0 select-none">
+          <div className="w-8 sm:w-10 h-10 flex items-center justify-center text-xs sm:text-sm font-serif italic text-muted flex-shrink-0 select-none">
             fx
           </div>
 
           {/* Formula Expression */}
-          <div className="flex-1 h-10 px-3 flex items-center font-sans text-xs sm:text-sm text-pencil truncate">
+          <div className="flex-1 min-w-0 h-10 px-2 sm:px-3 flex items-center font-sans text-xs sm:text-sm text-pencil truncate">
             {formulaText}
           </div>
 
           {/* Evaluated Value */}
-          <div className="px-4 h-10 flex items-center font-sans font-bold text-xs sm:text-sm text-pencil tabular-nums bg-sheet/80 flex-shrink-0">
+          <div className="px-2.5 sm:px-4 h-10 flex items-center font-sans font-bold text-xs sm:text-sm text-pencil tabular-nums bg-sheet/80 flex-shrink-0">
             {activeEntry?.entry_type === "payment" ? "-" : ""}₱{activeAmount.toFixed(2)}
           </div>
         </div>
 
+        {/* Mobile Swipe Hint */}
+        <div className="sm:hidden px-3 py-1.5 bg-paper/70 border-b border-rule flex items-center justify-between text-[11px] text-muted font-sans font-medium">
+          <span>Swipe table horizontally to see all columns</span>
+          <span className="font-bold text-ink">A &rarr; G</span>
+        </div>
+
         {/* Scrollable Spreadsheet Table Grid */}
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto w-full max-w-full min-w-0 touch-pan-x scrollbar-thin">
           <table className="w-full text-left border-collapse min-w-[720px] text-xs sm:text-sm font-sans">
             <thead>
               {/* Coordinate Row: Blank + A, B, C, D, E, F, G */}
@@ -331,14 +337,14 @@ export function ConfirmedPageSheet({
         </div>
 
         {/* Spreadsheet Sheet Tab & Footer Status Bar */}
-        <div className="border-t border-rule bg-paper/50 flex items-center justify-between">
+        <div className="border-t border-rule bg-paper/50 flex flex-wrap items-center justify-between gap-1.5 p-1 sm:p-0">
           {/* Active Sheet Tab */}
-          <div className="px-4 py-2 bg-sheet border-r border-rule border-b-2 border-b-ink font-bold text-xs sm:text-sm text-pencil shadow-sm">
+          <div className="px-3 sm:px-4 py-2 bg-sheet border-r border-rule border-b-2 border-b-ink font-bold text-xs sm:text-sm text-pencil shadow-sm truncate max-w-[140px] sm:max-w-none">
             {formattedDate}
           </div>
 
           {/* Right Summary Info */}
-          <div className="px-4 text-xs text-muted font-sans font-medium">
+          <div className="px-3 sm:px-4 py-2 text-xs text-muted font-sans font-medium whitespace-nowrap">
             {entries.length} {entries.length === 1 ? "row" : "rows"} &bull; Total: ₱
             {Number(page.computed_total).toFixed(2)}
           </div>

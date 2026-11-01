@@ -22,7 +22,7 @@ describe("POST /api/auth/demo", () => {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY = "anon-key-123";
   });
 
-  it("signs in anonymously and seeds store + 4 customers for new visitor", async () => {
+  it("signs in anonymously and creates store for new visitor without dummy customers", async () => {
     mockGetUser.mockResolvedValueOnce({ data: { user: null }, error: null });
     mockSignInAnonymously.mockResolvedValueOnce({
       data: { user: { id: "anon-user-1", is_anonymous: true } },
@@ -40,9 +40,6 @@ describe("POST /api/auth/demo", () => {
     const storeInsertSelect = vi.fn().mockReturnValue({ single: storeInsertSingle });
     const storeInsert = vi.fn().mockReturnValue({ select: storeInsertSelect });
 
-    // Insert customers -> success
-    const customerInsert = vi.fn().mockResolvedValueOnce({ data: null, error: null });
-
     mockFrom.mockImplementation((table: string) => {
       if (table === "stores") {
         return {
@@ -54,11 +51,6 @@ describe("POST /api/auth/demo", () => {
           insert: storeInsert,
         };
       }
-      if (table === "customers") {
-        return {
-          insert: customerInsert,
-        };
-      }
       return {};
     });
 
@@ -68,13 +60,8 @@ describe("POST /api/auth/demo", () => {
     expect(res.status).toBe(200);
     expect(json.success).toBe(true);
     expect(mockSignInAnonymously).toHaveBeenCalled();
-    expect(customerInsert).toHaveBeenCalledWith(
-      expect.arrayContaining([
-        expect.objectContaining({ name: "Mang Jose", normalized_name: "mang jose" }),
-        expect.objectContaining({ name: "Kuya Jun", normalized_name: "kuya jun" }),
-        expect.objectContaining({ name: "Nanay Cora", normalized_name: "nanay cora" }),
-        expect.objectContaining({ name: "Ate Baby", normalized_name: "ate baby" }),
-      ])
+    expect(storeInsert).toHaveBeenCalledWith(
+      expect.objectContaining({ name: "Aling Nena's Sari-Sari Store", owner_id: "anon-user-1" })
     );
   });
 

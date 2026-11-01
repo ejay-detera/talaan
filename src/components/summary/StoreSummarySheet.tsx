@@ -2,7 +2,8 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
-import { Download, Printer, ShoppingBag } from "lucide-react";
+import Link from "next/link";
+import { ArrowRight, Download, FileSpreadsheet, Printer, ShoppingBag } from "lucide-react";
 import { Amount } from "@/components/shared/Amount";
 import {
   computeStoreSummary,
@@ -22,13 +23,6 @@ export function StoreSummarySheet({ storeName, rows }: StoreSummarySheetProps) {
 
   const summary = useMemo(() => computeStoreSummary(rows, period), [rows, period]);
 
-  const periodLabel =
-    period === "7d"
-      ? "last 7 days"
-      : period === "30d"
-      ? "last 30 days"
-      : "all time";
-
   // Calculate total sold pieces and max item quantity for relative progress bar scaling
   const totalPieces = useMemo(() => {
     return summary.topItems.reduce((acc, it) => acc + it.totalQuantity, 0);
@@ -38,6 +32,62 @@ export function StoreSummarySheet({ storeName, rows }: StoreSummarySheetProps) {
     if (summary.topItems.length === 0) return 1;
     return Math.max(1, ...summary.topItems.map((it) => it.totalQuantity));
   }, [summary.topItems]);
+
+  if (rows.length === 0) {
+    return (
+      <div className="space-y-6 select-none">
+        {/* Top Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 print:hidden">
+          <div className="space-y-1">
+            <h1 className="font-display font-bold text-2xl sm:text-3xl text-pencil tracking-tight">
+              Store Summary
+            </h1>
+            <p className="text-xs sm:text-sm text-muted font-sans font-medium">
+              0 confirmed transactions recorded
+            </p>
+          </div>
+        </div>
+
+        {/* Paper Empty State Card */}
+        <div className="relative rounded-row border border-rule bg-[#FFFEF8] border-l-4 border-l-margin shadow-paper overflow-hidden select-none p-6 sm:p-10 text-center space-y-4">
+          {/* Binder Edge Holes */}
+          <div className="flex items-center justify-center gap-2 pb-2 border-b border-rule/50" aria-hidden="true">
+            <span className="w-2.5 h-2.5 rounded-full bg-paper border border-[#C5D0B4]" />
+            <span className="w-2.5 h-2.5 rounded-full bg-paper border border-[#C5D0B4]" />
+            <span className="w-2.5 h-2.5 rounded-full bg-paper border border-[#C5D0B4]" />
+          </div>
+
+          <div className="space-y-2 py-6">
+            <div className="w-12 h-12 rounded-full bg-paper border border-rule flex items-center justify-center mx-auto text-muted">
+              <FileSpreadsheet className="w-6 h-6" />
+            </div>
+            <h2 className="font-display font-bold text-lg sm:text-xl text-pencil">
+              No transactions recorded yet
+            </h2>
+            <p className="text-xs sm:text-sm text-muted font-sans max-w-sm mx-auto leading-relaxed">
+              Financial summaries, collections, and restock velocity will appear here once you scan and confirm counter notebook pages.
+            </p>
+            <div className="pt-2">
+              <Link
+                href="/dashboard"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-xs bg-ink text-sheet text-xs font-bold hover:bg-ink/90 transition-colors shadow-xs"
+              >
+                Go to Notebook
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const periodLabel =
+    period === "7d"
+      ? "last 7 days"
+      : period === "30d"
+      ? "last 30 days"
+      : "all time";
 
   // Collection percentages safely rounded
   const totalCreditCents = Math.round(summary.totalCredit * 100);

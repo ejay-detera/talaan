@@ -59,32 +59,32 @@ export default async function CustomerDetailPage({
   }
 
   return (
-    <div className="min-h-screen bg-transparent text-pencil font-sans selection:bg-marker selection:text-pencil pb-24">
+    <div className="min-h-screen bg-transparent text-pencil font-sans selection:bg-marker selection:text-pencil pb-24 w-full max-w-full min-w-0 overflow-x-hidden">
       {/* Sticky Header matching Image 2 */}
-      <header className="sticky top-0 z-20 bg-sheet border-b border-rule px-4 sm:px-6 py-4">
-        <div className="max-w-5xl mx-auto flex items-center justify-between gap-4">
+      <header className="sticky top-0 z-20 bg-sheet border-b border-rule px-3 sm:px-6 py-3 sm:py-4 w-full">
+        <div className="max-w-5xl mx-auto flex items-center justify-between gap-2 sm:gap-4">
           {/* Back to Customers link */}
           <Link
             href="/customers"
-            className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-pencil hover:text-ink transition-colors p-1"
+            className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-pencil hover:text-ink transition-colors p-1 flex-shrink-0"
           >
             <ArrowLeft className="w-4 h-4" />
-            <span>Customers</span>
+            <span className="hidden sm:inline">Customers</span>
           </Link>
 
           {/* Customer Title & Status Subtext */}
-          <div className="text-center">
-            <h1 className="font-display font-bold text-lg sm:text-2xl text-pencil leading-tight tracking-tight">
+          <div className="text-center min-w-0 flex-1 px-1">
+            <h1 className="font-display font-bold text-base sm:text-2xl text-pencil leading-tight tracking-tight truncate">
               {customer.name}
             </h1>
-            <p className="text-xs text-muted font-sans flex items-center justify-center gap-1.5">
+            <p className="text-[11px] sm:text-xs text-muted font-sans flex items-center justify-center gap-1 sm:gap-1.5 flex-wrap">
               <span>{hasDebt ? "Owing credit" : isPaid ? "Settled" : "Advance payment"}</span>
               <span>&bull;</span>
               <span>Last active: {lastActiveFormatted}</span>
               {customer.phone_optional && (
                 <>
                   <span>&bull;</span>
-                  <span className="inline-flex items-center gap-0.5">
+                  <span className="inline-flex items-center gap-0.5 whitespace-nowrap">
                     <Phone className="w-2.5 h-2.5" />
                     <span>{customer.phone_optional}</span>
                   </span>
@@ -94,9 +94,9 @@ export default async function CustomerDetailPage({
           </div>
 
           {/* Status Badge */}
-          <div className="w-28 text-right">
+          <div className="flex-shrink-0 text-right">
             <span
-              className={`inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-row border ${
+              className={`inline-flex items-center gap-1 text-[11px] sm:text-xs font-bold px-2 sm:px-2.5 py-1 rounded-row border whitespace-nowrap ${
                 hasDebt
                   ? "bg-[#FDF2F2] text-margin border-margin/40"
                   : isPaid
@@ -106,12 +106,12 @@ export default async function CustomerDetailPage({
             >
               {hasDebt ? (
                 <>
-                  <AlertCircle className="w-3 h-3" />
-                  <span>Payment Due</span>
+                  <AlertCircle className="w-3 h-3 flex-shrink-0" />
+                  <span>Due</span>
                 </>
               ) : (
                 <>
-                  <CheckCircle2 className="w-3 h-3" />
+                  <CheckCircle2 className="w-3 h-3 flex-shrink-0" />
                   <span>Settled</span>
                 </>
               )}
@@ -121,7 +121,7 @@ export default async function CustomerDetailPage({
       </header>
 
       {/* Main 2-Column Responsive Layout matching Image 2 */}
-      <main className="paper-enter max-w-5xl mx-auto px-4 sm:px-6 pt-6 space-y-6">
+      <main className="paper-enter max-w-5xl mx-auto px-3 sm:px-6 pt-5 sm:pt-6 space-y-6 w-full max-w-full min-w-0">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           {/* Left Column: Current Balance Card & Transaction History */}
           <div className="lg:col-span-6 space-y-6">

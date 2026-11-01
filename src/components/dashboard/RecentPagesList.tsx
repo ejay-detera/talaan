@@ -134,14 +134,14 @@ export function RecentPagesList({
       className={`rounded-row border border-rule bg-[#FFFEFB] overflow-hidden shadow-paper select-none ${className}`}
     >
       {/* Top Spiral Binder Header Strip */}
-      <div className="h-9 px-4 bg-[#F2F6EC] border-b border-rule flex items-center justify-between select-none">
-        <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1.5" aria-hidden="true">
+      <div className="h-9 px-3.5 sm:px-4 bg-[#F2F6EC] border-b border-rule flex items-center justify-between select-none gap-2">
+        <div className="flex items-center gap-2 min-w-0">
+          <div className="flex items-center gap-1.5 flex-shrink-0" aria-hidden="true">
             <span className="w-2.5 h-2.5 rounded-full bg-paper border border-[#C5D0B4]" />
             <span className="w-2.5 h-2.5 rounded-full bg-paper border border-[#C5D0B4]" />
             <span className="w-2.5 h-2.5 rounded-full bg-paper border border-[#C5D0B4]" />
           </div>
-          <span className="text-xs font-sans font-bold tracking-wider uppercase text-muted ml-1">
+          <span className="text-xs font-sans font-bold tracking-wider uppercase text-muted ml-1 whitespace-nowrap">
             Notebook Pages
           </span>
         </div>

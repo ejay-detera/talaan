@@ -166,7 +166,7 @@ export function ReviewSheet({
   };
 
   return (
-    <div className="relative space-y-4">
+    <div className="relative space-y-4 w-full max-w-full min-w-0">
       {/* Collapsible Notebook Preview Strip */}
       <NotebookStrip imageUrl={imageUrl} />
 
@@ -180,34 +180,40 @@ export function ReviewSheet({
       )}
 
       {/* Spreadsheet Review Container */}
-      <div className="relative rounded-sheet border border-rule bg-sheet shadow-paper overflow-hidden select-none">
+      <div className="relative rounded-sheet border border-rule bg-sheet shadow-paper overflow-hidden select-none w-full max-w-full min-w-0">
         {/* Authoritative Red Margin Line drawn down sheet */}
         <div className="margin-draw absolute left-0 top-0 bottom-0 w-[3px] bg-margin z-10 pointer-events-none" />
         {/* Formula Bar */}
-        <div className="border-b border-rule bg-paper/30 flex items-stretch divide-x divide-rule">
+        <div className="border-b border-rule bg-paper/30 flex items-stretch divide-x divide-rule w-full max-w-full min-w-0">
           {/* Cell Address Coordinate */}
-          <div className="w-14 sm:w-16 h-10 flex items-center justify-center font-sans font-bold text-xs sm:text-sm text-pencil bg-sheet flex-shrink-0">
+          <div className="w-12 sm:w-16 h-10 flex items-center justify-center font-sans font-bold text-xs sm:text-sm text-pencil bg-sheet flex-shrink-0">
             {activeRowCoordinate}
           </div>
 
           {/* Function Symbol */}
-          <div className="w-10 h-10 flex items-center justify-center text-sm font-serif italic text-muted flex-shrink-0 select-none">
+          <div className="w-8 sm:w-10 h-10 flex items-center justify-center text-xs sm:text-sm font-serif italic text-muted flex-shrink-0 select-none">
             fx
           </div>
 
           {/* Formula Expression */}
-          <div className="flex-1 h-10 px-3 flex items-center font-sans text-xs sm:text-sm text-pencil truncate">
+          <div className="flex-1 min-w-0 h-10 px-2 sm:px-3 flex items-center font-sans text-xs sm:text-sm text-pencil truncate">
             {formulaText}
           </div>
 
           {/* Evaluated Value */}
-          <div className="px-4 h-10 flex items-center font-sans font-bold text-xs sm:text-sm text-pencil tabular-nums bg-sheet/80 flex-shrink-0">
+          <div className="px-2.5 sm:px-4 h-10 flex items-center font-sans font-bold text-xs sm:text-sm text-pencil tabular-nums bg-sheet/80 flex-shrink-0">
             {activeEntry?.entry_type === "payment" ? "-" : ""}₱{activeAmount.toFixed(2)}
           </div>
         </div>
 
+        {/* Mobile Swipe Hint */}
+        <div className="sm:hidden px-3 py-1.5 bg-paper/70 border-b border-rule flex items-center justify-between text-[11px] text-muted font-sans font-medium">
+          <span>Swipe table horizontally to see all columns</span>
+          <span className="font-bold text-ink">A &rarr; G</span>
+        </div>
+
         {/* Scrollable Spreadsheet Table Grid */}
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto w-full max-w-full min-w-0 touch-pan-x scrollbar-thin">
           <table className="w-full text-left border-collapse min-w-[760px] text-xs sm:text-sm font-sans">
             <thead>
               {/* Coordinate Row: Blank + A, B, C, D, E, F, G */}
@@ -321,10 +327,10 @@ export function ReviewSheet({
         </div>
 
         {/* Spreadsheet Sheet Tab Bar & Add Row Button */}
-        <div className="border-t border-rule bg-paper/50 flex flex-wrap items-center justify-between gap-2">
-          <div className="flex items-center">
+        <div className="border-t border-rule bg-paper/50 flex flex-wrap items-center justify-between gap-1.5 p-1 sm:p-0">
+          <div className="flex items-center min-w-0">
             {/* Sheet Tab */}
-            <div className="px-4 py-2 bg-sheet border-r border-rule border-b-2 border-b-ink font-bold text-xs sm:text-sm text-pencil shadow-sm">
+            <div className="px-3 sm:px-4 py-2 bg-sheet border-r border-rule border-b-2 border-b-ink font-bold text-xs sm:text-sm text-pencil shadow-sm truncate max-w-[140px] sm:max-w-none">
               {formattedDate}
             </div>
 
@@ -332,7 +338,7 @@ export function ReviewSheet({
             <button
               type="button"
               onClick={handleAddRow}
-              className="px-3.5 py-2 min-h-[44px] text-xs font-bold text-ink hover:bg-paper/80 flex items-center gap-1.5 transition-colors cursor-pointer border-r border-rule"
+              className="px-3 sm:px-3.5 py-2 min-h-[44px] text-xs font-bold text-ink hover:bg-paper/80 flex items-center gap-1.5 transition-colors cursor-pointer border-r border-rule flex-shrink-0"
             >
               <Plus className="w-4 h-4" />
               <span>Insert Row</span>
@@ -340,7 +346,7 @@ export function ReviewSheet({
           </div>
 
           {/* Right Summary Info */}
-          <div className="px-4 py-2 text-xs text-muted font-sans font-medium">
+          <div className="px-3 sm:px-4 py-2 text-xs text-muted font-sans font-medium whitespace-nowrap">
             {entries.length} {entries.length === 1 ? "row" : "rows"} &bull; Total: ₱
             {totals.computedTotal.toFixed(2)}
           </div>
