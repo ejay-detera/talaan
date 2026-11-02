@@ -1,5 +1,5 @@
 // impeccable-disable design-system-font-size -- decorative miniature paper mockup props
-import { AlertTriangle, CheckCircle2, ShieldCheck } from "lucide-react";
+import { AlertTriangle, CheckCircle2 } from "lucide-react";
 import { Amount } from "@/components/shared/Amount";
 import {
   LANDING_SAMPLE_WRITTEN_TOTAL,
@@ -178,17 +178,6 @@ export function PaperMockupShowcase() {
             <span className="text-muted block text-sm">Computed Total</span>
             <span className="font-bold text-paid text-sm tabular-nums">
               <Amount amount={totals.computedTotal} />
-            </span>
-          </div>
-        </div>
-
-        {/* Discrepancy Signal Pill */}
-        <div className="flex items-center gap-2 px-3 py-2 rounded-row bg-sheet border border-margin/40 text-xs text-margin font-sans font-semibold shadow-xs">
-          <ShieldCheck className="w-4 h-4 text-paid flex-shrink-0" />
-          <div className="flex flex-col sm:flex-row sm:items-center sm:gap-1.5">
-            <span className="text-pencil font-bold">₱10.00 Overcharge Caught</span>
-            <span className="text-muted text-sm font-normal">
-              (Fixed before DB update)
             </span>
           </div>
         </div>
