@@ -16,7 +16,7 @@ const NAV_ITEMS: GooeyNavItem[] = [
 ];
 
 export function Navbar({}: NavbarProps) {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(-1);
   const isAnimatingRef = useRef(false);
   const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -35,14 +35,8 @@ export function Navbar({}: NavbarProps) {
         return;
       }
 
-      // 2. Detect page top / hero
-      if (scrollY < 120) {
-        setActiveIndex(0);
-        return;
-      }
-
-      // 3. Dynamically map sections by actual physical DOM offsetTop
-      const readingLine = scrollY + 200;
+      // 2. Dynamically map sections by actual physical DOM offsetTop
+      const readingLine = scrollY + windowHeight * 0.45;
       const sections = NAV_ITEMS.map((item, idx) => {
         const id = item.href?.startsWith("#") ? item.href.slice(1) : null;
         const el = id ? document.getElementById(id) : null;
@@ -56,14 +50,20 @@ export function Navbar({}: NavbarProps) {
       // Sort ascending by DOM top
       sections.sort((a, b) => a.top - b.top);
 
+      // If before first section (i.e. in the Hero), no nav item is active
+      if (sections.length > 0 && readingLine < sections[0].top) {
+        setActiveIndex(-1);
+        return;
+      }
+
       for (let i = sections.length - 1; i >= 0; i--) {
-        if (readingLine >= sections[i].top - 50) {
+        if (readingLine >= sections[i].top) {
           setActiveIndex(sections[i].index);
           return;
         }
       }
 
-      setActiveIndex(0);
+      setActiveIndex(-1);
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -101,11 +101,11 @@ export function Navbar({}: NavbarProps) {
         ).__lenis;
 
         if (lenis) {
-          lenis.scrollTo(target, { offset: -88, duration: 0.8 });
+          lenis.scrollTo(target, { offset: 0, duration: 0.8 });
         } else {
           const targetY = Math.max(
             0,
-            target.getBoundingClientRect().top + window.scrollY - 88
+            target.getBoundingClientRect().top + window.scrollY
           );
           window.scrollTo({ top: targetY, behavior: "smooth" });
         }
@@ -129,16 +129,16 @@ export function Navbar({}: NavbarProps) {
   };
 
   return (
-    <div className="fixed top-2.5 sm:top-4 inset-x-0 z-40 flex justify-center items-center px-2 sm:px-4 pointer-events-none">
+    <div className="fixed top-2 sm:top-4 inset-x-0 z-40 flex justify-center items-center px-1.5 sm:px-4 pointer-events-none">
       {/* Floating Center Dock with GooeyNav */}
-      <header className="pointer-events-auto flex items-center gap-1.5 sm:gap-2.5 p-1.5 sm:p-2 pl-2 sm:pl-3 rounded-sheet bg-sheet border border-rule shadow-paper-lg transition-all duration-300 max-w-[calc(100vw-16px)]">
+      <header className="pointer-events-auto flex items-center gap-1 sm:gap-3 p-1.5 sm:p-2.5 pl-2 sm:pl-3.5 pr-1.5 sm:pr-2.5 rounded-sheet bg-sheet border border-rule shadow-paper-lg transition-all duration-300 max-w-[calc(100vw-12px)]">
         {/* Placement Icon & Brand */}
         <Link
           href="#hero"
           onClick={(e) => {
             e.preventDefault();
             isAnimatingRef.current = true;
-            setActiveIndex(0);
+            setActiveIndex(-1);
             if (scrollTimeoutRef.current) {
               clearTimeout(scrollTimeoutRef.current);
             }
@@ -162,30 +162,30 @@ export function Navbar({}: NavbarProps) {
 
             scrollTimeoutRef.current = setTimeout(() => {
               isAnimatingRef.current = false;
-              setActiveIndex(0);
+              setActiveIndex(-1);
               window.history.pushState(null, "", "#hero");
             }, 850);
           }}
-          className="flex items-center gap-1.5 sm:gap-2 p-1 pr-1.5 sm:pr-2.5 rounded-full hover:bg-paper transition-all select-none group active:scale-[0.98] flex-shrink-0"
+          className="flex items-center gap-1.5 sm:gap-2 p-0.5 sm:p-1 pr-1 sm:pr-2.5 rounded-full hover:bg-paper transition-all select-none group active:scale-[0.98] flex-shrink-0"
           title="Talaan - Back to top"
         >
           <Image
             src="/assets/talaan-icon.png"
             alt="Talaan logo"
-            width={28}
-            height={28}
-            className="flex-shrink-0 object-contain transition-transform duration-200 group-hover:scale-105"
+            width={32}
+            height={32}
+            className="w-6 h-6 sm:w-8 sm:h-8 flex-shrink-0 object-contain transition-transform duration-200 group-hover:scale-105"
           />
-          <span className="font-display font-black text-sm tracking-tight text-pencil hidden md:inline">
+          <span className="font-display font-black text-base tracking-tight text-pencil hidden sm:inline">
             Talaan
           </span>
         </Link>
 
         {/* Divider */}
-        <div className="h-5 sm:h-6 w-[1px] bg-rule flex-shrink-0" />
+        <div className="h-4 sm:h-7 w-[1px] bg-rule flex-shrink-0" />
 
         {/* Centered Gooey Nav Component */}
-        <div className="flex items-center min-w-0">
+        <div className="flex items-center flex-shrink-0">
           <GooeyNav
             items={NAV_ITEMS}
             activeIndex={activeIndex}
@@ -194,9 +194,9 @@ export function Navbar({}: NavbarProps) {
             color="#1E3FAE"
             activeTextColor="#FFFFFF"
             colors={["#1E3FAE", "#2550D8", "#1A3694"]}
-            size="sm"
+            size="md"
             frame={false}
-            particleCount={12}
+            particleCount={14}
             animationTime={420}
             spread={45}
             gooeyness={0.5}
@@ -206,13 +206,13 @@ export function Navbar({}: NavbarProps) {
         </div>
 
         {/* Divider */}
-        <div className="h-5 sm:h-6 w-[1px] bg-rule flex-shrink-0" />
+        <div className="h-4 sm:h-7 w-[1px] bg-rule flex-shrink-0" />
 
         {/* Direct Action Link */}
-        <div className="flex items-center pr-1 sm:pr-1.5 flex-shrink-0">
+        <div className="flex items-center pr-0.5 sm:pr-1.5 flex-shrink-0">
           <Link
             href="/login?mode=signin"
-            className="px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full text-xs sm:text-sm font-semibold text-pencil hover:text-ink hover:bg-paper transition-all active:scale-[0.98] select-none whitespace-nowrap"
+            className="px-2.5 sm:px-4 py-1 sm:py-2 rounded-full text-xs sm:text-sm font-bold text-pencil hover:text-ink hover:bg-paper transition-all active:scale-[0.98] select-none whitespace-nowrap"
           >
             Sign In
           </Link>

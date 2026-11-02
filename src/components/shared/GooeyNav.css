@@ -11,6 +11,18 @@
   line-height: 1.2;
 }
 
+@media (max-width: 640px) {
+  .gooey-nav,
+  .gooey-nav--md,
+  .gooey-nav--sm {
+    --gn-pad: 2px;
+    --gn-gap: 2px;
+    --gn-font: 11px;
+    --gn-x: 8px;
+    --gn-y: 5px;
+  }
+}
+
 .gooey-nav--sm {
   --gn-pad: 3px;
   --gn-gap: 2px;

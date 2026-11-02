@@ -1,82 +1,87 @@
-import { Camera, Calculator, CheckSquare } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ShieldCheck, MessageSquare, ShoppingCart } from "lucide-react";
 
 export function FeaturesSection() {
-  const steps = [
+  const features = [
     {
-      step: "01",
-      icon: Camera,
-      title: "1. Capture & Vision Extraction",
-      subtitle: "Direct From Notebook Photos",
+      icon: ShieldCheck,
+      tag: "Prepare → Confirm",
+      title: "Two-Phase Sovereign Bookkeeping",
       description:
-        "Snap a photo of your counter notebook. The vision model extracts customer names, items, and handwritten amounts directly from the page without altering or fabricating numbers.",
+        "The AI vision model only drafts counter entries; it never directly touches customer ledger balances. You hold sovereign final approval on every row before transactions commit to your database.",
     },
     {
-      step: "02",
-      icon: Calculator,
-      title: "2. Deterministic Centavo Math",
-      subtitle: "Zero LLM Arithmetic • Fail-Closed Code",
+      icon: MessageSquare,
+      tag: "Customer Goodwill",
+      title: "Polite Taglish Payment Reminders",
       description:
-        "Strict TypeScript code calculates item totals (quantity × unit price) and reconciles page sums in integer centavos. Any discrepancy is flagged with a red margin indicator before saving.",
+        "Generate respectful, culturally courteous reminder drafts in authentic Filipino Taglish. Clear on exact balances and items, without uncomfortable confrontations that risk customer relationships.",
     },
     {
-      step: "03",
-      icon: CheckSquare,
-      title: "3. Human Confirm & Polite Reminders",
-      subtitle: "Storekeeper Keeps Sovereign Authority",
+      icon: ShoppingCart,
+      tag: "Inventory Liquidity",
+      title: "Pamalengke Restock Checklist",
       description:
-        "You review marked rows and approve final balances. Once confirmed, generate respectful Taglish payment reminders with one tap to share via SMS or messaging apps.",
+        "Talaan automatically compiles your most frequently credited goods into a market restock checklist. Know exactly what your community is consuming before the wet market opens.",
     },
   ];
 
   return (
-    <section id="how-it-works" className="w-full py-14 sm:py-20 border-t border-rule bg-paper scroll-mt-20">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-10 sm:space-y-14">
-        <div className="text-center max-w-2xl mx-auto space-y-3">
+    <section id="features" className="min-h-[100dvh] w-full py-16 sm:py-24 border-t border-rule bg-sheet scroll-mt-0 flex flex-col justify-center">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-12 sm:space-y-16 w-full">
+        {/* Section Header */}
+        <div className="text-center max-w-2xl mx-auto space-y-2.5">
           <h2 className="font-display font-bold text-2xl sm:text-4xl text-pencil tracking-tight">
-            How Talaan keeps your counter habit honest
+            Built specifically for Philippine counter commerce
           </h2>
           <p className="text-sm sm:text-base text-muted font-sans leading-relaxed">
-            Never replace your trusted paper notebook. Talaan bridges handwritten counter notes
-            to verified digital records with deterministic math.
+            Everything needed to manage store credit, eliminate arithmetic loss, and protect customer goodwill.
           </p>
         </div>
 
+        {/* 3 Equal Feature Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-          {steps.map((item) => {
+          {features.map((item, idx) => {
             const Icon = item.icon;
             return (
-              <Card
-                key={item.step}
-                className="group relative bg-sheet border border-rule rounded-sheet shadow-paper hover:shadow-paper-lg hover:border-ink/40 hover:-translate-y-1.5 transition-all duration-300 ease-out cursor-default overflow-hidden"
+              <div
+                key={idx}
+                className="group relative bg-paper/60 border border-rule rounded-sheet p-6 sm:p-8 shadow-paper hover:shadow-paper-lg hover:border-ink/40 hover:-translate-y-1 transition-all duration-300 ease-out flex flex-col justify-between"
               >
-                {/* Subtle top indicator on hover */}
-                <div className="absolute top-0 inset-x-0 h-1 bg-ink opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
-                <CardHeader className="p-6 sm:p-7 pb-3">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="w-11 h-11 rounded-row bg-paper border border-rule flex items-center justify-center text-ink group-hover:bg-ink group-hover:text-sheet group-hover:border-ink transition-all duration-300 shadow-xs group-hover:scale-105">
-                      <Icon className="w-5 h-5 transition-transform duration-300" />
+                <div className="space-y-4">
+                  {/* Icon & Category Tag */}
+                  <div className="flex items-center justify-between">
+                    <div className="w-11 h-11 rounded-row bg-sheet border border-rule flex items-center justify-center text-ink group-hover:bg-ink group-hover:text-sheet group-hover:border-ink transition-colors duration-200 shadow-xs">
+                      <Icon className="w-5 h-5" />
                     </div>
-                    <span className="font-display font-black text-2xl text-muted group-hover:text-ink transition-colors duration-300 select-none">
-                      {item.step}
+                    <span className="text-[11px] font-bold text-muted uppercase tracking-wider font-sans group-hover:text-ink transition-colors duration-150">
+                      {item.tag}
                     </span>
                   </div>
-                  <CardTitle className="text-lg sm:text-xl font-display font-bold text-pencil group-hover:text-ink transition-colors duration-200">
+
+                  {/* Title */}
+                  <h3 className="font-display font-bold text-lg sm:text-xl text-pencil tracking-tight group-hover:text-ink transition-colors duration-150">
                     {item.title}
-                  </CardTitle>
-                  <p className="text-xs font-semibold text-muted font-sans mt-1">
-                    {item.subtitle}
-                  </p>
-                </CardHeader>
-                <CardContent className="p-6 sm:p-7 pt-2">
+                  </h3>
+
+                  {/* Description */}
                   <p className="text-xs sm:text-sm text-pencil/80 font-sans leading-relaxed">
                     {item.description}
                   </p>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             );
           })}
+        </div>
+
+        {/* Sovereign Ledger Guarantee Trust Banner */}
+        <div className="max-w-4xl mx-auto p-6 sm:p-8 rounded-sheet bg-paper border border-rule text-center space-y-2 shadow-xs">
+          <h3 className="font-display font-bold text-base sm:text-lg text-pencil">
+            Sovereign Ledger Guarantee
+          </h3>
+          <p className="text-xs sm:text-sm text-muted font-sans max-w-2xl mx-auto leading-relaxed">
+            No automatic customer SMS blasts without your tap. No cloud fee surprise on open-weights inference.
+            Every total is calculated in TypeScript integer centavos with zero LLM arithmetic.
+          </p>
         </div>
       </div>
     </section>
