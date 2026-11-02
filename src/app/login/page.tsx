@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
-import { useRouter } from "next/navigation";
+import React, { useState, useEffect, useRef, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -22,16 +22,22 @@ import { Button } from "@/components/ui/button";
 
 type AuthMode = "signin" | "signup" | "otp" | "forgot";
 
-export default function LoginPage() {
+function LoginForm({
+  initialMode = "signin",
+  initialError = null,
+}: {
+  initialMode?: AuthMode;
+  initialError?: string | null;
+}) {
   const router = useRouter();
-  const [mode, setMode] = useState<AuthMode>("signin");
+  const [mode, setMode] = useState<AuthMode>(initialMode);
 
   // Form states
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(initialError);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   // OTP state
@@ -452,6 +458,30 @@ export default function LoginPage() {
                       <span>Sign In</span>
                     )}
                   </Button>
+
+                  <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-3 text-xs font-sans border-t border-rule/60">
+                    <Link
+                      href="/"
+                      className="inline-flex items-center gap-1.5 text-muted hover:text-pencil font-semibold transition-colors order-2 sm:order-1"
+                    >
+                      <ArrowLeft className="w-3.5 h-3.5" />
+                      <span>Back to Home</span>
+                    </Link>
+                    <div className="order-1 sm:order-2">
+                      <span className="text-muted">No account yet? </span>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setMode("signup");
+                          setErrorMessage(null);
+                          setSuccessMessage(null);
+                        }}
+                        className="font-bold text-ink hover:underline cursor-pointer"
+                      >
+                        Create Account
+                      </button>
+                    </div>
+                  </div>
                 </form>
               )}
 
@@ -526,6 +556,30 @@ export default function LoginPage() {
                       </span>
                     )}
                   </Button>
+
+                  <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-3 text-xs font-sans border-t border-rule/60">
+                    <Link
+                      href="/"
+                      className="inline-flex items-center gap-1.5 text-muted hover:text-pencil font-semibold transition-colors order-2 sm:order-1"
+                    >
+                      <ArrowLeft className="w-3.5 h-3.5" />
+                      <span>Back to Home</span>
+                    </Link>
+                    <div className="order-1 sm:order-2">
+                      <span className="text-muted">Already registered? </span>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setMode("signin");
+                          setErrorMessage(null);
+                          setSuccessMessage(null);
+                        }}
+                        className="font-bold text-ink hover:underline cursor-pointer"
+                      >
+                        Sign In
+                      </button>
+                    </div>
+                  </div>
                 </form>
               )}
 
@@ -597,6 +651,28 @@ export default function LoginPage() {
                       Change email
                     </button>
                   </div>
+
+                  <div className="flex items-center justify-between pt-3 text-xs font-sans border-t border-rule/60">
+                    <Link
+                      href="/"
+                      className="inline-flex items-center gap-1.5 text-muted hover:text-pencil font-semibold transition-colors"
+                    >
+                      <ArrowLeft className="w-3.5 h-3.5" />
+                      <span>Back to Home</span>
+                    </Link>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setMode("signin");
+                        setErrorMessage(null);
+                        setSuccessMessage(null);
+                      }}
+                      className="font-bold text-ink hover:underline cursor-pointer flex items-center gap-1"
+                    >
+                      <ArrowLeft className="w-3.5 h-3.5" />
+                      <span>Back to Sign In</span>
+                    </button>
+                  </div>
                 </div>
               )}
 
@@ -641,7 +717,14 @@ export default function LoginPage() {
                     )}
                   </Button>
 
-                  <div className="text-center pt-2">
+                  <div className="flex items-center justify-between pt-3 text-xs font-sans border-t border-rule/60">
+                    <Link
+                      href="/"
+                      className="inline-flex items-center gap-1.5 text-muted hover:text-pencil font-semibold transition-colors"
+                    >
+                      <ArrowLeft className="w-3.5 h-3.5" />
+                      <span>Back to Home</span>
+                    </Link>
                     <button
                       type="button"
                       onClick={() => {
@@ -649,9 +732,10 @@ export default function LoginPage() {
                         setErrorMessage(null);
                         setSuccessMessage(null);
                       }}
-                      className="text-xs font-semibold text-ink hover:underline cursor-pointer"
+                      className="font-bold text-ink hover:underline cursor-pointer flex items-center gap-1"
                     >
-                      Back to Sign In
+                      <ArrowLeft className="w-3.5 h-3.5" />
+                      <span>Back to Sign In</span>
                     </button>
                   </div>
                 </form>
@@ -745,5 +829,32 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+function LoginPageContent() {
+  const searchParams = useSearchParams();
+  const rawMode = searchParams.get("mode");
+  const modeKey = rawMode || "default";
+  const initialMode =
+    rawMode === "signin" || rawMode === "signup" || rawMode === "forgot" || rawMode === "otp"
+      ? (rawMode as AuthMode)
+      : "signin";
+  const initialError = searchParams.get("error");
+
+  return <LoginForm key={modeKey} initialMode={initialMode} initialError={initialError} />;
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-paper">
+          <Loader2 className="w-8 h-8 animate-spin text-ink" />
+        </div>
+      }
+    >
+      <LoginPageContent />
+    </Suspense>
   );
 }
