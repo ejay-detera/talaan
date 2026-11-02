@@ -40,8 +40,8 @@ function LoginForm({
   const [errorMessage, setErrorMessage] = useState<string | null>(initialError);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-  // OTP state
-  const [otpDigits, setOtpDigits] = useState<string[]>(["", "", "", "", "", ""]);
+  // OTP state (supports 8-digit and 6-digit codes)
+  const [otpDigits, setOtpDigits] = useState<string[]>(Array(8).fill(""));
   const [resendCooldown, setResendCooldown] = useState(0);
   const otpInputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
@@ -80,7 +80,7 @@ function LoginForm({
       if (error) {
         if (error.message.toLowerCase().includes("email not confirmed")) {
           setErrorMessage(
-            "Email not yet confirmed. Please check your inbox for the 6-digit verification code or click 'Create Account' to resend."
+            "Email not yet confirmed. Please check your inbox for the verification code or click 'Create Account' to resend."
           );
         } else {
           setErrorMessage(error.message);
@@ -118,8 +118,8 @@ function LoginForm({
       } else {
         setMode("otp");
         setResendCooldown(60);
-        setOtpDigits(["", "", "", "", "", ""]);
-        setSuccessMessage(`A 6-digit code has been sent to ${email.trim()}.`);
+        setOtpDigits(Array(8).fill(""));
+        setSuccessMessage(`A verification code has been sent to ${email.trim()}.`);
       }
     } catch {
       setErrorMessage("Unable to initiate account creation. Please retry.");
@@ -128,14 +128,14 @@ function LoginForm({
     }
   };
 
-  // Verify 6-Digit OTP Code
+  // Verify OTP Code (supports 8-digit and 6-digit codes)
   const handleVerifyOtp = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     setErrorMessage(null);
 
     const token = otpDigits.join("").trim();
-    if (token.length !== 6) {
-      setErrorMessage("Please enter all 6 digits of the verification code.");
+    if (token.length !== 8 && token.length !== 6) {
+      setErrorMessage("Please enter the verification code sent to your email.");
       return;
     }
 
@@ -233,15 +233,15 @@ function LoginForm({
   const handleOtpChange = (index: number, val: string) => {
     const digit = val.replace(/\D/g, "");
 
-    // Handle multi-character paste (e.g. user pastes 6 digits)
+    // Handle multi-character paste (e.g. user pastes 8 or 6 digits)
     if (digit.length > 1) {
-      const pasted = digit.slice(0, 6).split("");
-      const nextDigits = [...otpDigits];
-      for (let i = 0; i < 6; i++) {
+      const pasted = digit.slice(0, 8).split("");
+      const nextDigits = Array(8).fill("");
+      for (let i = 0; i < 8; i++) {
         nextDigits[i] = pasted[i] || "";
       }
       setOtpDigits(nextDigits);
-      const nextFocus = Math.min(pasted.length, 5);
+      const nextFocus = Math.min(pasted.length, 7);
       otpInputRefs.current[nextFocus]?.focus();
       return;
     }
@@ -250,7 +250,7 @@ function LoginForm({
     nextDigits[index] = digit;
     setOtpDigits(nextDigits);
 
-    if (digit && index < 5) {
+    if (digit && index < 7) {
       otpInputRefs.current[index + 1]?.focus();
     }
   };
@@ -341,16 +341,16 @@ function LoginForm({
                     : mode === "signup"
                     ? "Register your store"
                     : mode === "otp"
-                    ? "Enter 6-digit code"
+                    ? "Enter verification code"
                     : "Reset your password"}
                 </h1>
                 <p className="text-xs sm:text-sm text-muted leading-relaxed font-sans">
                   {mode === "signin"
                     ? "Sign in with your store credentials to access your ledger."
                     : mode === "signup"
-                    ? "Create an account. A 6-digit verification code will be sent to your email."
+                    ? "Create an account. A verification code will be sent to your email."
                     : mode === "otp"
-                    ? `Enter the 6-digit code sent to ${email} to activate your store.`
+                    ? `Enter the verification code sent to ${email} to activate your store.`
                     : "Enter your store email to receive a password reset link."}
                 </p>
               </div>
@@ -583,11 +583,11 @@ function LoginForm({
                 </form>
               )}
 
-              {/* 3. 6-DIGIT OTP VERIFICATION VIEW */}
+              {/* 3. OTP VERIFICATION VIEW */}
               {mode === "otp" && (
                 <div className="space-y-5 pt-2 animate-in fade-in duration-200">
-                  {/* 6 Digit Input Cells */}
-                  <div className="flex items-center justify-between gap-2 max-w-xs mx-auto">
+                  {/* 8 Digit Input Cells */}
+                  <div className="flex items-center justify-center gap-1.5 sm:gap-2 max-w-sm mx-auto">
                     {otpDigits.map((digit, idx) => (
                       <input
                         key={idx}
@@ -596,11 +596,12 @@ function LoginForm({
                         }}
                         type="text"
                         inputMode="numeric"
-                        maxLength={6}
+                        autoComplete="one-time-code"
+                        maxLength={8}
                         value={digit}
                         onChange={(e) => handleOtpChange(idx, e.target.value)}
                         onKeyDown={(e) => handleOtpKeyDown(idx, e)}
-                        className="w-11 h-13 text-center font-display font-bold text-xl text-pencil bg-[#FFFEF8] border border-rule rounded-row focus:border-ink focus:ring-2 focus:ring-ink/20 outline-none transition-all shadow-xs"
+                        className="w-8 sm:w-10 h-11 sm:h-12 text-center font-display font-bold text-base sm:text-xl text-pencil bg-[#FFFEF8] border border-rule rounded-row focus:border-ink focus:ring-2 focus:ring-ink/20 outline-none transition-all shadow-xs"
                       />
                     ))}
                   </div>
@@ -610,7 +611,10 @@ function LoginForm({
                     type="button"
                     size="lg"
                     onClick={() => handleVerifyOtp()}
-                    disabled={loading || otpDigits.join("").length !== 6}
+                    disabled={
+                      loading ||
+                      (otpDigits.join("").length !== 8 && otpDigits.join("").length !== 6)
+                    }
                     className="w-full shadow-paper min-h-[48px] text-sm font-bold"
                   >
                     {loading ? (
