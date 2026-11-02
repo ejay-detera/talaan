@@ -1,9 +1,7 @@
-// impeccable-disable side-tab -- intentional red margin line per docs/design.md
 "use client";
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { ShieldCheck } from "lucide-react";
 
 const STEPS = [
   { label: "Opening counter listahan...", percent: 25 },
@@ -37,62 +35,52 @@ export function InitialLoader() {
 
   return (
     <div
-      className={`fixed inset-0 z-50 flex items-center justify-center p-4 bg-paper/90 text-pencil font-sans selection:bg-marker transition-all duration-250 pointer-events-none ${
+      className={`fixed inset-0 z-50 flex items-center justify-center p-4 bg-paper/85 text-pencil font-sans selection:bg-marker backdrop-blur-[2px] transition-all duration-250 pointer-events-none ${
         fadeOut ? "opacity-0 invisible scale-[0.98]" : "opacity-100 scale-100"
       }`}
       aria-hidden="true"
     >
-      {/* Sovereign Notebook Loading Slip */}
-      <div className="relative w-full max-w-[360px] bg-sheet border border-rule border-l-4 border-l-margin rounded-sheet shadow-paper-lg p-6 sm:p-7 select-none overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-        {/* Binder Edge Holes */}
-        <div className="flex items-center justify-between pb-3 mb-4 border-b border-rule">
-          <div className="flex items-center gap-1.5" aria-hidden="true">
-            <span className="w-2 h-2 rounded-full bg-paper border border-[#C5D0B4]" />
-            <span className="w-2 h-2 rounded-full bg-paper border border-[#C5D0B4]" />
-            <span className="w-2 h-2 rounded-full bg-paper border border-[#C5D0B4]" />
-          </div>
-          <span className="text-xs font-bold uppercase tracking-wider text-muted font-sans">
-            Counter Ledger
+      {/* Pinned Sticky Notepad Loader */}
+      <div className="relative w-full max-w-[340px] bg-[#FFF9D2] border border-[#EADB85] rounded-row p-5 sm:p-6 shadow-sticky select-none animate-in fade-in zoom-in-95 duration-200 transform -rotate-1">
+        {/* Physical Pushpin Graphic */}
+        <div
+          className="absolute -top-3 left-1/2 -translate-x-1/2 w-6 h-6 flex items-center justify-center pointer-events-none"
+          aria-hidden="true"
+        >
+          <span className="w-4 h-4 rounded-full bg-margin border border-[#9A1F1E] shadow-sm block relative">
+            <span className="w-1.5 h-1.5 rounded-full bg-white/70 absolute top-0.5 left-0.5" />
           </span>
         </div>
 
-        {/* Brand Header */}
-        <div className="flex items-center gap-3 pb-4">
-          <Image
-            src="/assets/talaan-icon.png"
-            alt="Talaan logo"
-            width={40}
-            height={40}
-            className="flex-shrink-0 object-contain transition-transform duration-300"
-          />
-          <div>
-            <h2 className="font-display font-black text-xl text-pencil leading-tight tracking-tight">
+        {/* Notepad Header */}
+        <div className="flex items-center justify-between pb-3 border-b border-[#EADB85]/70">
+          <div className="flex items-center gap-2">
+            <Image
+              src="/assets/talaan-icon.png"
+              alt="Talaan logo"
+              width={26}
+              height={26}
+              className="flex-shrink-0 object-contain"
+            />
+            <span className="font-display font-black text-sm text-[#383318] tracking-tight">
               Talaan
-            </h2>
-            <p className="text-xs text-muted font-sans font-medium">
-              Two-Phase Store Bookkeeping
-            </p>
+            </span>
           </div>
+          <span className="text-[11px] font-sans font-semibold text-[#6E5D1E] uppercase tracking-wider">
+            Counter Memo
+          </span>
         </div>
 
-        {/* Ruled Notebook Rows ("Lines being written" animation per paper-motion.md §3e) */}
-        <div className="space-y-3 py-3 border-t border-b border-rule/60">
-          {[100, 82, 91, 60].map((w, i) => (
-            <div key={i} className="h-4 border-b border-rule/30 flex items-center">
-              <div
-                className="h-2 origin-left rounded-sm bg-rule"
-                style={{
-                  width: `${w}%`,
-                  animation: `write-line 700ms var(--ease-paper) ${i * 90}ms infinite alternate`,
-                }}
-              />
-            </div>
-          ))}
+        {/* Handwritten Memo Body */}
+        <div className="py-3">
+          <p className="font-hand text-xl text-[#383318] leading-tight">
+            &ldquo;Sulat pa rin sa papel &bull; Talaan ang bahala sa kuwenta.&rdquo;
+          </p>
         </div>
 
-        {/* Dynamic Progress Bar */}
-        <div className="space-y-2 pt-4">
-          <div className="h-1.5 w-full bg-rule/60 rounded-xs overflow-hidden relative">
+        {/* Loading Bar & Dynamic Step Label Below */}
+        <div className="pt-2 border-t border-[#EADB85]/70 space-y-2">
+          <div className="h-1.5 w-full bg-[#EADB85] rounded-xs overflow-hidden relative">
             <div
               className="h-full bg-ink rounded-xs transition-all duration-300 ease-out"
               style={{
@@ -101,21 +89,13 @@ export function InitialLoader() {
             />
           </div>
 
-          <div className="flex items-center justify-between text-xs font-sans">
-            <span className="font-semibold text-pencil transition-all duration-200 truncate pr-2">
+          <div className="flex items-center justify-between text-xs font-sans text-[#6E5D1E]">
+            <span className="font-medium truncate pr-2">
               {STEPS[stepIndex].label}
             </span>
             <span className="tabular-nums font-bold text-ink shrink-0">
               {STEPS[stepIndex].percent}%
             </span>
-          </div>
-        </div>
-
-        {/* Verification Guarantee Stamp */}
-        <div className="pt-4 flex items-center justify-center">
-          <div className="inline-flex items-center gap-1.5 font-bold text-xs text-paid bg-paid/10 border border-paid/30 rounded-row px-2.5 py-1 select-none">
-            <ShieldCheck className="w-3.5 h-3.5" />
-            <span>Zero LLM Math &bull; Centavo Exact</span>
           </div>
         </div>
       </div>

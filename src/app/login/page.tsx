@@ -11,12 +11,12 @@ import {
   EyeOff,
   Lock,
   Mail,
-  ShieldCheck,
   Loader2,
   AlertCircle,
   RefreshCw,
   Send,
 } from "lucide-react";
+import { PinnedStickyNote } from "@/components/landing/FloatingWidgets";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 
@@ -750,40 +750,19 @@ function LoginForm({
 
           {/* Right Column: Physical Paper Sovereign Mockup */}
           <div className="lg:col-span-6 bg-paper/70 p-6 sm:p-8 flex flex-col justify-between items-center text-center border-t lg:border-t-0 lg:border-l border-rule relative overflow-hidden select-none">
-            {/* Top Customer Avatars */}
-            <div className="w-full flex items-center justify-between pt-2 px-2">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-sheet border border-rule flex items-center justify-center text-xs font-bold text-pencil shadow-xs">
-                  MJ
-                </div>
-                <span className="text-xs font-semibold text-pencil hidden sm:inline">
-                  Mang Jose
-                </span>
-              </div>
-
-              <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-row bg-sheet border border-rule text-sm font-semibold text-paid">
-                <ShieldCheck className="w-3.5 h-3.5" />
-                <span>Deterministic Math</span>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-semibold text-pencil hidden sm:inline">
-                  Ate Baby
-                </span>
-                <div className="w-8 h-8 rounded-full bg-sheet border border-rule flex items-center justify-center text-xs font-bold text-pencil shadow-xs">
-                  AB
-                </div>
-              </div>
+            {/* Notepad with Pin */}
+            <div className="pt-2 flex justify-center">
+              <PinnedStickyNote />
             </div>
 
             {/* Central Physical Notebook Mockup */}
-            <div className="my-6 w-full max-w-sm bg-sheet rounded-sheet border border-rule p-5 relative transform hover:scale-[1.02] transition-transform duration-300">
+            <div className="my-4 w-full max-w-sm bg-sheet rounded-sheet border border-rule p-5 relative shadow-paper select-none transform hover:scale-[1.01] transition-transform duration-300">
               {/* Binder Edge Holes */}
               <div className="flex items-center gap-1.5 mb-3 pb-2 border-b border-rule">
                 <span className="w-2 h-2 rounded-full bg-paper border border-rule" />
                 <span className="w-2 h-2 rounded-full bg-paper border border-rule" />
                 <span className="w-2 h-2 rounded-full bg-paper border border-rule" />
-                <span className="text-sm uppercase font-bold tracking-wider text-muted ml-1">
+                <span className="text-xs uppercase font-bold tracking-wider text-muted ml-1">
                   Counter Listahan &bull; Page 14
                 </span>
               </div>
@@ -808,14 +787,8 @@ function LoginForm({
               </div>
             </div>
 
-            {/* Bottom Tagline & Carousel Dots */}
-            <div className="w-full space-y-3 pb-2">
-              <div className="flex items-center justify-center gap-1.5" aria-hidden="true">
-                <span className="w-2 h-2 rounded-full bg-ink" />
-                <span className="w-2 h-2 rounded-full bg-rule" />
-                <span className="w-2 h-2 rounded-full bg-rule" />
-              </div>
-
+            {/* Bottom Tagline */}
+            <div className="w-full pb-2">
               <div className="space-y-1 max-w-xs mx-auto">
                 <h2 className="font-display font-bold text-base sm:text-lg text-pencil leading-tight">
                   Make your store bookkeeping easier and organized with Talaan

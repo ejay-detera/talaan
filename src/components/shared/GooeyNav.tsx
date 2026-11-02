@@ -263,7 +263,8 @@ export const GooeyNav: React.FC<GooeyNavProps> = ({
   style
 }) => {
   const [innerIndex, setInnerIndex] = useState(initialActiveIndex);
-  const current = Math.min(Math.max(0, activeIndex ?? innerIndex), Math.max(0, items.length - 1));
+  const rawIndex = activeIndex !== undefined ? activeIndex : innerIndex;
+  const current = rawIndex === -1 ? -1 : Math.min(Math.max(0, rawIndex ?? 0), Math.max(0, items.length - 1));
   const stageRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
@@ -531,13 +532,17 @@ export const GooeyNav: React.FC<GooeyNavProps> = ({
       if (settledPill) {
         const box = boxes[0];
         overlay.style.clipPath = `path('${pillPath(box.cx - box.hw, box.cy - box.hh, box.hw * 2, box.hh * 2)}')`;
-      } else {
+        overlay.style.visibility = 'visible';
+      } else if (boxes.length > 0 || blobs.length > 0) {
         overlay.style.clipPath = `path('${trace(boxes, blobs, smooth) || 'M0,0Z'}')`;
+        overlay.style.visibility = 'visible';
+      } else {
+        overlay.style.clipPath = 'none';
+        overlay.style.visibility = 'hidden';
       }
-      overlay.style.visibility = 'visible';
 
       if (!pipeline || !gl) {
-        const box = shape(target, 1);
+        const box = target >= 0 ? shape(target, 1) : null;
         if (box) {
           fallback.style.transform = `translate(${box.x.toFixed(2)}px, ${box.y.toFixed(2)}px)`;
           fallback.style.width = `${box.w}px`;
@@ -704,15 +709,21 @@ export const GooeyNav: React.FC<GooeyNavProps> = ({
       pills.clear();
       drops.length = 0;
       target = index;
-      const state = pill(index);
-      state.mass = 1;
-      state.scale = 1;
-      state.velocity = 0;
+      if (index >= 0) {
+        const state = pill(index);
+        state.mass = 1;
+        state.scale = 1;
+        state.velocity = 0;
+      }
       render();
     };
 
     const go = (index: number, animate: boolean) => {
       if (index === target) return;
+      if (index < 0) {
+        settle(-1);
+        return;
+      }
       if (!rects[index] || !animate || reduced || target < 0) {
         settle(index);
         return;
