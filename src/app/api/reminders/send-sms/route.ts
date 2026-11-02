@@ -5,7 +5,11 @@ import { sendCustomerSMS } from "@/lib/sms";
 
 const sendSmsSchema = z.object({
   customer_id: z.string().min(1, "Customer ID is required."),
-  message: z.string().trim().min(1, "Message content is required."),
+  message: z
+    .string()
+    .trim()
+    .min(1, "Message content is required.")
+    .max(160, "Message exceeds maximum length of 160 characters."),
 });
 
 export async function POST(request: Request) {
@@ -26,11 +30,13 @@ export async function POST(request: Request) {
     const parsed = sendSmsSchema.safeParse(body);
 
     if (!parsed.success) {
+      const firstErrorMessage =
+        parsed.error.issues?.[0]?.message || "Invalid request payload.";
       return NextResponse.json(
         {
           error: {
             code: "BAD_REQUEST",
-            message: "Invalid request payload.",
+            message: firstErrorMessage,
             details: parsed.error.format(),
           },
         },

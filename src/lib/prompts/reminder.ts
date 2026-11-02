@@ -13,20 +13,22 @@ RULES:
 3. Language:
    - Natural conversational Taglish as spoken in neighborhood sari-sari stores in the Philippines.
 4. Output:
-   - Call the draft_reminder tool with the drafted message and tone.`;
+   - Call the draft_reminder tool with the drafted message and tone.
+5. SMS Length Limit:
+   - The drafted message MUST be strictly 160 characters or fewer (including spaces and punctuation) so it fits in a single SMS message. Keep it concise.`;
 
 export const REMINDER_TOOLS: OpenAI.Chat.Completions.ChatCompletionTool[] = [
   {
     type: "function",
     function: {
       name: "draft_reminder",
-      description: "Generate a culturally calibrated Taglish payment reminder draft for a customer.",
+      description: "Generate a culturally calibrated Taglish payment reminder draft for a customer (strictly 160 characters or fewer for SMS).",
       parameters: {
         type: "object",
         properties: {
           message: {
             type: "string",
-            description: "The drafted Taglish reminder message ready to copy or share via SMS/Messenger.",
+            description: "The drafted Taglish reminder message ready to copy or share via SMS/Messenger (strictly 160 characters or fewer).",
           },
           tone: {
             type: "string",

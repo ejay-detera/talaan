@@ -118,5 +118,29 @@ describe("POST /api/reminders/send-sms", () => {
       message: "Paalala sa utang: ₱50.00",
     });
   });
+
+  it("returns 400 if message exceeds 160 characters", async () => {
+    mockGetUser.mockResolvedValueOnce({
+      data: { user: { id: "user-1" } },
+      error: null,
+    });
+
+    const longMessage = "A".repeat(161);
+    const req = new Request("http://localhost/api/reminders/send-sms", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        customer_id: validCustomerId,
+        message: longMessage,
+      }),
+    });
+
+    const res = await POST(req);
+    expect(res.status).toBe(400);
+    const body = await res.json();
+    expect(body.error.code).toBe("BAD_REQUEST");
+    expect(body.error.message).toContain("160");
+    expect(mockSendCustomerSMS).not.toHaveBeenCalled();
+  });
 });
 

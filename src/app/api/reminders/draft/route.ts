@@ -95,10 +95,11 @@ export async function POST(request: NextRequest) {
       .slice(-5) // cite most recent items
       .join(", ");
 
-    const userPrompt = `Draft a ${tone} Taglish payment reminder for customer '${customer.name}'.
+    const userPrompt = `Draft a concise ${tone} Taglish payment reminder for customer '${customer.name}'.
 Outstanding balance: ₱${balanceInfo.balance.toFixed(2)}
 Recent unpaid purchases: ${unpaidItems || "listahan sa tindahan"}
-Target tone: ${tone === "friendly" ? "friendly (Malumanay / Polite & Friendly)" : "firm (Pormal / Direct & Respectful)"}`;
+Target tone: ${tone === "friendly" ? "friendly (Malumanay / Polite & Friendly)" : "firm (Pormal / Direct & Respectful)"}
+SMS Limit: The message MUST be strictly 160 characters or fewer.`;
 
     // 7. Call model via unified client with resilient fallback
     let draftedMessage = "";
@@ -139,12 +140,12 @@ Target tone: ${tone === "friendly" ? "friendly (Malumanay / Polite & Friendly)" 
       // Fallback to culturally calibrated template if model call or client init fails
       draftedMessage =
         tone === "friendly"
-          ? `Magandang araw po ${customer.name}! Paalala lang po sa inyong listahan sa tindahan, bale ₱${balanceInfo.balance.toFixed(2)} po lahat. Maraming salamat po!`
-          : `Magandang araw po ${customer.name}. Paalala ukol sa inyong natitirang balanse sa tindahan na nagkakahalaga ng ₱${balanceInfo.balance.toFixed(2)}. Paki-update o paki-ayos po sa lalong madaling panahon. Salamat po.`;
+          ? `Magandang araw po ${customer.name}! Paalala lang po sa inyong listahan sa tindahan na ₱${balanceInfo.balance.toFixed(2)}. Salamat po!`
+          : `Magandang araw po ${customer.name}. Paalala ukol sa balanse na ₱${balanceInfo.balance.toFixed(2)} sa tindahan. Paki-settle po agad. Salamat!`;
     }
 
     if (!draftedMessage) {
-      draftedMessage = `Magandang araw po ${customer.name}! Paalala lang po sa inyong listahan sa tindahan, bale ₱${balanceInfo.balance.toFixed(2)} po lahat. Salamat po!`;
+      draftedMessage = `Magandang araw po ${customer.name}! Paalala lang po sa inyong listahan sa tindahan na ₱${balanceInfo.balance.toFixed(2)}. Salamat po!`;
     }
 
     // 8. Save draft to reminders table

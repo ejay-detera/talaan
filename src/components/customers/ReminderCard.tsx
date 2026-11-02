@@ -15,13 +15,13 @@ interface ReminderCardProps {
 
 function getDefaultDraft(name: string, bal: number, t: ReminderTone): string {
   if (t === "firm") {
-    return `Magandang araw po, ${name}. Nais ko lang pong ipaalala ang natitirang balanse na ₱${bal.toFixed(
+    return `Magandang araw po, ${name}. Paalala ukol sa balanse na ₱${bal.toFixed(
       2
-    )} sa tindahan. Paki-settle na lang po sa lalong madaling panahon. Maraming salamat po!`;
+    )} sa tindahan. Paki-settle po agad. Salamat!`;
   }
-  return `Magandang araw po, ${name}! Paalala lang po na may balanse po kayo na ₱${bal.toFixed(
+  return `Magandang araw po, ${name}! Paalala lang po sa balanse na ₱${bal.toFixed(
     2
-  )} sa tindahan. Kung may pagkakataon po, pwede po kayong dumaan. Maraming salamat po!`;
+  )} sa tindahan. Salamat po!`;
 }
 
 /**
@@ -125,6 +125,12 @@ export function ReminderCard({
 
   async function triggerSmsSend(targetPhone: string) {
     if (!message) return;
+    if (message.length > 160) {
+      setSmsError(
+        "Message exceeds maximum length of 160 characters. Please trim the message or open your phone's text app."
+      );
+      return;
+    }
     setIsSendingSms(true);
     setSmsError(null);
     setSmsSentSuccess(null);
@@ -248,12 +254,32 @@ export function ReminderCard({
 
         {/* Note Instruction & Ruled Handwriting Textarea */}
         <div className="space-y-1.5">
-          <label
-            htmlFor="reminder-draft-text"
-            className="block text-xs font-semibold text-[#6E5D1E] font-sans"
-          >
-            Click to edit message
-          </label>
+          <div className="flex items-center justify-between gap-2">
+            <label
+              htmlFor="reminder-draft-text"
+              className="block text-xs font-semibold text-[#6E5D1E] font-sans"
+            >
+              Click to edit message
+            </label>
+            <div className="flex items-center gap-2">
+              {message.length > 160 && (
+                <button
+                  type="button"
+                  onClick={() => setMessage(message.slice(0, 160))}
+                  className="text-[11px] font-bold text-margin hover:underline cursor-pointer font-sans"
+                >
+                  Trim to 160
+                </button>
+              )}
+              <span
+                className={`text-[11px] font-bold font-sans tabular-nums ${
+                  message.length > 160 ? "text-margin font-extrabold" : "text-[#6E5D1E]"
+                }`}
+              >
+                {message.length}/160
+              </span>
+            </div>
+          </div>
 
           <div className="relative">
             <textarea
@@ -329,8 +355,13 @@ export function ReminderCard({
             {/* Direct Send SMS Button */}
             <button
               type="button"
-              disabled={isSendingSms || !message}
+              disabled={isSendingSms || !message || message.length > 160}
               onClick={handleSendSmsClick}
+              title={
+                message.length > 160
+                  ? "Message exceeds 160 characters. Trim to send via SMS API."
+                  : undefined
+              }
               className="flex-1 sm:flex-initial h-[42px] px-4 rounded-row bg-[#1F7A4D] hover:bg-[#1A6841] active:scale-[0.98] text-xs font-bold text-sheet flex items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer font-sans disabled:opacity-50"
             >
               {isSendingSms ? (
