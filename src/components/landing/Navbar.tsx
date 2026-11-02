@@ -211,7 +211,7 @@ export function Navbar({}: NavbarProps) {
         {/* Direct Action Link */}
         <div className="flex items-center pr-1 sm:pr-1.5 flex-shrink-0">
           <Link
-            href="/login"
+            href="/login?mode=signin"
             className="px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full text-xs sm:text-sm font-semibold text-pencil hover:text-ink hover:bg-paper transition-all active:scale-[0.98] select-none whitespace-nowrap"
           >
             Sign In

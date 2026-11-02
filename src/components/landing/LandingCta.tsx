@@ -33,7 +33,7 @@ export async function LandingCta() {
   return (
     <div className="flex justify-center w-full">
       <Link
-        href="/login"
+        href="/login?mode=signin"
         className="inline-flex items-center justify-center gap-2.5 w-full sm:w-auto min-w-[240px] h-[56px] px-8 rounded-row bg-ink text-sheet text-base font-semibold shadow-paper hover:bg-ink/90 active:scale-[0.99] transition-all cursor-pointer select-none group paper-press"
       >
         <LogIn className="w-5 h-5" />
