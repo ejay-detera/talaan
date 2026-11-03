@@ -155,7 +155,7 @@ flowchart LR
   end
   subgraph s3 ["Sprint 3 (Nov 2–Nov 4)"]
     P7["⬜ TAL-07: 30+ Page Muse Glimmer Evaluation"]
-    P8["⬜ TAL-08: README, Polish & Demo Video"]
+    P8["✅ TAL-08: README, Polish & Demo Video"]
   end
   now --> s1 --> s2 --> s3
 ```

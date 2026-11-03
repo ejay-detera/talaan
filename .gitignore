@@ -39,3 +39,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# playwright-cli & demo recordings
+/.playwright-cli/
+/recordings/
+/scripts/generate-voiceover.mjs
+/scripts/preflight-demo.mjs
+/scripts/record-demo.js
+/scripts/mux-video.mjs
+

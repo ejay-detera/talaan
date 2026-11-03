@@ -190,7 +190,7 @@
 |---|---|
 | Priority | P1 |
 | Points | 3 |
-| Status | 🔄 In Progress (`impeccable` audit & `README.md` done; pending Nov 3 demo video) |
+| Status | ✅ Done (`impeccable` audit, `README.md`, and Nov 3 demo video + backup take recorded on Muse Glimmer) |
 | Developer | Dev Ejay |
 | Traces | BR-01..07 · US-01..08 · Manual Checklist (§6 of `test-plan.md`) |
 
@@ -199,7 +199,7 @@
 **Acceptance criteria:**
 - [x] Run `C:\Users\Detera\.agents\skills\impeccable\scripts\impeccable.cmd detect --json` over all built routes and fix any findings (0 findings across `src/app` and `src/components`).
 - [x] Update root `README.md` with architecture diagram, setup instructions, "Built during the hackathon" section, and Muse Glimmer evaluation metrics table (`S-01` §4, §11).
-- [ ] Record final demo video (plus backup take) running against Muse Glimmer on Nov 3 (`S-01` §11).
+- [x] Record final demo video (plus backup take) running against Muse Glimmer on Nov 3 (`S-01` §11).
 
 ---
 
