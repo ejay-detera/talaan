@@ -58,21 +58,21 @@ export default function HomePage() {
         <HowItWorksSection />
 
         {/* 3. Proof Section: Physical Notebook & Symmetrical Verification Widgets */}
-        <section id="verification" className="min-h-[100dvh] w-full max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24 scroll-mt-0 flex flex-col justify-center">
-          <div className="text-center max-w-2xl mx-auto space-y-2.5 mb-8 sm:mb-12">
-            <h2 className="font-display font-bold text-2xl sm:text-4xl text-pencil tracking-tight">
+        <section id="verification" className="w-full max-w-6xl mx-auto px-4 sm:px-6 pt-16 sm:pt-20 lg:pt-20 pb-10 sm:pb-14 scroll-mt-0">
+          <div className="text-center max-w-2xl mx-auto space-y-1.5 mb-4 sm:mb-6">
+            <h2 className="font-display font-bold text-xl sm:text-2xl lg:text-3xl text-pencil tracking-tight">
               The Notebook, Kept — Sovereign Ledger Verification
             </h2>
-            <p className="text-sm sm:text-base text-muted font-sans leading-relaxed">
+            <p className="text-xs sm:text-sm text-muted font-sans leading-relaxed">
               Raw handwritten entries reconciled against deterministic centavos with two-ply proof.
             </p>
           </div>
 
-          <GsapPaperChoreography className="relative p-2 sm:p-6 lg:p-8">
+          <GsapPaperChoreography className="relative p-1 sm:p-3 lg:p-2">
             {/* Desktop Composition: 2 Flanking Widgets Left, Notebook Center, 2 Flanking Widgets Right */}
-            <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6 items-center">
               {/* Left Column (2 widgets): Pinned Sticky Note + Payment Reminder Draft */}
-              <div className="hidden lg:flex lg:col-span-3 flex-col gap-6 items-end gsap-flank-left">
+              <div className="hidden lg:flex lg:col-span-3 flex-col gap-3.5 items-end gsap-flank-left">
                 <PinnedStickyNote />
                 <PaymentReminderDraftWidget />
               </div>
@@ -83,7 +83,7 @@ export default function HomePage() {
               </div>
 
               {/* Right Column (2 widgets): Customer Balances + Deterministic Shield */}
-              <div className="hidden lg:flex lg:col-span-3 flex-col gap-6 items-start gsap-flank-right">
+              <div className="hidden lg:flex lg:col-span-3 flex-col gap-3.5 items-start gsap-flank-right">
                 <CustomerBalancesWidget />
                 <DeterministicShieldWidget />
               </div>

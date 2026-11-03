@@ -295,8 +295,8 @@ function LoginForm({
       <div className="relative z-10 w-full max-w-4xl bg-sheet rounded-sheet border border-rule shadow-paper-lg overflow-hidden animate-in fade-in zoom-in-95 duration-300">
         <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[580px]">
           {/* Left Column: Interactive Auth Form */}
-          <div className="lg:col-span-6 p-6 sm:p-10 flex flex-col justify-between">
-            <div className="space-y-5">
+          <div className="lg:col-span-6 p-6 sm:p-10 flex flex-col justify-center">
+            <div className="space-y-5 my-auto w-full">
               {/* Top Mode Tabs (Sign In vs Create Account) - shown when not in OTP or Forgot mode */}
               {(mode === "signin" || mode === "signup") && (
                 <div className="inline-flex items-center gap-1 p-1 bg-paper border border-rule rounded-sm w-full">
@@ -459,15 +459,8 @@ function LoginForm({
                     )}
                   </Button>
 
-                  <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-3 text-xs font-sans border-t border-rule/60">
-                    <Link
-                      href="/"
-                      className="inline-flex items-center gap-1.5 text-muted hover:text-pencil font-semibold transition-colors order-2 sm:order-1"
-                    >
-                      <ArrowLeft className="w-3.5 h-3.5" />
-                      <span>Back to Home</span>
-                    </Link>
-                    <div className="order-1 sm:order-2">
+                  <div className="flex items-center justify-center pt-3 text-xs font-sans border-t border-rule/60">
+                    <div>
                       <span className="text-muted">No account yet? </span>
                       <button
                         type="button"
@@ -557,15 +550,8 @@ function LoginForm({
                     )}
                   </Button>
 
-                  <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-3 text-xs font-sans border-t border-rule/60">
-                    <Link
-                      href="/"
-                      className="inline-flex items-center gap-1.5 text-muted hover:text-pencil font-semibold transition-colors order-2 sm:order-1"
-                    >
-                      <ArrowLeft className="w-3.5 h-3.5" />
-                      <span>Back to Home</span>
-                    </Link>
-                    <div className="order-1 sm:order-2">
+                  <div className="flex items-center justify-center pt-3 text-xs font-sans border-t border-rule/60">
+                    <div>
                       <span className="text-muted">Already registered? </span>
                       <button
                         type="button"
@@ -656,14 +642,7 @@ function LoginForm({
                     </button>
                   </div>
 
-                  <div className="flex items-center justify-between pt-3 text-xs font-sans border-t border-rule/60">
-                    <Link
-                      href="/"
-                      className="inline-flex items-center gap-1.5 text-muted hover:text-pencil font-semibold transition-colors"
-                    >
-                      <ArrowLeft className="w-3.5 h-3.5" />
-                      <span>Back to Home</span>
-                    </Link>
+                  <div className="flex items-center justify-center pt-3 text-xs font-sans border-t border-rule/60">
                     <button
                       type="button"
                       onClick={() => {
@@ -721,14 +700,7 @@ function LoginForm({
                     )}
                   </Button>
 
-                  <div className="flex items-center justify-between pt-3 text-xs font-sans border-t border-rule/60">
-                    <Link
-                      href="/"
-                      className="inline-flex items-center gap-1.5 text-muted hover:text-pencil font-semibold transition-colors"
-                    >
-                      <ArrowLeft className="w-3.5 h-3.5" />
-                      <span>Back to Home</span>
-                    </Link>
+                  <div className="flex items-center justify-center pt-3 text-xs font-sans border-t border-rule/60">
                     <button
                       type="button"
                       onClick={() => {
@@ -744,11 +716,6 @@ function LoginForm({
                   </div>
                 </form>
               )}
-            </div>
-
-            {/* Bottom Footer Note */}
-            <div className="pt-4 text-center text-xs text-muted font-sans border-t border-rule/50 mt-6">
-              <span>Secure authentication powered by Supabase & Brevo SMTP.</span>
             </div>
           </div>
 

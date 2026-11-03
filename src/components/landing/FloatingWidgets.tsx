@@ -19,7 +19,7 @@ import { Badge } from "@/components/ui/badge";
 export function PinnedStickyNote() {
   return (
     <div
-      className="slip paper-settle relative w-64 bg-[#FFF9D2] border border-[#EADB85] rounded-row p-4 shadow-sticky select-none paper-drift"
+      className="slip paper-settle relative w-60 bg-[#FFF9D2] border border-[#EADB85] rounded-row p-3 shadow-sticky select-none paper-drift"
       style={{ ["--tilt" as string]: "-2deg" }}
     >
       {/* Pushpin Graphic */}
@@ -27,23 +27,23 @@ export function PinnedStickyNote() {
         className="absolute -top-3 left-1/2 -translate-x-1/2 w-6 h-6 flex items-center justify-center pointer-events-none"
         aria-hidden="true"
       >
-        <span className="w-4 h-4 rounded-full bg-margin border border-[#9A1F1E] shadow-sm block relative">
-          <span className="w-1.5 h-1.5 rounded-full bg-white/70 absolute top-0.5 left-0.5" />
+        <span className="w-3.5 h-3.5 rounded-full bg-margin border border-[#9A1F1E] shadow-sm block relative">
+          <span className="w-1 h-1 rounded-full bg-white/70 absolute top-0.5 left-0.5" />
         </span>
       </div>
 
-      <div className="pt-1 space-y-2">
-        <div className="flex items-center justify-between text-sm font-sans font-semibold text-[#6E5D1E] uppercase tracking-wider">
+      <div className="pt-0.5 space-y-1.5">
+        <div className="flex items-center justify-between text-xs font-sans font-semibold text-[#6E5D1E] uppercase tracking-wider">
           <span>Counter Memo</span>
           <span>Ate Baby</span>
         </div>
 
-        <p className="font-hand text-xl text-[#383318] leading-tight">
+        <p className="font-hand text-lg text-[#383318] leading-snug">
           3x pancit canton @ 12 = 46. Discrepancy caught by code!
         </p>
 
-        <div className="pt-1 flex items-center justify-between text-xs font-sans border-t border-[#EADB85]/60">
-          <span className="text-[#6E5D1E] text-sm">Corrected Total:</span>
+        <div className="pt-1 flex items-center justify-between text-[11px] font-sans border-t border-[#EADB85]/60">
+          <span className="text-[#6E5D1E]">Corrected Total:</span>
           <span className="font-bold text-[#1F7A4D] tabular-nums">₱36.00</span>
         </div>
       </div>
@@ -59,38 +59,38 @@ export function PinnedStickyNote() {
 export function CustomerBalancesWidget() {
   return (
     <Card
-      className="slip paper-settle w-72 shadow-paper select-none paper-drift-delayed"
+      className="slip paper-settle w-64 shadow-paper select-none paper-drift-delayed"
       style={{ ["--tilt" as string]: "1.5deg", ["--delay" as string]: "90ms" }}
     >
-      <CardHeader className="p-3.5 pb-2">
+      <CardHeader className="p-3 pb-1.5">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-xs font-bold font-sans uppercase tracking-wider text-muted flex items-center gap-1.5">
+          <CardTitle className="text-[11px] font-bold font-sans uppercase tracking-wider text-muted flex items-center gap-1.5">
             <Users className="w-3.5 h-3.5 text-ink" />
             Active Customer Balances
           </CardTitle>
-          <span className="text-sm text-paid font-semibold">Synced</span>
+          <span className="text-xs text-paid font-semibold">Synced</span>
         </div>
       </CardHeader>
 
-      <CardContent className="p-3.5 pt-0 space-y-2">
+      <CardContent className="p-3 pt-0 space-y-1">
         <div className="divide-y divide-rule text-xs font-sans">
-          <div className="py-1.5 flex items-center justify-between">
+          <div className="py-1 flex items-center justify-between">
             <span className="font-medium text-pencil">Mang Jose</span>
             <span className="font-bold text-pencil tabular-nums">₱76.00</span>
           </div>
 
-          <div className="py-1.5 flex items-center justify-between">
+          <div className="py-1 flex items-center justify-between">
             <div className="flex items-center gap-1.5">
               <span className="font-medium text-pencil">Nanay Cora</span>
-              <span className="text-sm text-muted italic">(Review)</span>
+              <span className="text-[11px] text-muted italic">(Review)</span>
             </div>
             <span className="font-bold text-pencil tabular-nums">₱54.00</span>
           </div>
 
-          <div className="py-1.5 flex items-center justify-between">
+          <div className="py-1 flex items-center justify-between">
             <div className="flex items-center gap-1.5">
               <span className="font-medium text-pencil">Ate Baby</span>
-              <span className="text-sm text-paid font-semibold">(Verified)</span>
+              <span className="text-[11px] text-paid font-semibold">(Verified)</span>
             </div>
             <span className="font-bold text-paid tabular-nums">₱36.00</span>
           </div>
@@ -108,29 +108,29 @@ export function CustomerBalancesWidget() {
 export function PaymentReminderDraftWidget() {
   return (
     <Card
-      className="slip paper-settle w-72 shadow-paper select-none"
+      className="slip paper-settle w-64 shadow-paper select-none"
       style={{ ["--tilt" as string]: "-1deg", ["--delay" as string]: "180ms" }}
     >
-      <CardHeader className="p-3.5 pb-2">
+      <CardHeader className="p-3 pb-1.5">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-xs font-bold font-sans uppercase tracking-wider text-muted flex items-center gap-1.5">
+          <CardTitle className="text-[11px] font-bold font-sans uppercase tracking-wider text-muted flex items-center gap-1.5">
             <MessageSquare className="w-3.5 h-3.5 text-ink" />
             Taglish Reminder Draft
           </CardTitle>
-          <Badge variant="secondary" className="text-sm py-0 px-1.5">
+          <Badge variant="secondary" className="text-[10px] py-0 px-1.5">
             One-Tap Share
           </Badge>
         </div>
       </CardHeader>
 
-      <CardContent className="p-3.5 pt-0 space-y-2.5">
-        <div className="p-2.5 rounded-row bg-paper border border-rule/80 text-xs font-sans text-pencil leading-relaxed">
+      <CardContent className="p-3 pt-0 space-y-1.5">
+        <div className="p-2 rounded-row bg-paper border border-rule/80 text-[11px] font-sans text-pencil leading-snug">
           &ldquo;Magandang araw po Ate Baby! Paalala lang po sa natitirang utang na{" "}
           <strong className="text-pencil font-bold">₱36.00</strong> sa tindahan ni
           Aling Nena. Maraming salamat po!&rdquo;
         </div>
 
-        <div className="flex items-center justify-between text-sm font-sans text-muted">
+        <div className="flex items-center justify-between text-[11px] font-sans text-muted">
           <span className="flex items-center gap-1">
             <Sparkles className="w-3 h-3 text-ink" /> SMS draft
           </span>
@@ -151,32 +151,32 @@ export function PaymentReminderDraftWidget() {
 export function DeterministicShieldWidget() {
   return (
     <Card
-      className="slip paper-settle w-72 shadow-paper select-none"
+      className="slip paper-settle w-64 shadow-paper select-none"
       style={{ ["--tilt" as string]: "1deg", ["--delay" as string]: "270ms" }}
     >
-      <CardHeader className="p-3.5 pb-2">
+      <CardHeader className="p-3 pb-1.5">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-xs font-bold font-sans uppercase tracking-wider text-muted flex items-center gap-1.5">
+          <CardTitle className="text-[11px] font-bold font-sans uppercase tracking-wider text-muted flex items-center gap-1.5">
             <ShieldCheck className="w-3.5 h-3.5 text-paid" />
             Deterministic Engine
           </CardTitle>
-          <span className="text-sm text-paid font-semibold">100% Math</span>
+          <span className="text-xs text-paid font-semibold">100% Math</span>
         </div>
       </CardHeader>
 
-      <CardContent className="p-3.5 pt-0 space-y-2">
-        <div className="space-y-1.5 text-xs font-sans text-muted">
+      <CardContent className="p-3 pt-0 space-y-1.5">
+        <div className="space-y-1 text-xs font-sans text-muted">
           <div className="flex items-center gap-1.5 text-pencil">
             <CheckCircle2 className="w-3.5 h-3.5 text-paid flex-shrink-0" />
-            <span className="text-sm">Zero LLM arithmetic</span>
+            <span className="text-xs">Zero LLM arithmetic</span>
           </div>
           <div className="flex items-center gap-1.5 text-pencil">
             <CheckCircle2 className="w-3.5 h-3.5 text-paid flex-shrink-0" />
-            <span className="text-sm">Integer-centavo math in code</span>
+            <span className="text-xs">Integer-centavo math in code</span>
           </div>
           <div className="flex items-center gap-1.5 text-pencil">
             <CheckCircle2 className="w-3.5 h-3.5 text-paid flex-shrink-0" />
-            <span className="text-sm">Human confirms before DB write</span>
+            <span className="text-xs">Human confirms before DB write</span>
           </div>
         </div>
       </CardContent>
